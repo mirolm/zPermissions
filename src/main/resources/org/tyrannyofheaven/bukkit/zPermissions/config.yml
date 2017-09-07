@@ -1,6 +1,6 @@
 config-version: 19
 
-database-support: true
+database-support: false
 
 database:
   username: us3r
@@ -10,8 +10,6 @@ database:
   url: jdbc:sqlite:plugins/zPermissions/zPermissions.db
 
 database-read-only: false
-
-region-support: true
 
 group-permission: 'group.%s'
 
@@ -50,12 +48,6 @@ opaque-inheritance: true
 interleaved-player-permissions: true
 
 rank-admin-broadcast: false
-
-region-managers:
-- WorldGuard
-- Residence
-- Factions
-- Factoid
 
 inherited-metadata: false
 
