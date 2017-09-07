@@ -70,7 +70,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <minimizeJar>true</minimizeJar>
+                    <minimizeJar>false</minimizeJar>
                     <shadedArtifactAttached>false</shadedArtifactAttached>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
@@ -79,14 +79,6 @@
                         </includes>
                     </artifactSet>
                     <relocations>
-                        <relocation>
-                            <pattern>com.avaje</pattern>
-                            <shadedPattern>org.tyrannyofheaven.shade.avaje</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>javax.persistence</pattern>
-                            <shadedPattern>org.tyrannyofheaven.shade.javax.persistence</shadedPattern>
-                        </relocation>
                         <relocation>
                             <pattern>org.tyrannyofheaven.bukkit.util</pattern>
                             <shadedPattern>org.tyrannyofheaven.bukkit.zPermissions.util</shadedPattern>
