@@ -2,6 +2,13 @@ config-version: 19
 
 database-support: true
 
+database:
+  username: us3r
+  isolation: SERIALIZABLE
+  driver: org.sqlite.JDBC
+  password: passw0rd
+  url: jdbc:sqlite:plugins/zPermissions/zPermissions.db
+
 database-read-only: false
 
 region-support: true
