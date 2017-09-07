@@ -55,7 +55,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.tyrannyofheaven.bukkit.util.DBPlugin;
 import org.tyrannyofheaven.bukkit.util.ToHDatabaseUtils;
 import org.tyrannyofheaven.bukkit.util.ToHFileUtils;
 import org.tyrannyofheaven.bukkit.util.ToHNamingConvention;
@@ -91,11 +91,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionRegion;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
 import org.tyrannyofheaven.bukkit.zPermissions.model.UuidDisplayNameCache;
-import org.tyrannyofheaven.bukkit.zPermissions.region.FactionsRegionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.region.FactoidRegionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.region.RegionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.region.ResidenceRegionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.region.WorldGuardRegionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.service.DefaultPlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.PlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.ZPermissionsServiceImpl;
@@ -118,7 +114,7 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
  * 
  * @author zerothangel
  */
-public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, ZPermissionsConfig, CommandExceptionHandler {
+public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZPermissionsConfig, CommandExceptionHandler {
 
     // Name of the default group, in absence of a config file
     private static final String DEFAULT_GROUP = "default";
@@ -675,18 +671,18 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
         RegionStrategy regionStrategy;
 
         // WorldGuard
-        regionStrategy = new WorldGuardRegionStrategy(this, getZPermissionsCore());
-        strategies.put(regionStrategy.getName(), regionStrategy);
+        //regionStrategy = new WorldGuardRegionStrategy(this, getZPermissionsCore());
+        //strategies.put(regionStrategy.getName(), regionStrategy);
 
         // Additional region managers are registered here.
-        regionStrategy = new ResidenceRegionStrategy(this, getZPermissionsCore());
-        strategies.put(regionStrategy.getName(), regionStrategy);
+        //regionStrategy = new ResidenceRegionStrategy(this, getZPermissionsCore());
+        //strategies.put(regionStrategy.getName(), regionStrategy);
         
-        regionStrategy = new FactionsRegionStrategy(this, getZPermissionsCore());
-        strategies.put(regionStrategy.getName(), regionStrategy);
+        //regionStrategy = new FactionsRegionStrategy(this, getZPermissionsCore());
+        //strategies.put(regionStrategy.getName(), regionStrategy);
 
-        regionStrategy = new FactoidRegionStrategy(this, getZPermissionsCore());
-        strategies.put(regionStrategy.getName(), regionStrategy);
+        //regionStrategy = new FactoidRegionStrategy(this, getZPermissionsCore());
+        //strategies.put(regionStrategy.getName(), regionStrategy);
 
         // Run through list in preference order
         for (String rmName : regionManagers) {

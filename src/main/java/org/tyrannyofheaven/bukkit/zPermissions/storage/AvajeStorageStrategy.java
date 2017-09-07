@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import org.tyrannyofheaven.bukkit.util.DBPlugin;
 import org.tyrannyofheaven.bukkit.util.transaction.AsyncTransactionStrategy;
 import org.tyrannyofheaven.bukkit.util.transaction.PreBeginHook;
 import org.tyrannyofheaven.bukkit.util.transaction.PreCommitHook;
@@ -65,7 +65,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
 
     private final TransactionStrategy internalTransactionStrategy; // NB private and only used here
 
-    private final Plugin plugin;
+    private final DBPlugin plugin;
 
     private final ExecutorService executorService;
 
@@ -75,7 +75,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
 
     private long uuidCacheTimeout = 120L * 60L * 1000L; // Default to 2 hours
 
-    public AvajeStorageStrategy(Plugin plugin, int maxRetries, boolean readOnlyMode) {
+    public AvajeStorageStrategy(DBPlugin plugin, int maxRetries, boolean readOnlyMode) {
         // Following will be used to actually execute async
         executorService = Executors.newSingleThreadExecutor();
 

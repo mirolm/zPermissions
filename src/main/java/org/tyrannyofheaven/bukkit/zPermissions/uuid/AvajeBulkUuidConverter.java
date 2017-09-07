@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
-import org.bukkit.plugin.Plugin;
+import org.tyrannyofheaven.bukkit.util.DBPlugin;
 import org.tyrannyofheaven.bukkit.util.uuid.UuidDisplayName;
 import org.tyrannyofheaven.bukkit.util.uuid.UuidResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.model.Membership;
@@ -38,13 +38,13 @@ import com.avaje.ebean.EbeanServer;
 
 public class AvajeBulkUuidConverter implements BulkUuidConverter {
 
-    private final Plugin plugin;
+    private final DBPlugin plugin;
 
     private final EbeanServer ebeanServer;
 
     private final UuidResolver uuidResolver;
 
-    public AvajeBulkUuidConverter(Plugin plugin, UuidResolver uuidResolver) {
+    public AvajeBulkUuidConverter(DBPlugin plugin, UuidResolver uuidResolver) {
         this.plugin = plugin;
         this.ebeanServer = plugin.getDatabase();
         this.uuidResolver = uuidResolver;
