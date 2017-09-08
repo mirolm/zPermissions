@@ -92,6 +92,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionRegion;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
 import org.tyrannyofheaven.bukkit.zPermissions.model.UuidDisplayNameCache;
 import org.tyrannyofheaven.bukkit.zPermissions.region.RegionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.region.WorldGuardRegionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.service.DefaultPlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.PlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.ZPermissionsServiceImpl;
@@ -663,6 +664,33 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     private void initializeRegionStrategy() {
         regionStrategy = null;
+
+        if (!regionSupportEnable)
+            return; // Don't bother with the rest
+
+        Map<String, RegionStrategy> strategies = new LinkedHashMap<>();
+        RegionStrategy regionStrategy;
+
+        // WorldGuard
+        regionStrategy = new WorldGuardRegionStrategy(this, getZPermissionsCore());
+        strategies.put(regionStrategy.getName(), regionStrategy);
+
+        // Run through list in preference order
+        for (String rmName : regionManagers) {
+            regionStrategy = strategies.get(rmName);
+            if (regionStrategy == null) {
+                // Misconfiguration
+                warn(this, "Unknown region manager '%s'. Valid values are: %s", rmName, ToHStringUtils.delimitedString(", ", strategies.keySet()));
+                continue;
+            }
+
+            if (regionStrategy.isPresent()) {
+                debug(this, "Found region manager %s", regionStrategy.getName());
+                regionStrategy.init();
+                this.regionStrategy = regionStrategy;
+                return;
+            }
+        }
     }
 
     @Override

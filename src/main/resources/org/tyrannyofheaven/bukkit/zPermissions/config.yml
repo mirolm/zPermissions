@@ -1,6 +1,6 @@
 config-version: 19
 
-database-support: false
+database-support: true
 
 database:
   username: us3r
@@ -10,6 +10,8 @@ database:
   url: jdbc:sqlite:plugins/zPermissions/zPermissions.db
 
 database-read-only: false
+
+region-support: true
 
 group-permission: 'group.%s'
 
@@ -48,6 +50,9 @@ opaque-inheritance: true
 interleaved-player-permissions: true
 
 rank-admin-broadcast: false
+
+region-managers:
+- WorldGuard
 
 inherited-metadata: false
 

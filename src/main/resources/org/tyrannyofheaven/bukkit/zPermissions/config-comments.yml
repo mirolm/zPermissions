@@ -74,6 +74,12 @@ kick-ops-on-error: |
   Only valid if kick-on-error is true. If a problem occurs while determining
   an op's permissions, then the op will only be kicked if this is true.
 
+region-support: |
+  Whether region-based permissions are enabled. Requires a region plugin such
+  as WorldGuard or Residence. Setting this to false will save some processing
+  if you use a region plugin but don't use region-based permissions. Has no
+  effect if a region plugin is not present.
+
 auto-refresh-interval: |
   Interval, in minutes, in which to automatically refresh permissions from
   the database. Set to a non-positive number to disable. Has no effect on
@@ -109,6 +115,10 @@ rank-admin-broadcast: |
   If true, rank commands will broadcast changes to admins by default.
   Otherwise, rank commands will broadcast to players with a custom
   permission, e.g. zpermissions.notify.promote, etc.
+
+region-managers: |
+  If region-support is enabled, this is the order in which region manager
+  plugins will be detected. The first plugin detected will be used.
 
 inherited-metadata: |
   If true, metadata resolution will follow group inheritence rules, exactly
