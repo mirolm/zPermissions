@@ -28,7 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.ToHLoggingUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 
 import com.google.common.collect.Iterables;

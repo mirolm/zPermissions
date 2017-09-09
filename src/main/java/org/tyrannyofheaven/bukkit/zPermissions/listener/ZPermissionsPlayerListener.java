@@ -15,7 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.listener;
 
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.debug;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.debug;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -27,7 +27,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.uuid.UuidResolver;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.RefreshCause;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 

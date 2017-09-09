@@ -15,7 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.log;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.log;
 import static org.tyrannyofheaven.bukkit.zPermissions.util.Utils.formatPlayerName;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallback;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.model.Entry;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;

@@ -1,6 +1,6 @@
 package org.tyrannyofheaven.bukkit.zPermissions.vault;
 
-import static org.tyrannyofheaven.bukkit.util.ToHStringUtils.hasText;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
 
 import java.util.UUID;
 import java.util.logging.Level;
@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallbackWithoutResult;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;

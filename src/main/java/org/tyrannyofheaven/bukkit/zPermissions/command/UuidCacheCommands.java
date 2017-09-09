@@ -16,9 +16,9 @@
 package org.tyrannyofheaven.bukkit.zPermissions.command;
 
 import org.bukkit.command.CommandSender;
-import org.tyrannyofheaven.bukkit.util.command.Command;
-import org.tyrannyofheaven.bukkit.util.command.Option;
-import org.tyrannyofheaven.bukkit.util.uuid.UuidResolver;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Command;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Option;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidResolver;
 
 public class UuidCacheCommands {
 

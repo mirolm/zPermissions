@@ -3,8 +3,8 @@ package org.tyrannyofheaven.bukkit.zPermissions.storage;
 
 import java.util.Map;
 
-import org.tyrannyofheaven.bukkit.util.transaction.NullTransactionStrategy;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.NullTransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.DummyPermissionDao;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.InMemoryPermissionService;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;

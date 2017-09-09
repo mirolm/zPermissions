@@ -15,10 +15,10 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.debug;
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.error;
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.warn;
-import static org.tyrannyofheaven.bukkit.util.ToHStringUtils.delimitedString;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.debug;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.error;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.warn;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.delimitedString;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;

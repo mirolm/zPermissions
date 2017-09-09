@@ -15,7 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions;
 
-import static org.tyrannyofheaven.bukkit.util.ToHStringUtils.hasText;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
 
 /**
  * Holder/parser for world-specific permissions as specified on the command-line.

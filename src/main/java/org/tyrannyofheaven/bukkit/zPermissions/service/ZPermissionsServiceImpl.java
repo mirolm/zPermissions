@@ -15,9 +15,9 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.service;
 
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.warn;
-import static org.tyrannyofheaven.bukkit.util.ToHStringUtils.hasText;
-import static org.tyrannyofheaven.bukkit.util.uuid.UuidUtils.canonicalizeUuid;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.warn;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils.canonicalizeUuid;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,9 +31,9 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallback;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallbackWithoutResult;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.MetadataManager;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;

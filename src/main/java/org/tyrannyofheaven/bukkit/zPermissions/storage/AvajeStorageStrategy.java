@@ -15,8 +15,8 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.storage;
 
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.debug;
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.log;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.debug;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.log;
 
 import java.util.Collection;
 import java.util.Date;
@@ -31,16 +31,16 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.tyrannyofheaven.bukkit.util.DBPlugin;
-import org.tyrannyofheaven.bukkit.util.transaction.AsyncTransactionStrategy;
-import org.tyrannyofheaven.bukkit.util.transaction.PreBeginHook;
-import org.tyrannyofheaven.bukkit.util.transaction.PreCommitHook;
-import org.tyrannyofheaven.bukkit.util.transaction.RetryingAvajeTransactionStrategy;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallback;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallbackWithoutResult;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionStrategy;
-import org.tyrannyofheaven.bukkit.util.uuid.UuidDisplayName;
-import org.tyrannyofheaven.bukkit.util.uuid.UuidResolver;
+import org.tyrannyofheaven.bukkit.zPermissions.util.DBPlugin;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.AsyncTransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.PreBeginHook;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.PreCommitHook;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.RetryingAvajeTransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidDisplayName;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.ReadOnlyException;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.AvajePermissionDao;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.InMemoryPermissionService;

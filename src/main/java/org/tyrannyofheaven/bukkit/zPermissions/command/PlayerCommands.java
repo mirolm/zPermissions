@@ -15,9 +15,9 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.command;
 
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendMessage;
-import static org.tyrannyofheaven.bukkit.util.command.reader.CommandReader.abortBatchProcessing;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.colorize;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.command.reader.CommandReader.abortBatchProcessing;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,17 +29,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.ToHMessageUtils;
-import org.tyrannyofheaven.bukkit.util.ToHStringUtils;
-import org.tyrannyofheaven.bukkit.util.ToHUtils;
-import org.tyrannyofheaven.bukkit.util.command.Command;
-import org.tyrannyofheaven.bukkit.util.command.HelpBuilder;
-import org.tyrannyofheaven.bukkit.util.command.Option;
-import org.tyrannyofheaven.bukkit.util.command.Require;
-import org.tyrannyofheaven.bukkit.util.command.Session;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallbackWithoutResult;
-import org.tyrannyofheaven.bukkit.util.uuid.CommandUuidResolver;
-import org.tyrannyofheaven.bukkit.util.uuid.CommandUuidResolverHandler;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Command;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.HelpBuilder;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Option;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Require;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Session;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolverHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.RefreshCause;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;

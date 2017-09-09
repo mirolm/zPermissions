@@ -15,8 +15,8 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
-import static org.tyrannyofheaven.bukkit.util.ToHStringUtils.delimitedString;
-import static org.tyrannyofheaven.bukkit.util.ToHStringUtils.quoteArgForCommand;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.delimitedString;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.quoteArgForCommand;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +29,7 @@ import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallbackWithoutResult;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.model.EntityMetadata;
 import org.tyrannyofheaven.bukkit.zPermissions.model.Entry;
 import org.tyrannyofheaven.bukkit.zPermissions.model.Membership;

@@ -15,7 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.model;
 
-import static org.tyrannyofheaven.bukkit.util.uuid.UuidUtils.uncanonicalizeUuid;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils.uncanonicalizeUuid;
 
 import java.util.Date;
 import java.util.UUID;
@@ -28,7 +28,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.tyrannyofheaven.bukkit.util.uuid.UuidUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
 
 @Entity
 @Table(name="uuidcache")

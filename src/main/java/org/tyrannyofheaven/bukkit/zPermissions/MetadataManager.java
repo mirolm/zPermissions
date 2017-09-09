@@ -26,8 +26,8 @@ import java.util.UUID;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallback;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver.MetadataResult;
 
 /**

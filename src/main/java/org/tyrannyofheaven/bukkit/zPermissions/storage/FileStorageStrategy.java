@@ -15,8 +15,8 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.storage;
 
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.debug;
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.log;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.debug;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.log;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,9 +29,9 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallback;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionException;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionStrategy;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionException;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.FilePermissionDao;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.InMemoryPermissionService;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;

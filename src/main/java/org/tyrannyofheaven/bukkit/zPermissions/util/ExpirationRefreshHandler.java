@@ -15,10 +15,10 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
-import static org.tyrannyofheaven.bukkit.util.ToHLoggingUtils.debug;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.broadcast;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.debug;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.broadcast;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.colorize;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.sendMessage;
 
 import java.util.Comparator;
 import java.util.Date;

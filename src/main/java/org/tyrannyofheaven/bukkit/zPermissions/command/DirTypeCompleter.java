@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
-import org.tyrannyofheaven.bukkit.util.command.TypeCompleter;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.TypeCompleter;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;
 
 public class DirTypeCompleter implements TypeCompleter {

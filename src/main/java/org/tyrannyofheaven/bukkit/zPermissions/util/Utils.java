@@ -15,8 +15,8 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
-import static org.tyrannyofheaven.bukkit.util.ToHUtils.assertFalse;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.colorize;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHUtils.assertFalse;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,10 +43,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.util.ToHMessageUtils;
-import org.tyrannyofheaven.bukkit.util.ToHStringUtils;
-import org.tyrannyofheaven.bukkit.util.command.ParseException;
-import org.tyrannyofheaven.bukkit.util.uuid.UuidUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.ParseException;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
 import org.tyrannyofheaven.bukkit.zPermissions.model.EntityMetadata;
 import org.tyrannyofheaven.bukkit.zPermissions.model.Entry;

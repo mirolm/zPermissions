@@ -15,7 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.dao;
 
-import static org.tyrannyofheaven.bukkit.util.uuid.UuidUtils.uncanonicalizeUuid;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils.uncanonicalizeUuid;
 import static org.tyrannyofheaven.bukkit.zPermissions.dao.InMemoryPermissionService.getEntity;
 import static org.tyrannyofheaven.bukkit.zPermissions.dao.InMemoryPermissionService.getRegion;
 import static org.tyrannyofheaven.bukkit.zPermissions.dao.InMemoryPermissionService.getWorld;

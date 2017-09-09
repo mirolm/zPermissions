@@ -15,23 +15,23 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.command;
 
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendMessage;
-import static org.tyrannyofheaven.bukkit.util.command.reader.CommandReader.abortBatchProcessing;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.colorize;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.command.reader.CommandReader.abortBatchProcessing;
 
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.tyrannyofheaven.bukkit.util.ToHStringUtils;
-import org.tyrannyofheaven.bukkit.util.command.Command;
-import org.tyrannyofheaven.bukkit.util.command.Option;
-import org.tyrannyofheaven.bukkit.util.command.Require;
-import org.tyrannyofheaven.bukkit.util.command.Session;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallback;
-import org.tyrannyofheaven.bukkit.util.transaction.TransactionCallbackWithoutResult;
-import org.tyrannyofheaven.bukkit.util.uuid.CommandUuidResolver;
-import org.tyrannyofheaven.bukkit.util.uuid.CommandUuidResolverHandler;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Command;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Option;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Require;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.Session;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
+import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
+import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolverHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.MissingGroupException;
 import org.tyrannyofheaven.bukkit.zPermissions.model.EntityMetadata;

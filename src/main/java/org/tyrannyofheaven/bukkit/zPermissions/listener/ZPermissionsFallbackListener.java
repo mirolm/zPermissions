@@ -15,8 +15,8 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.listener;
 
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.colorize;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.sendMessage;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

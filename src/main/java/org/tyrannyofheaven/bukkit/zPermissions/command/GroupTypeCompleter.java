@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
-import org.tyrannyofheaven.bukkit.util.command.TypeCompleter;
+import org.tyrannyofheaven.bukkit.zPermissions.util.command.TypeCompleter;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
 
 public class GroupTypeCompleter implements TypeCompleter {
