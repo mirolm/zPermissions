@@ -1251,8 +1251,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         else {
             // Set up default region manager(s)
             regionManagers.add("WorldGuard");
-            regionManagers.add("Residence");
-            regionManagers.add("Factoid");
         }
 
         configureWorldMirrors();
