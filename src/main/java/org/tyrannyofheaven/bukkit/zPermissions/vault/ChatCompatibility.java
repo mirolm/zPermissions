@@ -13,6 +13,7 @@ public abstract class ChatCompatibility extends Chat {
         super(perms);
     }
 
+    @Deprecated
     @Override
     public String getPlayerPrefix(String world, String player) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -20,6 +21,7 @@ public abstract class ChatCompatibility extends Chat {
         return getPlayerPrefix(world, offlinePlayer);
     }
 
+    @Deprecated
     @Override
     public void setPlayerPrefix(String world, String player, String prefix) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -27,6 +29,7 @@ public abstract class ChatCompatibility extends Chat {
         setPlayerPrefix(world, offlinePlayer, prefix);
     }
 
+    @Deprecated
     @Override
     public String getPlayerSuffix(String world, String player) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -34,6 +37,7 @@ public abstract class ChatCompatibility extends Chat {
         return getPlayerSuffix(world, offlinePlayer);
     }
 
+    @Deprecated
     @Override
     public void setPlayerSuffix(String world, String player, String suffix) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -41,6 +45,7 @@ public abstract class ChatCompatibility extends Chat {
         setPlayerSuffix(world, offlinePlayer, suffix);
     }
 
+    @Deprecated
     @Override
     public int getPlayerInfoInteger(String world, String player, String node, int defaultValue) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -48,6 +53,7 @@ public abstract class ChatCompatibility extends Chat {
         return getPlayerInfoInteger(world, offlinePlayer, node, defaultValue);
     }
 
+    @Deprecated
     @Override
     public void setPlayerInfoInteger(String world, String player, String node, int value) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -55,6 +61,7 @@ public abstract class ChatCompatibility extends Chat {
         setPlayerInfoInteger(world, offlinePlayer, node, value);
     }
 
+    @Deprecated
     @Override
     public double getPlayerInfoDouble(String world, String player, String node, double defaultValue) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -62,6 +69,7 @@ public abstract class ChatCompatibility extends Chat {
         return getPlayerInfoDouble(world, offlinePlayer, node, defaultValue);
     }
 
+    @Deprecated
     @Override
     public void setPlayerInfoDouble(String world, String player, String node, double value) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -69,6 +77,7 @@ public abstract class ChatCompatibility extends Chat {
         setPlayerInfoDouble(world, offlinePlayer, node, value);
     }
 
+    @Deprecated
     @Override
     public boolean getPlayerInfoBoolean(String world, String player, String node, boolean defaultValue) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -76,6 +85,7 @@ public abstract class ChatCompatibility extends Chat {
         return getPlayerInfoBoolean(world, offlinePlayer, node, defaultValue);
     }
 
+    @Deprecated
     @Override
     public void setPlayerInfoBoolean(String world, String player, String node, boolean value) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -83,6 +93,7 @@ public abstract class ChatCompatibility extends Chat {
         setPlayerInfoBoolean(world, offlinePlayer, node, value);
     }
 
+    @Deprecated
     @Override
     public String getPlayerInfoString(String world, String player, String node, String defaultValue) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -90,6 +101,7 @@ public abstract class ChatCompatibility extends Chat {
         return getPlayerInfoString(world, offlinePlayer, node, defaultValue);
     }
 
+    @Deprecated
     @Override
     public void setPlayerInfoString(String world, String player, String node, String value) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);

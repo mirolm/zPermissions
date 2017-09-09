@@ -15,6 +15,7 @@ public abstract class PermissionCompatibility extends Permission {
         this.resolver = resolver;
     }
 
+    @Deprecated
     @Override
     public boolean playerHas(String world, String player, String permission) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -22,6 +23,7 @@ public abstract class PermissionCompatibility extends Permission {
         return playerHas(world, offlinePlayer, permission);
     }
 
+    @Deprecated
     @Override
     public boolean playerAdd(String world, String player, String permission) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -29,6 +31,7 @@ public abstract class PermissionCompatibility extends Permission {
         return playerAdd(world, offlinePlayer, permission);
     }
 
+    @Deprecated
     @Override
     public boolean playerRemove(String world, String player, String permission) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -36,6 +39,7 @@ public abstract class PermissionCompatibility extends Permission {
         return playerRemove(world, offlinePlayer, permission);
     }
 
+    @Deprecated
     @Override
     public boolean playerInGroup(String world, String player, String group) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -43,6 +47,7 @@ public abstract class PermissionCompatibility extends Permission {
         return playerInGroup(world, offlinePlayer, group);
     }
 
+    @Deprecated
     @Override
     public boolean playerAddGroup(String world, String player, String group) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -50,6 +55,7 @@ public abstract class PermissionCompatibility extends Permission {
         return playerAddGroup(world, offlinePlayer, group);
     }
 
+    @Deprecated
     @Override
     public boolean playerRemoveGroup(String world, String player, String group) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -57,6 +63,7 @@ public abstract class PermissionCompatibility extends Permission {
         return playerRemoveGroup(world, offlinePlayer, group);
     }
 
+    @Deprecated
     @Override
     public String[] getPlayerGroups(String world, String player) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
@@ -64,6 +71,7 @@ public abstract class PermissionCompatibility extends Permission {
         return getPlayerGroups(world, offlinePlayer);
     }
 
+    @Deprecated
     @Override
     public String getPrimaryGroup(String world, String player) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);

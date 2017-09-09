@@ -60,6 +60,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         return uuidResolver;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void migrate() throws Exception {
         // Does it exist?
@@ -137,6 +138,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         log(plugin, "Migration done");
     }
 
+    @SuppressWarnings("unchecked")
     private int preparePlayers(Map<String, Object> data, Set<String> usernames) {
         int count = 0;
         for (Map<String, Object> player : (List<Map<String, Object>>)data.get("players")) {
@@ -153,6 +155,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         return count;
     }
 
+    @SuppressWarnings("unchecked")
     private List<Map<String, Object>> prepareGroups(Map<String, Object> data, Set<String> usernames) {
         List<Map<String, Object>> result = new ArrayList<>();
 
@@ -194,6 +197,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private void migratePlayers(Map<String, Object> data, Map<String, UuidDisplayName> resolved) {
         for (Iterator<Map<String, Object>> i = ((List<Map<String, Object>>)data.get("players")).iterator(); i.hasNext();) {
             Map<String, Object> player = i.next();
@@ -218,6 +222,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void migrateGroups(List<Map<String, Object>> groups, Map<String, UuidDisplayName> resolved) {
         for (Map<String, Object> group : groups) {
             List<String> memberNames = (List<String>)group.get("members"); // Guaranteed to be non-empty list of strings due to prepareGroups
