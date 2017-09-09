@@ -1,6 +1,6 @@
-/.classpath
-/.project
-/.settings
-/target
+# Intellij
 .idea/
 *.iml
+
+# Maven
+target/
