@@ -15,13 +15,11 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Material;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Miscellaneous utility methods.
@@ -104,28 +102,6 @@ public class ToHUtils {
             material = materialMap.get(name.toLowerCase());
         }
         return material;
-    }
-
-    /**
-     * Peeks into the plugin's manifest to determine actual version information.
-     * 
-     * @param plugin the plugin
-     * @return a VersionInfo object holding the artifactId/version/build fields
-     */
-    public static VersionInfo getVersion(Plugin plugin) {
-        VersionInfo versionInfo = null;;
-        try {
-            versionInfo = VersionMain.getVersion(plugin.getClass());
-            if (versionInfo == null)
-                ToHLoggingUtils.warn(plugin, "Failed to determine actual version");
-        }
-        catch (IOException e) {
-            ToHLoggingUtils.error(plugin, "Error determining actual version:", e);
-        }
-        if (versionInfo == null) {
-            versionInfo = new VersionInfo(plugin.getDescription().getName(), plugin.getDescription().getVersion(), "UNKNOWN");
-        }
-        return versionInfo;
     }
 
 }
