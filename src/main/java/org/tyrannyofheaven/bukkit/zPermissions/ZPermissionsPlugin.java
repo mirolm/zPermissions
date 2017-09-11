@@ -226,6 +226,9 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     // Whether default group membership should be made explicit
     private static final boolean DEFAULT_EXPLICIT_DEFAULT_GROUP_MEMBERSHIP = false;
 
+    // Plugin Version
+    private final String PluginVersion = this.getDescription().getVersion();
+
     // Permission resolver
     private PermissionsResolver resolver = new PermissionsResolver(this);
 
@@ -449,7 +452,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             removeBukkitPermissions(player, true);
         }
 
-        log(this, "%s disabled.", this.getDescription().getVersion());
+        log(this, "%s disabled.", PluginVersion);
     }
 
     /* (non-Javadoc)
@@ -458,7 +461,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     @Override
     public void onEnable() {
         try {
-            log(this, "%s starting...", this.getDescription().getVersion());
+            log(this, "%s starting...", PluginVersion);
 
             // FIXME Defaults workaround, to be removed after 1.0
             boolean isUpgrade = new File(getDataFolder(), "config.yml").exists();
@@ -643,7 +646,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             // Initialize expiration handler
             refreshExpirations();
             
-            log(this, "%s enabled.", this.getDescription().getVersion());
+            log(this, "%s enabled.", PluginVersion);
         }
         catch (Throwable t) {
             unrecoverableError("everything else", t);
