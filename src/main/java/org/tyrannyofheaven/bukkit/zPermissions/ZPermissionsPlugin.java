@@ -61,6 +61,8 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.ToHFileUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.util.ToHNamingConvention;
 import org.tyrannyofheaven.bukkit.zPermissions.util.ToHSchemaVersion;
 import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.VersionInfo;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.CommandExceptionHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.ToHCommandExecutor;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
@@ -226,8 +228,8 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     // Whether default group membership should be made explicit
     private static final boolean DEFAULT_EXPLICIT_DEFAULT_GROUP_MEMBERSHIP = false;
 
-    // Plugin Version
-    private final String PluginVersion = this.getDescription().getVersion();
+    // Version info (may include build number)
+    private VersionInfo versionInfo;
 
     // Permission resolver
     private PermissionsResolver resolver = new PermissionsResolver(this);
@@ -410,6 +412,11 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         return this;
     }
 
+    @Override
+    public void onLoad() {
+        versionInfo = ToHUtils.getVersion(this);
+    }
+
     /* (non-Javadoc)
      * @see org.bukkit.plugin.Plugin#onDisable()
      */
@@ -452,7 +459,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             removeBukkitPermissions(player, true);
         }
 
-        log(this, "%s disabled.", PluginVersion);
+        log(this, "%s disabled.", versionInfo.getVersionString());
     }
 
     /* (non-Javadoc)
@@ -461,7 +468,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     @Override
     public void onEnable() {
         try {
-            log(this, "%s starting...", PluginVersion);
+            log(this, "%s starting...", versionInfo.getVersionString());
 
             // FIXME Defaults workaround, to be removed after 1.0
             boolean isUpgrade = new File(getDataFolder(), "config.yml").exists();
@@ -646,7 +653,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             // Initialize expiration handler
             refreshExpirations();
             
-            log(this, "%s enabled.", PluginVersion);
+            log(this, "%s enabled.", versionInfo.getVersionString());
         }
         catch (Throwable t) {
             unrecoverableError("everything else", t);

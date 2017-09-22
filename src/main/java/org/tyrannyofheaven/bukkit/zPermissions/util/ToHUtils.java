@@ -15,15 +15,17 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.bukkit.plugin.Plugin;
 
 /**
  * Miscellaneous utility methods.
- * 
+ *
  * @author zerothangel
  */
 public class ToHUtils {
@@ -48,7 +50,7 @@ public class ToHUtils {
 
     /**
      * Throws an AssertionError if test is false.
-     * 
+     *
      * @param test the test
      * @param message assertion message
      */
@@ -59,7 +61,7 @@ public class ToHUtils {
 
     /**
      * Throws an AssertionError if test is false.
-     * 
+     *
      * @param test the test
      */
     public static void assertTrue(boolean test) {
@@ -69,7 +71,7 @@ public class ToHUtils {
 
     /**
      * Throws an AssertionError if test is true.
-     * 
+     *
      * @param test the test
      * @param message assertion message
      */
@@ -80,7 +82,7 @@ public class ToHUtils {
 
     /**
      * Throws an AssertionError if test is true.
-     * 
+     *
      * @param test the test
      */
     public static void assertFalse(boolean test) {
@@ -91,7 +93,7 @@ public class ToHUtils {
     /**
      * Similar to {@link Material#matchMaterial(String)} but also accepts names
      * without underscores or spaces, e.g. woodpickaxe.
-     * 
+     *
      * @param name name of the material to match
      * @return Material or null if not found
      */
@@ -102,6 +104,28 @@ public class ToHUtils {
             material = materialMap.get(name.toLowerCase());
         }
         return material;
+    }
+
+    /**
+     * Peeks into the plugin's manifest to determine actual version information.
+     *
+     * @param plugin the plugin
+     * @return a VersionInfo object holding the artifactId/version/build fields
+     */
+    public static VersionInfo getVersion(Plugin plugin) {
+        VersionInfo versionInfo = null;;
+        try {
+            versionInfo = VersionMain.getVersion(plugin.getClass());
+            if (versionInfo == null)
+                ToHLoggingUtils.warn(plugin, "Failed to determine actual version");
+        }
+        catch (IOException e) {
+            ToHLoggingUtils.error(plugin, "Error determining actual version:", e);
+        }
+        if (versionInfo == null) {
+            versionInfo = new VersionInfo(plugin.getDescription().getName(), plugin.getDescription().getVersion(), "UNKNOWN");
+        }
+        return versionInfo;
     }
 
 }
