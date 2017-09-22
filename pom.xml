@@ -178,7 +178,7 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Implementation-Build>${project.version}${zperm.desc}</Implementation-Build>
+                            <Implementation-Version>${project.version}${zperm.desc}</Implementation-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
