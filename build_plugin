@@ -1,0 +1,18 @@
+#!/bin/bash
+
+export M3_HOME=/opt/maven_default
+export M3=$M3_HOME/bin
+export PATH=$M3:$PATH
+export JAVA_HOME=/opt/jdk_default
+export PATH=$JAVA_HOME/bin:$PATH
+export MAVEN_OPTS="-Xms256m -Xmx512m"
+
+## lrwxrwxrwx 1 build build   20 Mar  8 11:57 src -> zPermissions/src/
+## lrwxrwxrwx 1 build build   23 Feb 18 16:39 pom.xml -> zPermissions/pom.xml
+
+rm -rf zPermissions
+rm -rf target
+
+git clone https://github.com/mirolm/zPermissions.git
+
+mvn clean install
