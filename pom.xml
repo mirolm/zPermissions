@@ -181,9 +181,7 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Main-Class>${bukkitplugin.main}</Main-Class>
                             <Implementation-Build>${zperm.desc}</Implementation-Build>
-                            <Implementation-Vendor-Id>${bukkitplugin.author}</Implementation-Vendor-Id>
                             <Build-Time>${maven.build.timestamp}</Build-Time>
                         </manifestEntries>
                     </archive>
