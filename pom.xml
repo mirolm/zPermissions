@@ -7,8 +7,11 @@
     <version>1.4.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>zPermissions</name>
+    <description>Superperms implementation with Bukkit database backend</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <bukkitplugin.main>org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsPlugin</bukkitplugin.main>
+        <bukkitplugin.author>ZerothAngel</bukkitplugin.author>
     </properties>
     <repositories>
         <repository>
@@ -178,7 +181,10 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
+                            <Main-Class>${bukkitplugin.main}</Main-Class>
                             <Implementation-Build>${zperm.desc}</Implementation-Build>
+                            <Implementation-Vendor-Id>${bukkitplugin.author}</Implementation-Vendor-Id>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
                         </manifestEntries>
                     </archive>
                 </configuration>

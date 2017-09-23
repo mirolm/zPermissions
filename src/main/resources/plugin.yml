@@ -1,8 +1,8 @@
 name: ${project.name}
 version: ${project.version}
-main: org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsPlugin
-description: Superperms implementation with Bukkit database backend
-author: ZerothAngel
+main: ${bukkitplugin.main}
+description: ${project.description}
+author: ${bukkitplugin.author}
 database: false
 load: STARTUP
 
