@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.tyrannyofheaven.bukkit</groupId>
     <artifactId>zPermissions</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>zPermissions</name>
     <properties>
@@ -155,7 +155,7 @@
                 <artifactId>scriptus</artifactId>
                 <version>0.3.1</version>
                 <configuration>
-                    <format>-%s</format>
+                    <format>%s</format>
                     <scmDirectory>zPermissions/</scmDirectory>
                     <descriptionProperty>zperm.desc</descriptionProperty>
                 </configuration>
@@ -178,7 +178,7 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Implementation-Version>${project.version}${zperm.desc}</Implementation-Version>
+                            <Implementation-Build>${zperm.desc}</Implementation-Build>
                         </manifestEntries>
                     </archive>
                 </configuration>
