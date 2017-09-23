@@ -283,4 +283,20 @@ public class PlayerCommands extends CommonCommands {
         super.clone(sender, playerName, destination, false);
     }
 
+    @Command(value="refresh", description="Bukkit hasPermission() check")
+    @Require("zpermissions.player.refresh")
+    public void refresh(CommandSender sender, @Session("entityName") String playerName) {
+        Player player = Bukkit.getPlayer(playerName);
+        if (player == null) {
+            sendMessage(sender, colorize("{RED}Player is not online."));
+            abortBatchProcessing();
+            return;
+        }
+
+        core.invalidateMetadataCache(player.getName(), player.getUniqueId(), false);
+        core.refreshPlayer(player.getUniqueId(), RefreshCause.COMMAND);
+        core.refreshExpirations(player.getUniqueId());
+        sendMessage(sender, colorize("{GREEN}Permissions refreshed for %s"), player.getName());
+    }
+
 }
