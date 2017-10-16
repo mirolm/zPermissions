@@ -20,8 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-// CVE-2017-15361 bogus commit
-
 /**
  * Programmatic interface of read-only operations for things that are not easily
  * done solely by command line (i.e. would involve parsing command output, which
