@@ -5,6 +5,7 @@ description: ${project.description}
 author: ${bukkitplugin.author}
 database: false
 load: STARTUP
+api-version: 1.13
 
 commands:
   permissions:
