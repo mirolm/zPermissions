@@ -11,6 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <bukkitplugin.main>org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsPlugin</bukkitplugin.main>
         <bukkitplugin.author>ZerothAngel</bukkitplugin.author>
+        <bukkitplugin.api>1.13</bukkitplugin.api>
     </properties>
     <repositories>
         <repository>
