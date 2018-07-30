@@ -141,7 +141,7 @@ public interface ZPermissionsService {
      * the group or its ancestors.
      *
      * <p>You <strong>must</strong> properly handle defaults do something like
-     * Bukkit's hasPermissions() method. See {@link #getPlayerPermissions(String, Set, String)}
+     * Bukkit's hasPermissions() method. See {@link #getPlayerPermissions(String, Set, UUID)}
      * for further explanation.
      *
      * @param worldName   the name of the target world. May be <code>null</code>.
@@ -157,6 +157,7 @@ public interface ZPermissionsService {
      * @param groupName the group's name
      * @return the group's members
      */
+    @Deprecated
     Set<String> getGroupMembers(String groupName);
 
     /**
