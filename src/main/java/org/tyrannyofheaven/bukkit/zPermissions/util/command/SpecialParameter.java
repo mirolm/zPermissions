@@ -80,7 +80,7 @@ final class SpecialParameter implements MethodParameter {
         /**
          * String[] parameter
          */
-        REST;
+        REST
     }
 
 }

@@ -65,7 +65,7 @@ public class ToHMessageUtils {
 
     // For colorize()
     private static enum ColorizeState {
-        TEXT, COLOR_OPEN, COLOR_NAME, COLOR_CLOSE, COLOR_ESCAPE;
+        TEXT, COLOR_OPEN, COLOR_NAME, COLOR_CLOSE, COLOR_ESCAPE
     }
 
     /**

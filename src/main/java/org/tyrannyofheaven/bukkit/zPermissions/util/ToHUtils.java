@@ -114,7 +114,6 @@ public class ToHUtils {
      */
     public static VersionInfo getVersion(Plugin plugin) {
         VersionInfo versionInfo = null;
-        ;
         try {
             versionInfo = VersionMain.getVersion(plugin.getClass());
             if (versionInfo == null)

@@ -89,7 +89,7 @@ public class ZPermissionsPlayerUpdateEvent extends PlayerEvent {
          * Player movement, including movement within the same world (if
          * region-support is enabled) and movement to a different world.
          */
-        MOVEMENT;
+        MOVEMENT
     }
 
 }

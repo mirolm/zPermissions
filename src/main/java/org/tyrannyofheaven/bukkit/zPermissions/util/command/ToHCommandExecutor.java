@@ -283,7 +283,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
     }
 
     private static enum SplitState {
-        NORMAL, ESCAPED, QUOTED, QUOTED_ESCAPED;
+        NORMAL, ESCAPED, QUOTED, QUOTED_ESCAPED
     }
 
 }
