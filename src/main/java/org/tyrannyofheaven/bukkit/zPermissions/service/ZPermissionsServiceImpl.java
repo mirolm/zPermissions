@@ -130,11 +130,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
      */
     @Override
     public Set<String> getAllGroups() {
-        Set<String> groups = new HashSet<>();
-
-        groups.addAll(getPermissionService().getEntityNames(true));
-
-        return groups;
+        return new HashSet<>(getPermissionService().getEntityNames(true));
     }
 
     /* (non-Javadoc)
@@ -292,11 +288,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     @Deprecated
     @Override
     public Set<String> getAllPlayers() {
-        Set<String> players = new HashSet<>();
-
-        players.addAll(getPermissionService().getEntityNames(false));
-
-        return players;
+        return new HashSet<>(getPermissionService().getEntityNames(false));
     }
 
     @Override
