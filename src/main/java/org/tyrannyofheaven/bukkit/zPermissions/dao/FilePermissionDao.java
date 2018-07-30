@@ -196,14 +196,11 @@ public class FilePermissionDao implements PermissionDao {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(new SafeConstructor(), new Representer(), options);
-        Writer out = new FileWriter(newFile);
-        try {
+        try (Writer out = new FileWriter(newFile)) {
             out.write("# DO NOT EDIT -- file is written to periodically!\n" +
                     "# Seriously, do not edit. Today it is YAML, tomorrow it may not be.\n" +
                     "# If you edit this file and you have problems, you are on your own!\n");
             yaml.dump(dump, out);
-        } finally {
-            out.close();
         }
 
         File backupFile = new File(file.getParentFile(), file.getName() + "~");
@@ -238,12 +235,9 @@ public class FilePermissionDao implements PermissionDao {
     @SuppressWarnings("unchecked")
     public void load(File file) throws IOException {
         Yaml yaml = new Yaml(new SafeConstructor());
-        Reader in = new FileReader(file);
         Map<String, Object> input = null;
-        try {
+        try (Reader in = new FileReader(file)) {
             input = (Map<String, Object>) yaml.load(in);
-        } finally {
-            in.close();
         }
         if (input != null) {
             load(input);

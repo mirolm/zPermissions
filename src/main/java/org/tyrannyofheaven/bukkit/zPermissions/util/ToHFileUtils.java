@@ -63,15 +63,12 @@ public class ToHFileUtils {
      * @throws IOException
      */
     public static void copyFile(InputStream input, File outFile) throws IOException {
-        OutputStream os = new FileOutputStream(outFile);
-        try {
+        try (OutputStream os = new FileOutputStream(outFile)) {
             byte[] buffer = new byte[COPY_BUFFER_SIZE];
             int readLen;
             while ((readLen = input.read(buffer)) != -1) {
                 os.write(buffer, 0, readLen);
             }
-        } finally {
-            os.close();
         }
     }
 
@@ -84,11 +81,8 @@ public class ToHFileUtils {
      * @throws IOException
      */
     public static void copyResourceToFile(Class<?> clazz, String resourceName, File outFile) throws IOException {
-        InputStream is = clazz.getResourceAsStream(resourceName);
-        try {
+        try (InputStream is = clazz.getResourceAsStream(resourceName)) {
             copyFile(is, outFile);
-        } finally {
-            is.close();
         }
     }
 

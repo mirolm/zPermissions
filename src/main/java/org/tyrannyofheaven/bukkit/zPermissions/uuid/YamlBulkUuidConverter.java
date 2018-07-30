@@ -68,12 +68,9 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
 
         // Read it in
         Yaml yaml = new Yaml(new SafeConstructor());
-        Reader in = new FileReader(dataFile);
         Map<String, Object> data = null;
-        try {
+        try (Reader in = new FileReader(dataFile)) {
             data = (Map<String, Object>) yaml.load(in);
-        } finally {
-            in.close();
         }
 
         // Gather usernames
@@ -106,12 +103,9 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         yaml = new Yaml(new SafeConstructor(), new Representer(), options);
-        Writer out = new FileWriter(newFile);
-        try {
+        try (Writer out = new FileWriter(newFile)) {
             out.write("# DO NOT EDIT -- file is written to periodically!\n");
             yaml.dump(data, out);
-        } finally {
-            out.close();
         }
 
         File backupFile = new File(dataFile.getParentFile(), dataFile.getName() + "~");

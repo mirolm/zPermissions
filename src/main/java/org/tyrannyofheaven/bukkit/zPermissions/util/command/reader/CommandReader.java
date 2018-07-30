@@ -111,8 +111,7 @@ public class CommandReader {
         List<CommandCall> calls = new ArrayList<>();
 
         // Read entire stream before executing anything
-        BufferedReader in = new BufferedReader(new InputStreamReader(input));
-        try {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(input))) {
             int lineNo = 0;
             String line;
             while ((line = in.readLine()) != null) {
@@ -138,8 +137,6 @@ public class CommandReader {
 
                 calls.add(new CommandCall(command, c, Arrays.copyOfRange(args, 1, args.length)));
             }
-        } finally {
-            in.close();
         }
 
         // Set up abort flag

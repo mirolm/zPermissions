@@ -162,21 +162,15 @@ public class MojangUuidResolver implements UuidResolver {
         connection.setConnectTimeout(15000);
         connection.setReadTimeout(15000);
 
-        DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
-        try {
+        try (DataOutputStream writer = new DataOutputStream(connection.getOutputStream())) {
             writer.write(body.getBytes(Charsets.UTF_8));
             writer.flush();
-        } finally {
-            writer.close();
         }
 
-        Reader reader = new InputStreamReader(connection.getInputStream());
         JSONArray profiles;
-        try {
+        try (Reader reader = new InputStreamReader(connection.getInputStream())) {
             JSONParser parser = new JSONParser(); // NB Not thread safe
             profiles = (JSONArray) parser.parse(reader);
-        } finally {
-            reader.close();
         }
 
         return convertResponse(profiles);

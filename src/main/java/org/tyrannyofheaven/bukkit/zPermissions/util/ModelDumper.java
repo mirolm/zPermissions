@@ -54,8 +54,7 @@ public class ModelDumper {
     }
 
     public void dump(File outFile) throws FileNotFoundException {
-        final PrintWriter out = new PrintWriter(outFile);
-        try {
+        try (PrintWriter out = new PrintWriter(outFile)) {
             storageStrategy.getTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
                 public void doInTransactionWithoutResult() throws Exception {
@@ -108,8 +107,6 @@ public class ModelDumper {
                     }
                 }
             }, true);
-        } finally {
-            out.close();
         }
     }
 
