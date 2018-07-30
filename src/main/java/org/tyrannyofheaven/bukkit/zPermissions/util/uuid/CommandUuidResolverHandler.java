@@ -21,6 +21,6 @@ import org.bukkit.command.CommandSender;
 
 public interface CommandUuidResolverHandler {
 
-    public void process(CommandSender sender, String name, UUID uuid, boolean skip);
+    void process(CommandSender sender, String name, UUID uuid, boolean skip);
 
 }

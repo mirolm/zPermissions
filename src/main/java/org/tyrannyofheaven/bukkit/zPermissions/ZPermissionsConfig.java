@@ -25,38 +25,38 @@ import java.util.List;
  */
 public interface ZPermissionsConfig {
 
-    public List<String> getTracks();
+    List<String> getTracks();
 
-    public String getDefaultTrack();
+    String getDefaultTrack();
 
-    public List<String> getTrack(String trackName);
+    List<String> getTrack(String trackName);
 
-    public File getDumpDirectory();
+    File getDumpDirectory();
 
-    public boolean isRankAdminBroadcast();
+    boolean isRankAdminBroadcast();
 
-    public int getDefaultTempPermissionTimeout();
+    int getDefaultTempPermissionTimeout();
 
-    public String getDefaultPrimaryGroupTrack();
+    String getDefaultPrimaryGroupTrack();
 
-    public boolean isVaultPrefixIncludesGroup();
+    boolean isVaultPrefixIncludesGroup();
 
-    public boolean isVaultMetadataIncludesGroup();
+    boolean isVaultMetadataIncludesGroup();
 
-    public boolean isVaultGroupTestUsesAssignedOnly();
+    boolean isVaultGroupTestUsesAssignedOnly();
 
-    public boolean isVaultGetGroupsUsesAssignedOnly();
+    boolean isVaultGetGroupsUsesAssignedOnly();
 
-    public boolean isInheritedMetadata();
+    boolean isInheritedMetadata();
 
-    public String getVaultPlayerPrefixFormat();
+    String getVaultPlayerPrefixFormat();
 
-    public String getVaultPlayerSuffixFormat();
+    String getVaultPlayerSuffixFormat();
 
-    public int getSearchBatchSize();
+    int getSearchBatchSize();
 
-    public int getSearchDelay();
+    int getSearchDelay();
 
-    public boolean isServiceMetadataPrefixHack();
+    boolean isServiceMetadataPrefixHack();
 
 }

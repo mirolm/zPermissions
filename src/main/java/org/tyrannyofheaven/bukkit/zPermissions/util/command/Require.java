@@ -35,16 +35,16 @@ public @interface Require {
     /**
      * One or more permission names.
      */
-    public String[] value();
+    String[] value();
 
     /**
      * Whether all permissions are required.
      */
-    public boolean all() default false;
+    boolean all() default false;
 
     /**
      * Whether negated permissions should be explicitly checked.
      */
-    public boolean checkNegations() default false;
+    boolean checkNegations() default false;
 
 }

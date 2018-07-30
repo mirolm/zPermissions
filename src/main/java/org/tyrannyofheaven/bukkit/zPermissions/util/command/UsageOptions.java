@@ -27,7 +27,7 @@ public interface UsageOptions {
      *
      * @return the usage preamble
      */
-    public String getPreamble();
+    String getPreamble();
 
     /**
      * The usage postamble. Outputted at the end of the line. (After the
@@ -35,35 +35,35 @@ public interface UsageOptions {
      *
      * @return the usage postamble
      */
-    public String getPostamble();
+    String getPostamble();
 
     /**
      * Starting delimiter for flags.
      *
      * @return delimiter string
      */
-    public String getFlagStart();
+    String getFlagStart();
 
     /**
      * Ending delimiter for flags.
      *
      * @return delimiter string
      */
-    public String getFlagEnd();
+    String getFlagEnd();
 
     /**
      * Starting delimiter for flag values.
      *
      * @return delimiter string
      */
-    public String getFlagValueStart();
+    String getFlagValueStart();
 
     /**
      * Ending delimiter for flag values.
      *
      * @return delimiter string
      */
-    public String getFlagValueEnd();
+    String getFlagValueEnd();
 
     /**
      * Starting delimiter for positional parameters.
@@ -71,7 +71,7 @@ public interface UsageOptions {
      * @param optional true if optional parameter
      * @return delimiter string
      */
-    public String getParameterStart(boolean optional);
+    String getParameterStart(boolean optional);
 
     /**
      * Ending delimiter for positional parameters.
@@ -79,27 +79,27 @@ public interface UsageOptions {
      * @param optional true if optional parameter
      * @return delimiter string
      */
-    public String getParameterEnd(boolean optional);
+    String getParameterEnd(boolean optional);
 
     /**
      * Delimiter between usage and its description.
      *
      * @return delimiter string
      */
-    public String getDescriptionDelimiter();
+    String getDescriptionDelimiter();
 
     /**
      * Starting delimiter for varargs parameter.
      *
      * @return delimiter string
      */
-    public String getVarargsStart();
+    String getVarargsStart();
 
     /**
      * Ending delimiter for varargs parameter.
      *
      * @return delimiter string
      */
-    public String getVarargsEnd();
+    String getVarargsEnd();
 
 }

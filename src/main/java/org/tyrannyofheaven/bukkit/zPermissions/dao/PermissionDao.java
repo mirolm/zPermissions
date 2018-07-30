@@ -33,40 +33,40 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
  */
 public interface PermissionDao {
 
-    public void createRegion(PermissionRegion region);
+    void createRegion(PermissionRegion region);
 
-    public void createWorld(PermissionWorld world);
+    void createWorld(PermissionWorld world);
 
-    public void createEntity(PermissionEntity entity);
+    void createEntity(PermissionEntity entity);
 
-    public void createOrUpdateEntry(Entry entry);
+    void createOrUpdateEntry(Entry entry);
 
-    public void deleteEntry(Entry entry);
+    void deleteEntry(Entry entry);
 
-    public void createOrUpdateMembership(Membership membership);
+    void createOrUpdateMembership(Membership membership);
 
-    public void setEntityParent(PermissionEntity entity, PermissionEntity parent);
+    void setEntityParent(PermissionEntity entity, PermissionEntity parent);
 
-    public void createOrUpdateInheritance(Inheritance inheritance);
+    void createOrUpdateInheritance(Inheritance inheritance);
 
-    public void deleteInheritance(Inheritance inheritance);
+    void deleteInheritance(Inheritance inheritance);
 
-    public void setEntityPriority(PermissionEntity entity, int priority);
+    void setEntityPriority(PermissionEntity entity, int priority);
 
-    public void deleteRegions(Collection<PermissionRegion> regions);
+    void deleteRegions(Collection<PermissionRegion> regions);
 
-    public void deleteWorlds(Collection<PermissionWorld> worlds);
+    void deleteWorlds(Collection<PermissionWorld> worlds);
 
-    public void deleteEntity(PermissionEntity entity);
+    void deleteEntity(PermissionEntity entity);
 
-    public void deleteMembership(Membership membership);
+    void deleteMembership(Membership membership);
 
-    public void createOrUpdateMetadata(EntityMetadata metadata);
+    void createOrUpdateMetadata(EntityMetadata metadata);
 
-    public void deleteMetadata(EntityMetadata metadata);
+    void deleteMetadata(EntityMetadata metadata);
 
-    public void updateDisplayName(PermissionEntity entity);
+    void updateDisplayName(PermissionEntity entity);
 
-    public void updateDisplayName(Membership membership);
+    void updateDisplayName(Membership membership);
 
 }

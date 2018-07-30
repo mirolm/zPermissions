@@ -35,7 +35,7 @@ public interface RegionStrategy {
      *
      * @return the name of the region manager
      */
-    public String getName();
+    String getName();
 
     /**
      * Returns whether or not this region plugin is present.
@@ -43,7 +43,7 @@ public interface RegionStrategy {
      * @return true if present. In which case this strategy will be used as the
      * main RegionStrategy and {@link #init()} will be called.
      */
-    public boolean isPresent();
+    boolean isPresent();
 
     // Lifecycle
 
@@ -52,20 +52,20 @@ public interface RegionStrategy {
      * happen later (e.g. PluginEnableEvent). After initialization, {@link #isEnabled()}
      * should always return true.
      */
-    public void init();
+    void init();
 
     /**
      * Returns whether this RegionStrategy is ready.
      *
      * @return true if ready to receive calls to {@link #getRegions(Location)}.
      */
-    public boolean isEnabled();
+    boolean isEnabled();
 
     /**
      * Do any cleanup. Once this method completes, {@link #isEnabled()} should return false.
      * Will be called regardless of {@link #isEnabled()} state, but only if {@link #init()} was called.
      */
-    public void shutdown();
+    void shutdown();
 
     // Service
 
@@ -77,6 +77,6 @@ public interface RegionStrategy {
      * @return name of containing regions or empty set. Never null. Region names
      * must be in all lowercase.
      */
-    public Set<String> getRegions(Location location, Player player);
+    Set<String> getRegions(Location location, Player player);
 
 }

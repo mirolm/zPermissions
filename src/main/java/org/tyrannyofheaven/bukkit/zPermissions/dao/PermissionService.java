@@ -31,54 +31,54 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
  */
 public interface PermissionService {
 
-    public Boolean getPermission(String name, UUID uuid, boolean group, String region, String world, String permission);
+    Boolean getPermission(String name, UUID uuid, boolean group, String region, String world, String permission);
 
-    public void setPermission(String name, UUID uuid, boolean group, String region, String world, String permission, boolean value);
+    void setPermission(String name, UUID uuid, boolean group, String region, String world, String permission, boolean value);
 
-    public boolean unsetPermission(String name, UUID uuid, boolean group, String region, String world, String permission);
+    boolean unsetPermission(String name, UUID uuid, boolean group, String region, String world, String permission);
 
-    public void addMember(String groupName, UUID memberUuid, String memberName, Date expiration);
+    void addMember(String groupName, UUID memberUuid, String memberName, Date expiration);
 
-    public boolean removeMember(String groupName, UUID memberUuid);
+    boolean removeMember(String groupName, UUID memberUuid);
 
     // NB: Resolver critical path
-    public List<Membership> getGroups(UUID memberUuid);
+    List<Membership> getGroups(UUID memberUuid);
 
-    public List<Membership> getMembers(String group);
+    List<Membership> getMembers(String group);
 
-    public PermissionEntity getEntity(String name, UUID uuid, boolean group);
+    PermissionEntity getEntity(String name, UUID uuid, boolean group);
 
-    public List<PermissionEntity> getEntities(boolean group);
+    List<PermissionEntity> getEntities(boolean group);
 
-    public void setGroup(UUID playerUuid, String playerName, String groupName, Date expiration);
+    void setGroup(UUID playerUuid, String playerName, String groupName, Date expiration);
 
     // Technically deprecated
-    public void setParent(String groupName, String parentName);
+    void setParent(String groupName, String parentName);
 
-    public void setParents(String groupName, List<String> parentNames);
+    void setParents(String groupName, List<String> parentNames);
 
-    public void setPriority(String groupName, int priority);
+    void setPriority(String groupName, int priority);
 
-    public boolean deleteEntity(String name, UUID uuid, boolean group);
-
-    // NB: Resolver critical path
-    public List<String> getAncestry(String groupName);
+    boolean deleteEntity(String name, UUID uuid, boolean group);
 
     // NB: Resolver critical path
-    public List<Entry> getEntries(String name, UUID uuid, boolean group);
+    List<String> getAncestry(String groupName);
 
-    public boolean createGroup(String name);
+    // NB: Resolver critical path
+    List<Entry> getEntries(String name, UUID uuid, boolean group);
 
-    public List<String> getEntityNames(boolean group);
+    boolean createGroup(String name);
 
-    public Object getMetadata(String name, UUID uuid, boolean group, String metadataName);
+    List<String> getEntityNames(boolean group);
 
-    public List<EntityMetadata> getAllMetadata(String name, UUID uuid, boolean group);
+    Object getMetadata(String name, UUID uuid, boolean group, String metadataName);
 
-    public void setMetadata(String name, UUID uuid, boolean group, String metadataName, Object value);
+    List<EntityMetadata> getAllMetadata(String name, UUID uuid, boolean group);
 
-    public boolean unsetMetadata(String name, UUID uuid, boolean group, String metadataName);
+    void setMetadata(String name, UUID uuid, boolean group, String metadataName, Object value);
 
-    public void updateDisplayName(UUID uuid, String displayName);
+    boolean unsetMetadata(String name, UUID uuid, boolean group, String metadataName);
+
+    void updateDisplayName(UUID uuid, String displayName);
 
 }

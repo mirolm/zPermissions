@@ -39,30 +39,30 @@ public @interface Option {
      * The name of this mapping. Flags should start with a dash ('-'). Anything
      * not starting with '-' will be considered a positional parameter.
      */
-    public String[] value();
+    String[] value();
 
     /**
      * The name of the value, for display in the usage string. Note that
      * this is ignored for boolean/Boolean flags.
      */
-    public String valueName() default "";
+    String valueName() default "";
 
     /**
      * Whether or not this parameter is optional. Flags are always optional,
      * regardless of this setting.
      */
-    public boolean optional() default false;
+    boolean optional() default false;
 
     /**
      * Whether or not this parameter is nullable. Only applies to non-optional,
      * non-flag parameters.
      */
-    public boolean nullable() default false;
+    boolean nullable() default false;
 
     /**
      * The name of the TypeCompleter to use. TypeCompleters should be registered
      * via {@link ToHCommandExecutor#registerTypeCompleter(String, TypeCompleter)}.
      */
-    public String completer() default "";
+    String completer() default "";
 
 }

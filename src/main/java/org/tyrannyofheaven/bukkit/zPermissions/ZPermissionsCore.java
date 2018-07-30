@@ -32,49 +32,49 @@ public interface ZPermissionsCore {
 
     // Refreshing the attachments of a set of players
 
-    public void refreshPlayer(UUID uuid, RefreshCause cause);
+    void refreshPlayer(UUID uuid, RefreshCause cause);
 
-    public void refreshPlayers(); // Also invalidates metadata cache of refreshed players
+    void refreshPlayers(); // Also invalidates metadata cache of refreshed players
 
     // NB called from async thread
-    public void refreshPlayers(Collection<UUID> playerUuids); // Also invalidates metadata cache of refreshed players
+    void refreshPlayers(Collection<UUID> playerUuids); // Also invalidates metadata cache of refreshed players
 
-    public boolean refreshAffectedPlayers(String groupName); // Also invalidates metadata cache of refreshed players
+    boolean refreshAffectedPlayers(String groupName); // Also invalidates metadata cache of refreshed players
 
     // Refreshing the temporary group membership timer
 
-    public void refreshExpirations();
+    void refreshExpirations();
 
-    public void refreshExpirations(UUID uuid);
+    void refreshExpirations(UUID uuid);
 
     // Config + storage reload
 
-    public void reload();
+    void reload();
 
     // Storage reload
 
-    public void refresh(boolean force, Runnable runnable);
+    void refresh(boolean force, Runnable runnable);
 
     // Player attachment control
 
-    public void setBukkitPermissions(Player player, Location location, boolean force, RefreshCause eventCause);
+    void setBukkitPermissions(Player player, Location location, boolean force, RefreshCause eventCause);
 
-    public void removeBukkitPermissions(Player player, boolean recalculate);
+    void removeBukkitPermissions(Player player, boolean recalculate);
 
     // Utility
 
-    public Set<String> getRegions(Location location, Player player);
+    Set<String> getRegions(Location location, Player player);
 
-    public void logExternalChange(String message, Object... args);
+    void logExternalChange(String message, Object... args);
 
-    public void updateDisplayName(UUID uuid, String displayName);
+    void updateDisplayName(UUID uuid, String displayName);
 
-    public void handleExplicitDefaultGroupMembership(final UUID uuid, final String displayName);
+    void handleExplicitDefaultGroupMembership(final UUID uuid, final String displayName);
 
     // Metadata cache management
 
-    public void invalidateMetadataCache(String name, UUID uuid, boolean group);
+    void invalidateMetadataCache(String name, UUID uuid, boolean group);
 
-    public void invalidateMetadataCache();
+    void invalidateMetadataCache();
 
 }

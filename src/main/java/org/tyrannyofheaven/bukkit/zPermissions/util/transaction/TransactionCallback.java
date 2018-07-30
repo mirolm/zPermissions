@@ -28,6 +28,6 @@ public interface TransactionCallback<T> {
      * @return the result of the operation
      * @throws Exception any thrown exception will result in a rollback
      */
-    public T doInTransaction() throws Exception;
+    T doInTransaction() throws Exception;
 
 }

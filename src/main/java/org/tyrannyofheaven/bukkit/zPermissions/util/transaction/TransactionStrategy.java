@@ -29,7 +29,7 @@ public interface TransactionStrategy {
      * @param callback the callback
      * @return the result of the callback
      */
-    public <T> T execute(TransactionCallback<T> callback);
+    <T> T execute(TransactionCallback<T> callback);
 
     /**
      * Execute the given callback within a transaction suitable for this
@@ -39,6 +39,6 @@ public interface TransactionStrategy {
      * @param readOnly true if this transaction should be considered read-only
      * @return the result of the callback
      */
-    public <T> T execute(TransactionCallback<T> callback, boolean readOnly);
+    <T> T execute(TransactionCallback<T> callback, boolean readOnly);
 
 }

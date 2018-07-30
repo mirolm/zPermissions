@@ -35,6 +35,6 @@ public @interface Session {
     /**
      * The name of the session value to use for this parameter.
      */
-    public String value();
+    String value();
 
 }

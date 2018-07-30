@@ -35,6 +35,6 @@ public interface TypeCompleter {
      * @param partial start of string to match for completion. May be empty, never null.
      * @return
      */
-    public List<String> complete(Class<?> clazz, String arg, CommandSender sender, String partial);
+    List<String> complete(Class<?> clazz, String arg, CommandSender sender, String partial);
 
 }

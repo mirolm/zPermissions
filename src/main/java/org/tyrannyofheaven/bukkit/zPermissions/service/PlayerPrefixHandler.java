@@ -21,8 +21,8 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
 
 public interface PlayerPrefixHandler {
 
-    public String getPlayerPrefix(ZPermissionsService service, UUID uuid);
+    String getPlayerPrefix(ZPermissionsService service, UUID uuid);
 
-    public String getPlayerSuffix(ZPermissionsService service, UUID uuid);
+    String getPlayerSuffix(ZPermissionsService service, UUID uuid);
 
 }

@@ -30,7 +30,7 @@ public interface UuidResolver {
      * properties (uuid and displayName) must be returned. If no display name
      * lookup is possible, simply returning the passed-in username is acceptable.
      */
-    public UuidDisplayName resolve(String username);
+    UuidDisplayName resolve(String username);
 
     /**
      * Looks up the UUID of a username. Possibly blocking.
@@ -43,7 +43,7 @@ public interface UuidResolver {
      * properties (uuid and displayName) must be returned. If no display name
      * lookup is possible, simply returning the passed-in username is acceptable.
      */
-    public UuidDisplayName resolve(String username, boolean cacheOnly);
+    UuidDisplayName resolve(String username, boolean cacheOnly);
 
     /**
      * Bulk resolution of usernames to UUIDs. Possibly blocking.
@@ -53,7 +53,7 @@ public interface UuidResolver {
      * methods in this interface, both properties must be filled.
      * @throws IOException if something went wrong resolving the usernames
      */
-    public Map<String, UuidDisplayName> resolve(Collection<String> usernames) throws Exception;
+    Map<String, UuidDisplayName> resolve(Collection<String> usernames) throws Exception;
 
     /**
      * Pre-load the cache (if this implementation has one) with the given
@@ -63,7 +63,7 @@ public interface UuidResolver {
      * @param username the username
      * @param uuid     the associated UUID
      */
-    public void preload(String username, UUID uuid);
+    void preload(String username, UUID uuid);
 
     /**
      * Hint to the underlying implementation that the cache entry for the
@@ -71,11 +71,11 @@ public interface UuidResolver {
      *
      * @param username the username
      */
-    public void invalidate(String username);
+    void invalidate(String username);
 
     /**
      * Hint to the underlying implementation to invalidate all cache entries.
      */
-    public void invalidateAll();
+    void invalidateAll();
 
 }

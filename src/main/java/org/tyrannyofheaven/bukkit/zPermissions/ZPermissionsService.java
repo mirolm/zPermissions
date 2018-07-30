@@ -34,7 +34,7 @@ public interface ZPermissionsService {
      * only group members
      */
     @Deprecated
-    public Set<String> getAllPlayers();
+    Set<String> getAllPlayers();
 
     /**
      * Retrieve UUIDs of all players with permissions defined.
@@ -42,7 +42,7 @@ public interface ZPermissionsService {
      * @return set of players known by zPermissions, not including those who are
      * only group members
      */
-    public Set<UUID> getAllPlayersUUID();
+    Set<UUID> getAllPlayersUUID();
 
     /**
      * Resolve a player's permissions for the given world and region set. The
@@ -63,7 +63,7 @@ public interface ZPermissionsService {
      * @return effective permissions for this player
      */
     @Deprecated
-    public Map<String, Boolean> getPlayerPermissions(String worldName, Set<String> regionNames, String playerName);
+    Map<String, Boolean> getPlayerPermissions(String worldName, Set<String> regionNames, String playerName);
 
     /**
      * Resolve a player's permissions for the given world and region set. The
@@ -83,7 +83,7 @@ public interface ZPermissionsService {
      * @param playerName  the player's name
      * @return effective permissions for this player
      */
-    public Map<String, Boolean> getPlayerPermissions(String worldName, Set<String> regionNames, UUID uuid);
+    Map<String, Boolean> getPlayerPermissions(String worldName, Set<String> regionNames, UUID uuid);
 
     /**
      * Retrieve groups which a player is explicitly assigned. The groups are
@@ -95,7 +95,7 @@ public interface ZPermissionsService {
      * @return the names of groups which the player is assigned to
      */
     @Deprecated
-    public List<String> getPlayerAssignedGroups(String playerName);
+    List<String> getPlayerAssignedGroups(String playerName);
 
     /**
      * Retrieve groups which a player is explicitly assigned. The groups are
@@ -106,7 +106,7 @@ public interface ZPermissionsService {
      * @param uuid the player's UUID
      * @return the names of groups which the player is assigned to
      */
-    public List<String> getPlayerAssignedGroups(UUID uuid);
+    List<String> getPlayerAssignedGroups(UUID uuid);
 
     /**
      * Retrieve groups which a player is a member of. This includes all
@@ -116,7 +116,7 @@ public interface ZPermissionsService {
      * @return the names of groups which the player is a member of
      */
     @Deprecated
-    public Set<String> getPlayerGroups(String playerName);
+    Set<String> getPlayerGroups(String playerName);
 
     /**
      * Retrieve groups which a player is a member of. This includes all
@@ -125,14 +125,14 @@ public interface ZPermissionsService {
      * @param uuid the player's UUID
      * @return the names of groups which the player is a member of
      */
-    public Set<String> getPlayerGroups(UUID uuid);
+    Set<String> getPlayerGroups(UUID uuid);
 
     /**
      * Retrieve names of all groups.
      *
      * @return names of all groups known by zPermissions
      */
-    public Set<String> getAllGroups();
+    Set<String> getAllGroups();
 
     /**
      * Resolve a group's permissions for the given world and region set.
@@ -149,7 +149,7 @@ public interface ZPermissionsService {
      * @param groupName   the group's name
      * @return effective permissions for this group
      */
-    public Map<String, Boolean> getGroupPermissions(String worldName, Set<String> regionNames, String groupName);
+    Map<String, Boolean> getGroupPermissions(String worldName, Set<String> regionNames, String groupName);
 
     /**
      * Retrieve the names of the players that are members of the given group.
@@ -157,7 +157,7 @@ public interface ZPermissionsService {
      * @param groupName the group's name
      * @return the group's members
      */
-    public Set<String> getGroupMembers(String groupName);
+    Set<String> getGroupMembers(String groupName);
 
     /**
      * Retrieve the UUIDs of the players that are members of the given group.
@@ -165,7 +165,7 @@ public interface ZPermissionsService {
      * @param groupName the group's name
      * @return the group's members
      */
-    public Set<UUID> getGroupMembersUUID(String groupName);
+    Set<UUID> getGroupMembersUUID(String groupName);
 
     /**
      * Retrieve the named metadata value from a player.
@@ -178,7 +178,7 @@ public interface ZPermissionsService {
      * @throws IllegalStateException if the actual metadata type does not match the given type
      */
     @Deprecated
-    public <T> T getPlayerMetadata(String playerName, String metadataName, Class<T> type);
+    <T> T getPlayerMetadata(String playerName, String metadataName, Class<T> type);
 
     /**
      * Retrieve the named metadata value from a player.
@@ -190,7 +190,7 @@ public interface ZPermissionsService {
      * @return the metadata value or null if not found
      * @throws IllegalStateException if the actual metadata type does not match the given type
      */
-    public <T> T getPlayerMetadata(UUID uuid, String metadataName, Class<T> type);
+    <T> T getPlayerMetadata(UUID uuid, String metadataName, Class<T> type);
 
     /**
      * Retrieve the named metadata value from a group.
@@ -202,14 +202,14 @@ public interface ZPermissionsService {
      * @return the metadata value or null if not found
      * @throws IllegalStateException if the actual metadata type does not match the given type
      */
-    public <T> T getGroupMetadata(String groupName, String metadataName, Class<T> type);
+    <T> T getGroupMetadata(String groupName, String metadataName, Class<T> type);
 
     /**
      * Retrieve names of all defined tracks.
      *
      * @return names of all tracks
      */
-    public Set<String> getAllTracks();
+    Set<String> getAllTracks();
 
     /**
      * Retrieve group names of the given track in rank order.
@@ -217,7 +217,7 @@ public interface ZPermissionsService {
      * @param trackName the track name
      * @return the group names of the track
      */
-    public List<String> getTrackGroups(String trackName);
+    List<String> getTrackGroups(String trackName);
 
     /**
      * zPermissions does not have any concept of "primary group." The closest
@@ -230,7 +230,7 @@ public interface ZPermissionsService {
      * @return the name of the player's primary group
      */
     @Deprecated
-    public String getPlayerPrimaryGroup(String playerName);
+    String getPlayerPrimaryGroup(String playerName);
 
     /**
      * zPermissions does not have any concept of "primary group." The closest
@@ -242,7 +242,7 @@ public interface ZPermissionsService {
      * @param uuid the UUID of the player
      * @return the name of the player's primary group
      */
-    public String getPlayerPrimaryGroup(UUID uuid);
+    String getPlayerPrimaryGroup(UUID uuid);
 
     /**
      * Retrieve a player's chat prefix.
@@ -250,7 +250,7 @@ public interface ZPermissionsService {
      * @param uuid the player's UUID
      * @return the player's prefix or empty string if none
      */
-    public String getPlayerPrefix(UUID uuid);
+    String getPlayerPrefix(UUID uuid);
 
     /**
      * Retrieve a player's suffix.
@@ -258,6 +258,6 @@ public interface ZPermissionsService {
      * @param uuid the player's UUID
      * @return the player's suffix or empty string if none
      */
-    public String getPlayerSuffix(UUID uuid);
+    String getPlayerSuffix(UUID uuid);
 
 }

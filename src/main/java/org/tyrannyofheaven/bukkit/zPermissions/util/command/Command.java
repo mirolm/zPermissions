@@ -43,21 +43,21 @@ public @interface Command {
     /**
      * The name of the command along with any associated aliases.
      */
-    public String[] value();
+    String[] value();
 
     /**
      * Command description to be displayed when showing help.
      */
-    public String description() default "";
+    String description() default "";
 
     /**
      * Description of the varargs (String[]) parameter when showing help.
      */
-    public String varargs() default "";
+    String varargs() default "";
 
     /**
      * TypeCompleter to use for varargs. Also see {@link ToHCommandExecutor#registerTypeCompleter(String, TypeCompleter)}.
      */
-    public String completer() default "";
+    String completer() default "";
 
 }

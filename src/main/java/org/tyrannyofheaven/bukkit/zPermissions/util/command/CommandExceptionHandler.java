@@ -34,6 +34,6 @@ public interface CommandExceptionHandler {
      * @param t       the exception thrown
      * @return true if the exception was handled, false otherwise
      */
-    public boolean handleException(CommandSender sender, org.bukkit.command.Command command, String label, String[] args, Throwable t);
+    boolean handleException(CommandSender sender, org.bukkit.command.Command command, String label, String[] args, Throwable t);
 
 }

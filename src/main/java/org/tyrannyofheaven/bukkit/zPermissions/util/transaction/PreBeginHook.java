@@ -29,6 +29,6 @@ public interface PreBeginHook {
      * @param readOnly the read-only flag for this transaction
      * @throws Exception an exception signifying that a rollback should be performed
      */
-    public void preBegin(boolean readOnly) throws Exception;
+    void preBegin(boolean readOnly) throws Exception;
 
 }

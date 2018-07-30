@@ -34,13 +34,13 @@ public interface StorageStrategy {
      *
      * @param configMap Configuration map containing key-value pairs
      */
-    public void init(Map<String, Object> configMap);
+    void init(Map<String, Object> configMap);
 
     /**
      * Perform any required cleanup. Called from the zPermissions onDisable()
      * handler.
      */
-    public void shutdown();
+    void shutdown();
 
     /**
      * A request to re-read from the permissions store. Whether this is actually
@@ -52,7 +52,7 @@ public interface StorageStrategy {
      *                   not-<code>null</code>, this task should be run <i>synchronously</i>
      *                   in the main thread.
      */
-    public void refresh(boolean force, Runnable finishTask);
+    void refresh(boolean force, Runnable finishTask);
 
     /**
      * Retrieve an instance of {@link PermissionService} that is associated with
@@ -60,7 +60,7 @@ public interface StorageStrategy {
      *
      * @return the PermissionService instance
      */
-    public PermissionService getPermissionService();
+    PermissionService getPermissionService();
 
     /**
      * Retrieve an instance of {@link TransactionStrategy} that is associated
@@ -70,7 +70,7 @@ public interface StorageStrategy {
      *
      * @return a TransactionStrategy
      */
-    public TransactionStrategy getTransactionStrategy();
+    TransactionStrategy getTransactionStrategy();
 
     /**
      * Retrieve an instance of {@link TransactionStrategy} that is associated
@@ -80,6 +80,6 @@ public interface StorageStrategy {
      *
      * @return a TransactionStrategy
      */
-    public TransactionStrategy getRetryingTransactionStrategy();
+    TransactionStrategy getRetryingTransactionStrategy();
 
 }
