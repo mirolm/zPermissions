@@ -132,9 +132,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     public Set<String> getAllGroups() {
         Set<String> groups = new HashSet<>();
 
-        for (String groupName : getPermissionService().getEntityNames(true)) {
-            groups.add(groupName);
-        }
+        groups.addAll(getPermissionService().getEntityNames(true));
 
         return groups;
     }
@@ -296,9 +294,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     public Set<String> getAllPlayers() {
         Set<String> players = new HashSet<>();
 
-        for (String playerName : getPermissionService().getEntityNames(false)) {
-            players.add(playerName);
-        }
+        players.addAll(getPermissionService().getEntityNames(false));
 
         return players;
     }

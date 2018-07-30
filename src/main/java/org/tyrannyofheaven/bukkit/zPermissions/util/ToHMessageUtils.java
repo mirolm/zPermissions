@@ -16,6 +16,7 @@
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -262,8 +263,7 @@ public class ToHMessageUtils {
             List<String> outputLines = new ArrayList<>(lines.size());
             for (String line : lines) {
                 String[] wrapped = ChatPaginator.wordWrap(line, ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
-                for (String wrap : wrapped)
-                    outputLines.add(wrap);
+                Collections.addAll(outputLines, wrapped);
             }
             lines = outputLines;
 
