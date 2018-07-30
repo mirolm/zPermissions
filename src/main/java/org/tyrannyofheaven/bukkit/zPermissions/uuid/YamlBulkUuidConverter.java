@@ -71,12 +71,11 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         Reader in = new FileReader(dataFile);
         Map<String, Object> data = null;
         try {
-            data = (Map<String, Object>)yaml.load(in);
-        }
-        finally {
+            data = (Map<String, Object>) yaml.load(in);
+        } finally {
             in.close();
         }
-        
+
         // Gather usernames
         Set<String> usernames = new HashSet<>();
         int players = preparePlayers(data, usernames);
@@ -111,8 +110,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         try {
             out.write("# DO NOT EDIT -- file is written to periodically!\n");
             yaml.dump(data, out);
-        }
-        finally {
+        } finally {
             out.close();
         }
 
@@ -141,11 +139,11 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
     @SuppressWarnings("unchecked")
     private int preparePlayers(Map<String, Object> data, Set<String> usernames) {
         int count = 0;
-        for (Map<String, Object> player : (List<Map<String, Object>>)data.get("players")) {
-            String name = (String)player.get("name");
+        for (Map<String, Object> player : (List<Map<String, Object>>) data.get("players")) {
+            String name = (String) player.get("name");
             if (!hasText(name))
                 throw new IllegalStateException("name must have a value");
-            String uuidString = (String)player.get("uuid");
+            String uuidString = (String) player.get("uuid");
             if (uuidString == null) {
                 // Hasn't been migrated yet
                 count++;
@@ -159,9 +157,9 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
     private List<Map<String, Object>> prepareGroups(Map<String, Object> data, Set<String> usernames) {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        for (Map<String, Object> group : (List<Map<String, Object>>)data.get("groups")) {
+        for (Map<String, Object> group : (List<Map<String, Object>>) data.get("groups")) {
             boolean migrate = false;
-            List<?> members = (List<?>)group.get("members");
+            List<?> members = (List<?>) group.get("members");
             // pre-UUID -> list of strings
             // post-UUID -> list of maps
             if (!members.isEmpty()) {
@@ -171,17 +169,17 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
                     // Needs migration
                     migrate = true;
                     for (Object username : members) {
-                        usernames.add(((String)username).toLowerCase());
+                        usernames.add(((String) username).toLowerCase());
                     }
                 }
             }
 
             // Next check temp members
-            List<Map<String, Object>> tempMembers = (List<Map<String, Object>>)group.get("tempmembers");
+            List<Map<String, Object>> tempMembers = (List<Map<String, Object>>) group.get("tempmembers");
             if (tempMembers == null) // backwards compat
                 tempMembers = Collections.emptyList();
             for (Map<String, Object> tempMember : tempMembers) {
-                String name = (String)tempMember.get("member");
+                String name = (String) tempMember.get("member");
                 if (name == null) break; // Already migrated
                 if (!hasText(name))
                     throw new IllegalStateException("member must have a value");
@@ -199,13 +197,13 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
 
     @SuppressWarnings("unchecked")
     private void migratePlayers(Map<String, Object> data, Map<String, UuidDisplayName> resolved) {
-        for (Iterator<Map<String, Object>> i = ((List<Map<String, Object>>)data.get("players")).iterator(); i.hasNext();) {
+        for (Iterator<Map<String, Object>> i = ((List<Map<String, Object>>) data.get("players")).iterator(); i.hasNext(); ) {
             Map<String, Object> player = i.next();
 
-            String name = (String)player.get("name");
+            String name = (String) player.get("name");
             if (!hasText(name))
                 throw new IllegalStateException("name must have a value");
-            String uuidString = (String)player.get("uuid");
+            String uuidString = (String) player.get("uuid");
             if (uuidString == null) {
                 // Needs migrating
                 UuidDisplayName udn = resolved.get(name.toLowerCase());
@@ -213,8 +211,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
                     // Couldn't be resolved, remove from list
                     i.remove();
                     warn(plugin, "Unable to migrate '%s' -- failed to lookup UUID", name);
-                }
-                else {
+                } else {
                     player.put("uuid", canonicalizeUuid(udn.getUuid()));
                     player.put("name", udn.getDisplayName());
                 }
@@ -225,7 +222,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
     @SuppressWarnings("unchecked")
     private void migrateGroups(List<Map<String, Object>> groups, Map<String, UuidDisplayName> resolved) {
         for (Map<String, Object> group : groups) {
-            List<String> memberNames = (List<String>)group.get("members"); // Guaranteed to be non-empty list of strings due to prepareGroups
+            List<String> memberNames = (List<String>) group.get("members"); // Guaranteed to be non-empty list of strings due to prepareGroups
             List<Map<String, Object>> memberMaps = new ArrayList<>();
             for (String username : memberNames) {
                 UuidDisplayName udn = resolved.get(username.toLowerCase());
@@ -234,21 +231,20 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
                     memberMap.put("uuid", canonicalizeUuid(udn.getUuid()));
                     memberMap.put("name", udn.getDisplayName());
                     memberMaps.add(memberMap);
-                }
-                else {
+                } else {
                     warn(plugin, "Unable to migrate '%s' (member of '%s') -- failed to lookup UUID", username, group.get("name"));
                 }
             }
             // Replace with migrated list
             group.put("members", memberMaps);
-            
+
             // Migrate temp members
-            List<Map<String, Object>> tempMembers = (List<Map<String, Object>>)group.get("tempmembers");
+            List<Map<String, Object>> tempMembers = (List<Map<String, Object>>) group.get("tempmembers");
             if (tempMembers == null) // backwards compat
                 tempMembers = Collections.emptyList();
-            for (Iterator<Map<String, Object>> i = tempMembers.iterator(); i.hasNext();) {
+            for (Iterator<Map<String, Object>> i = tempMembers.iterator(); i.hasNext(); ) {
                 Map<String, Object> tempMember = i.next();
-                String name = (String)tempMember.get("member");
+                String name = (String) tempMember.get("member");
                 if (!hasText(name))
                     throw new IllegalStateException("member must have a value");
                 if (!tempMember.containsKey("uuid")) {
@@ -257,8 +253,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
                         tempMember.put("uuid", canonicalizeUuid(udn.getUuid()));
                         tempMember.put("name", udn.getDisplayName());
                         tempMember.remove("member");
-                    }
-                    else {
+                    } else {
                         i.remove();
                         warn(plugin, "Unable to migrate '%s' (member of '%s') -- failed to lookup UUID", name, group.get("name"));
                     }

@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 /**
  * Metadata for mapped parameters.
- * 
+ *
  * @author zerothangel
  */
 final class OptionMetaData implements MethodParameter {
@@ -33,18 +33,18 @@ final class OptionMetaData implements MethodParameter {
     private final String valueName;
 
     private final Class<?> type;
-    
+
     private final boolean optional;
-    
+
     private final boolean nullable;
-    
+
     private final String completer;
 
     /**
      * Create an OptionMetaData.
-     * 
-     * @param names the name of the mapping along with any aliases
-     * @param type the parameter type
+     *
+     * @param names    the name of the mapping along with any aliases
+     * @param type     the parameter type
      * @param optional true if optional
      */
     public OptionMetaData(String[] names, String valueName, Class<?> type, boolean optional, boolean nullable, String completer) {
@@ -67,7 +67,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns the primary name of the option.
-     * 
+     *
      * @return the primary name
      */
     public String getName() {
@@ -76,7 +76,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns all names of the option.
-     * 
+     *
      * @return all names of the option
      */
     public String[] getNames() {
@@ -85,7 +85,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns the name of the value (for the usage string).
-     * 
+     *
      * @return the value name
      */
     public String getValueName() {
@@ -94,7 +94,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns the type of the option.
-     * 
+     *
      * @return the type of the option
      */
     public Class<?> getType() {
@@ -103,7 +103,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns whether or not the option is optional.
-     * 
+     *
      * @return true if optional
      */
     public boolean isOptional() {
@@ -112,7 +112,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns whether or not the option is nullable.
-     * 
+     *
      * @return true if nullable
      */
     public boolean isNullable() {
@@ -121,7 +121,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns whether or not the option is a flag or a positional parameter.
-     * 
+     *
      * @return true if a positional parameter, false if a flag
      */
     public boolean isArgument() {
@@ -131,7 +131,7 @@ final class OptionMetaData implements MethodParameter {
     /**
      * Returns whether or not an option with the given name is a flag or a
      * positional parameter.
-     * 
+     *
      * @return true if a positional parameter, false if a flag
      */
     public static boolean isArgument(String name) {
@@ -140,7 +140,7 @@ final class OptionMetaData implements MethodParameter {
 
     /**
      * Returns the name of the associated completer, if any.
-     * 
+     *
      * @return completer name, or null
      */
     public String getCompleter() {

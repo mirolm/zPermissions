@@ -28,7 +28,7 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * Simple & naive profiling, for development. Don't use in production code!
- * 
+ *
  * @author zerothangel
  */
 public class ToHProfileUtils {
@@ -67,7 +67,7 @@ public class ToHProfileUtils {
             if (pd.minTime.compareAndSet(minTime, current)) break;
             minTime = pd.minTime.get();
         }
-        
+
         long maxTime = pd.maxTime.get();
         while (current > maxTime) {
             if (pd.maxTime.compareAndSet(maxTime, current)) break;
@@ -99,17 +99,17 @@ public class ToHProfileUtils {
     }
 
     private static class ProfileData {
-        
+
         private final AtomicLong startTime = new AtomicLong();
 
         private final AtomicLong accumulatedTime = new AtomicLong();
-        
+
         private final AtomicInteger hits = new AtomicInteger();
 
         private final AtomicLong lastTime = new AtomicLong();
 
         private final AtomicLong minTime = new AtomicLong(Long.MAX_VALUE);
-        
+
         private final AtomicLong maxTime = new AtomicLong();
 
         @Override

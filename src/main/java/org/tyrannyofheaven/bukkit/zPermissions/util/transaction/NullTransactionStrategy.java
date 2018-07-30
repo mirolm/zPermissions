@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.transaction;
 
 /**
  * TransactionStrategy that does nothing special.
- * 
+ *
  * @author zerothangel
  */
 public class NullTransactionStrategy implements TransactionStrategy {
@@ -39,12 +39,10 @@ public class NullTransactionStrategy implements TransactionStrategy {
             throw new IllegalArgumentException("callback cannot be null");
         try {
             return callback.doInTransaction();
-        }
-        catch (Error | RuntimeException e) {
+        } catch (Error | RuntimeException e) {
             // No need to wrap these, just re-throw
             throw e;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new TransactionException(t);
         }
     }

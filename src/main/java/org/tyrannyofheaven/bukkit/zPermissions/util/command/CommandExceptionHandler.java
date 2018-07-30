@@ -19,19 +19,19 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Allows customized handling of exceptions thrown by command handlers.
- * 
+ *
  * @author zerothangel
  */
 public interface CommandExceptionHandler {
 
     /**
      * Handle the specified exception.
-     * 
-     * @param sender Source of the command
+     *
+     * @param sender  Source of the command
      * @param command Command which was executed
-     * @param label Alias of the command which was used
-     * @param args Passed command arguments
-     * @param t the exception thrown
+     * @param label   Alias of the command which was used
+     * @param args    Passed command arguments
+     * @param t       the exception thrown
      * @return true if the exception was handled, false otherwise
      */
     public boolean handleException(CommandSender sender, org.bukkit.command.Command command, String label, String[] args, Throwable t);

@@ -33,11 +33,11 @@ public class ZPermissionsRankChangeEvent extends Event {
 
     /**
      * Create a rank change event.
-     * 
+     *
      * @param playerName the name of the player
-     * @param track the name of the track
-     * @param fromGroup the previous group. May be <code>null</code>.
-     * @param toGroup the new group. May be <code>null</code>.
+     * @param track      the name of the track
+     * @param fromGroup  the previous group. May be <code>null</code>.
+     * @param toGroup    the new group. May be <code>null</code>.
      */
     public ZPermissionsRankChangeEvent(String playerName, String track, String fromGroup, String toGroup) {
         if (playerName == null || playerName.trim().isEmpty())
@@ -59,7 +59,7 @@ public class ZPermissionsRankChangeEvent extends Event {
      * The name of the player whose rank has changed. Note that there's no
      * guarantee about the letter case of the name (it will be as was entered
      * from the command line).
-     * 
+     *
      * @return the name of the player
      */
     public String getPlayerName() {
@@ -69,7 +69,7 @@ public class ZPermissionsRankChangeEvent extends Event {
     /**
      * The name of the track. Note that there's no guarantee about the letter
      * case of the name.
-     * 
+     *
      * @return the name of the track
      */
     public String getTrack() {
@@ -79,7 +79,7 @@ public class ZPermissionsRankChangeEvent extends Event {
     /**
      * The player's previous group. This may be <code>null</code> meaning the
      * player was not previously on any group in this track.
-     * 
+     *
      * @return the previous group
      */
     public String getFromGroup() {
@@ -89,7 +89,7 @@ public class ZPermissionsRankChangeEvent extends Event {
     /**
      * The player's new group. This may be <code>null</code> meaning the player
      * was removed from all groups in this track.
-     * 
+     *
      * @return the new group
      */
     public String getToGroup() {

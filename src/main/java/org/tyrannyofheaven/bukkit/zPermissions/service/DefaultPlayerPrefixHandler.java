@@ -40,38 +40,36 @@ public class DefaultPlayerPrefixHandler implements PlayerPrefixHandler {
     @Override
     public String getPlayerPrefix(ZPermissionsService service, UUID uuid) {
         String prefix;
-        
+
         if (config.getVaultPlayerPrefixFormat().isEmpty()) {
             prefix = service.getPlayerMetadata(uuid, MetadataConstants.PREFIX_KEY, String.class);
             if (prefix == null && config.isVaultPrefixIncludesGroup())
                 prefix = service.getGroupMetadata(service.getPlayerPrimaryGroup(uuid), MetadataConstants.PREFIX_KEY, String.class);
-        }
-        else {
+        } else {
             prefix = getFormattedPrefixSuffix(service, uuid, config.getVaultPlayerPrefixFormat(), true);
         }
-        
+
         if (prefix == null)
             return "";
         else
             return prefix;
     }
-    
+
     /* (non-Javadoc)
      * @see org.tyrannyofheaven.bukkit.zPermissions.vault.PlayerPrefixHandler#getPlayerSuffix(java.lang.String)
      */
     @Override
     public String getPlayerSuffix(ZPermissionsService service, UUID uuid) {
         String suffix;
-        
+
         if (config.getVaultPlayerSuffixFormat().isEmpty()) {
             suffix = service.getPlayerMetadata(uuid, MetadataConstants.SUFFIX_KEY, String.class);
             if (suffix == null && config.isVaultPrefixIncludesGroup())
                 suffix = service.getGroupMetadata(service.getPlayerPrimaryGroup(uuid), MetadataConstants.SUFFIX_KEY, String.class);
-        }
-        else {
+        } else {
             suffix = getFormattedPrefixSuffix(service, uuid, config.getVaultPlayerSuffixFormat(), false);
         }
-        
+
         if (suffix == null)
             return "";
         else

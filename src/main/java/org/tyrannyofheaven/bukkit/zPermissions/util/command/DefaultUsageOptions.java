@@ -19,7 +19,7 @@ import org.bukkit.ChatColor;
 
 /**
  * Default UsageOptions for my plugins.
- * 
+ *
  * @author zerothangel
  */
 public class DefaultUsageOptions implements UsageOptions {

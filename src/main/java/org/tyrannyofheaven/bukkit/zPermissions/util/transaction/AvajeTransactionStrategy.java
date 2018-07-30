@@ -21,7 +21,7 @@ import com.avaje.ebean.EbeanServer;
  * TransactionStrategy that executes the action inside an Avaje Ebean
  * transaction. The transaction is committed upon return of the callback.
  * To force rollback, throw an exception.
- * 
+ *
  * @author zerothangel
  */
 public class AvajeTransactionStrategy implements TransactionStrategy {
@@ -34,8 +34,8 @@ public class AvajeTransactionStrategy implements TransactionStrategy {
 
     /**
      * Create an instance associated with the given EbeanServer.
-     * 
-     * @param ebeanServer the EbeanServer to use for transactions
+     *
+     * @param ebeanServer   the EbeanServer to use for transactions
      * @param preCommitHook the pre-commit hook or null
      */
     public AvajeTransactionStrategy(EbeanServer ebeanServer, PreBeginHook preBeginHook, PreCommitHook preCommitHook) {
@@ -48,7 +48,7 @@ public class AvajeTransactionStrategy implements TransactionStrategy {
 
     /**
      * Create an instance associated with the given EbeanServer.
-     * 
+     *
      * @param ebeanServer the EbeanServer to use for transactions
      */
     public AvajeTransactionStrategy(EbeanServer ebeanServer) {
@@ -95,16 +95,13 @@ public class AvajeTransactionStrategy implements TransactionStrategy {
                     getPreCommitHook().preCommit(readOnly);
                 getEbeanServer().commitTransaction();
                 return result;
-            }
-            finally {
+            } finally {
                 getEbeanServer().endTransaction();
             }
-        }
-        catch (Error | RuntimeException e) {
+        } catch (Error | RuntimeException e) {
             // No need to wrap these, just re-throw
             throw e;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new TransactionException(t);
         }
     }

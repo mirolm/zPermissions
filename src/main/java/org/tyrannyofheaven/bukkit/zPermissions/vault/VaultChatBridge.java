@@ -231,8 +231,7 @@ public class VaultChatBridge extends ChatCompatibility {
         final UUID uuid;
         if (!group) {
             uuid = player.getUniqueId();
-        }
-        else uuid = null;
+        } else uuid = null;
 
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
@@ -247,8 +246,7 @@ public class VaultChatBridge extends ChatCompatibility {
             core.invalidateMetadataCache(name, uuid, group);
             core.logExternalChange("Metadata '%s' for %s %s set via Vault", metadataName,
                     group ? "group" : "player", name);
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             // Ignore
         }
     }

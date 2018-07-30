@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 /**
  * Annotates a command method parameter which will received the named session
  * value. The parameter can be of any type.
- * 
+ *
  * @author zerothangel
  */
 @Documented

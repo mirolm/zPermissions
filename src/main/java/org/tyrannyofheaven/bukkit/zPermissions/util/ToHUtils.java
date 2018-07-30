@@ -51,7 +51,7 @@ public class ToHUtils {
     /**
      * Throws an AssertionError if test is false.
      *
-     * @param test the test
+     * @param test    the test
      * @param message assertion message
      */
     public static void assertTrue(boolean test, String message) {
@@ -72,7 +72,7 @@ public class ToHUtils {
     /**
      * Throws an AssertionError if test is true.
      *
-     * @param test the test
+     * @param test    the test
      * @param message assertion message
      */
     public static void assertFalse(boolean test, String message) {
@@ -113,13 +113,13 @@ public class ToHUtils {
      * @return a VersionInfo object holding the artifactId/version/build fields
      */
     public static VersionInfo getVersion(Plugin plugin) {
-        VersionInfo versionInfo = null;;
+        VersionInfo versionInfo = null;
+        ;
         try {
             versionInfo = VersionMain.getVersion(plugin.getClass());
             if (versionInfo == null)
                 ToHLoggingUtils.warn(plugin, "Failed to determine actual version");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             ToHLoggingUtils.error(plugin, "Error determining actual version:", e);
         }
         if (versionInfo == null) {

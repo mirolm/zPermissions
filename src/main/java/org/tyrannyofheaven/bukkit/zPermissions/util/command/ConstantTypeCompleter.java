@@ -24,7 +24,7 @@ import org.bukkit.util.StringUtil;
 
 /**
  * Simple TypeCompleter that simply returns the arguments (whitespace-separated).
- * 
+ *
  * @author zerothangel
  */
 class ConstantTypeCompleter implements TypeCompleter {

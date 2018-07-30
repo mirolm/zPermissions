@@ -18,7 +18,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 /**
  * Exception thrown when there is an error (usually a programming error) in a
  * command handler.
- * 
+ *
  * @author zerothangel
  */
 class CommandException extends RuntimeException {

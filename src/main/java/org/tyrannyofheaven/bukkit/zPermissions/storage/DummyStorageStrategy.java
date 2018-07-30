@@ -12,13 +12,13 @@ import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
 /*
  * This is the top-level storage interface. A custom implementation can be used
  * by setting the custom-storage-strategy option in zPermissions' config.yml.
- * 
+ *
  * To be used this way, this class must have a no-arg constructor.
- * 
+ *
  * Note that init() and refresh() are usually responsible for loading from
  * whatever store you use. However, loading can be delegated to the PermissionDao
  * implementation, if it makes more sense to do it that way (and it usually does).
- * 
+ *
  * Loading usually consists of:
  * 1. Instantiating a new MemoryState instance
  * 2. Using the static methods in InMemoryPermissionService to create entities
@@ -27,7 +27,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
  *    Membership#member. When in doubt, check the loading code in AvajePermissionDao &
  *    FilePermissionDao.
  * 3. Calling your InMemoryPermissionService instance's setMemoryState() method.
- * 
+ *
  * Also see javadocs for StorageStrategy.
  */
 public class DummyStorageStrategy implements StorageStrategy {
@@ -64,7 +64,7 @@ public class DummyStorageStrategy implements StorageStrategy {
          * above, it should block so initialization does not continue until
          * everything has loaded. See AvajeStorageStrategy for an example of how
          * this is handled.)
-         * 
+         *
          * Only execute finishTask if in-memory representation changed
          * (i.e. InMemoryPermissionService#setMemoryState() was called) and
          * finishTask != null
@@ -91,13 +91,13 @@ public class DummyStorageStrategy implements StorageStrategy {
      *
      * Both getters should return the same instance, and it will usually be
      * one of two implementations:
-     * 
+     *
      * NullTransactionStrategy - If you don't actually do any I/O in PermissionDao, e.g.
      *   you just set a dirty flag and perform I/O elsewhere (similar to FilePermissionDao).
      * AsyncTransactionStrategy - If your store is transactional (e.g. requires a real
      *   TransactionStrategy implementation) and your I/O would normally block.
      *   Databases fall under this. (Also see AvajePermissionDao.)
-     * 
+     *
      * If your I/O is blocking but not transactional, you can probably get away
      * with using NullTransactionStrategy.
      */

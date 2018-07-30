@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
 
 /**
  * Entity class to keep track of the current <em>data</em> version.
- * 
+ *
  * @author zerothangel
  */
 @Entity
@@ -46,7 +46,7 @@ public class DataVersion {
         this.name = name;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public long getVersion() {
         return version;
     }
@@ -55,7 +55,7 @@ public class DataVersion {
         this.version = version;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     public Date getTimestamp() {
         return timestamp;
@@ -69,7 +69,7 @@ public class DataVersion {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof DataVersion)) return false;
-        DataVersion o = (DataVersion)obj;
+        DataVersion o = (DataVersion) obj;
         return getName().equals(o.getName());
     }
 

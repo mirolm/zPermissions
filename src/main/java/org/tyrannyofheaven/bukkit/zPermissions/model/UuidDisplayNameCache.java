@@ -31,15 +31,15 @@ import javax.persistence.Transient;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
 
 @Entity
-@Table(name="uuidcache")
+@Table(name = "uuidcache")
 public class UuidDisplayNameCache {
 
     private String name;
-    
+
     private String displayName;
 
     private String uuidString;
-    
+
     private Date timestamp;
 
     @Id
@@ -51,7 +51,7 @@ public class UuidDisplayNameCache {
         this.name = name;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public String getDisplayName() {
         return displayName;
     }
@@ -60,7 +60,7 @@ public class UuidDisplayNameCache {
         this.displayName = displayName;
     }
 
-    @Column(name="uuid", nullable=false)
+    @Column(name = "uuid", nullable = false)
     public String getUuidString() {
         return uuidString;
     }
@@ -69,7 +69,7 @@ public class UuidDisplayNameCache {
         this.uuidString = uuid;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     public Date getTimestamp() {
         return timestamp;

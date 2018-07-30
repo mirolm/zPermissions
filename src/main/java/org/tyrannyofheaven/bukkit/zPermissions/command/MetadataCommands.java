@@ -57,9 +57,9 @@ public class MetadataCommands {
         this.uuidResolver = uuidResolver;
     }
 
-    @Command(value="get", description="Retrieve metadata value")
+    @Command(value = "get", description = "Retrieve metadata value")
     @Require({"zpermissions.player.view", "zpermissions.player.manage", "zpermissions.player.chat",
-        "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat"})
+            "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat"})
     public void get(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName) {
         uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
             @Override
@@ -76,23 +76,22 @@ public class MetadataCommands {
                 return storageStrategy.getPermissionService().getMetadata(name, uuid, group, metadataName);
             }
         }, true);
-        
+
         if (result == null) {
             sendMessage(sender, colorize("%s%s{YELLOW} does not set {GOLD}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, metadataName);
             abortBatchProcessing();
-        }
-        else {
+        } else {
             sendMessage(sender, colorize("%s%s{YELLOW} sets {GOLD}%s{YELLOW} to {GREEN}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, metadataName, result);
         }
     }
 
-    @Command(value="set", description="Set metadata (string)")
+    @Command(value = "set", description = "Set metadata (string)")
     @Require({"zpermissions.player.manage", "zpermissions.group.manage"})
     public void set(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName, @Option("value") String value, String[] rest) {
         final StringBuilder stringValue = new StringBuilder(value);
         if (rest.length > 0) {
             stringValue.append(' ')
-                .append(ToHStringUtils.delimitedString(" ", (Object[])rest));
+                    .append(ToHStringUtils.delimitedString(" ", (Object[]) rest));
         }
         set0(sender, name, metadataName, stringValue.toString());
     }
@@ -115,8 +114,7 @@ public class MetadataCommands {
                 }
             });
             core.invalidateMetadataCache(name, uuid, group);
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             handleMissingGroup(sender, e);
             return;
         }
@@ -124,25 +122,25 @@ public class MetadataCommands {
         sendMessage(sender, colorize("{GOLD}%s{YELLOW} set to {GREEN}%s{YELLOW} for %s%s"), metadataName, value == null ? Boolean.TRUE : value, group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name);
     }
 
-    @Command(value="setint", description="Set metadata (integer)")
+    @Command(value = "setint", description = "Set metadata (integer)")
     @Require({"zpermissions.player.manage", "zpermissions.group.manage"})
     public void set(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName, @Option("value") long value) {
         set0(sender, name, metadataName, value);
     }
 
-    @Command(value="setreal", description="Set metadata (real)")
+    @Command(value = "setreal", description = "Set metadata (real)")
     @Require({"zpermissions.player.manage", "zpermissions.group.manage"})
     public void set(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName, @Option("value") double value) {
         set0(sender, name, metadataName, value);
     }
 
-    @Command(value="setbool", description="Set metadata (boolean)")
+    @Command(value = "setbool", description = "Set metadata (boolean)")
     @Require({"zpermissions.player.manage", "zpermissions.group.manage"})
-    public void set(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName, @Option(value="value", optional=true) Boolean value) {
+    public void set(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName, @Option(value = "value", optional = true) Boolean value) {
         set0(sender, name, metadataName, value == null ? Boolean.TRUE : value);
     }
 
-    @Command(value="unset", description="Remove metadata value")
+    @Command(value = "unset", description = "Remove metadata value")
     @Require({"zpermissions.player.manage", "zpermissions.group.manage"})
     public void unset(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName) {
         uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
@@ -160,20 +158,19 @@ public class MetadataCommands {
                 return storageStrategy.getPermissionService().unsetMetadata(name, uuid, group, metadataName);
             }
         });
-        
+
         if (result) {
             sendMessage(sender, colorize("{GOLD}%s{YELLOW} unset for %s%s"), metadataName, group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name);
             core.invalidateMetadataCache(name, uuid, group);
-        }
-        else {
+        } else {
             sendMessage(sender, colorize("%s%s{RED} does not set {GOLD}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, metadataName);
             abortBatchProcessing();
         }
     }
 
-    @Command(value={"show", "list", "ls"}, description="List all metadata")
+    @Command(value = {"show", "list", "ls"}, description = "List all metadata")
     @Require({"zpermissions.player.view", "zpermissions.player.manage", "zpermissions.player.chat",
-        "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat"})
+            "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat"})
     public void list(CommandSender sender, final @Session("entityName") String name) {
         uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
             @Override

@@ -26,7 +26,7 @@ import org.bukkit.util.StringUtil;
 
 /**
  * TypeCompleter for world names.
- * 
+ *
  * @author zerothangel
  */
 class WorldTypeCompleter implements TypeCompleter {

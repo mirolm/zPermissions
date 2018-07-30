@@ -98,8 +98,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
             core.logExternalChange("Added permission '%s' to group %s via Vault",
                     new QualifiedPermission(null, world, permission), group);
             return true;
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             return false;
         }
     }
@@ -202,8 +201,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
                     getPermissionService().addMember(group, uuid, playerName, null);
                 }
             });
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             return false;
         }
         core.invalidateMetadataCache(playerName, uuid, false);
@@ -228,9 +226,8 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
             }
             // Have no clue
             return false;
-        }
-        else {
-            return playerHas((Player)player, permission);
+        } else {
+            return playerHas((Player) player, permission);
         }
     }
 
@@ -295,8 +292,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
                     return getPermissionService().removeMember(group, uuid);
                 }
             });
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             return false;
         }
         core.invalidateMetadataCache(playerName, uuid, false);

@@ -27,7 +27,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 /**
  * Additional player events to listen on if (WorldGuard) region support is
  * enabled.
- * 
+ *
  * @author zerothangel
  */
 public class ZPermissionsRegionPlayerListener implements Listener {
@@ -38,13 +38,13 @@ public class ZPermissionsRegionPlayerListener implements Listener {
         this.core = plugin;
     }
 
-    @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         // Conditionally update if world or region changed
         core.setBukkitPermissions(event.getPlayer(), event.getTo(), false, RefreshCause.MOVEMENT);
     }
 
-    @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         // Only bother if player actually moved to a new block
         if (event.getFrom().getBlockX() != event.getTo().getBlockX() ||
@@ -55,7 +55,7 @@ public class ZPermissionsRegionPlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         // Conditionally update if respawning in a different world or region
         core.setBukkitPermissions(event.getPlayer(), event.getRespawnLocation(), false, RefreshCause.MOVEMENT);

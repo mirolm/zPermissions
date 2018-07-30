@@ -26,7 +26,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
 
 /**
  * Mid-tier service interface for zPermissions permissions store.
- * 
+ *
  * @author zerothangel
  */
 public interface PermissionService {
@@ -38,7 +38,7 @@ public interface PermissionService {
     public boolean unsetPermission(String name, UUID uuid, boolean group, String region, String world, String permission);
 
     public void addMember(String groupName, UUID memberUuid, String memberName, Date expiration);
-    
+
     public boolean removeMember(String groupName, UUID memberUuid);
 
     // NB: Resolver critical path
@@ -68,7 +68,7 @@ public interface PermissionService {
     public List<Entry> getEntries(String name, UUID uuid, boolean group);
 
     public boolean createGroup(String name);
-    
+
     public List<String> getEntityNames(boolean group);
 
     public Object getMetadata(String name, UUID uuid, boolean group, String metadataName);

@@ -44,12 +44,12 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
  * Avaje's handling of inheritance seems a bit wonky. So I've basically
  * collapsed both classes into this single class, using {@link #isGroup()} as
  * a discriminator. Ugh...
- * 
+ *
  * @author zerothangel
  */
 @Entity
-@Table(name="entities")
-@UniqueConstraint(columnNames={"name", "is_group"})
+@Table(name = "entities")
+@UniqueConstraint(columnNames = {"name", "is_group"})
 public class PermissionEntity {
 
     private Long id;
@@ -63,13 +63,13 @@ public class PermissionEntity {
     private int priority;
 
     private PermissionEntity parent;
-    
+
     private Set<Entry> permissions = new HashSet<>();
 
     private Set<Membership> memberships = new HashSet<>();
 
     private Set<Inheritance> inheritancesAsParent = new HashSet<>();
-    
+
     private Set<Inheritance> inheritancesAsChild = new HashSet<>();
 
     private Set<EntityMetadata> metadata = new HashSet<>();
@@ -86,7 +86,7 @@ public class PermissionEntity {
         this.id = id;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -95,7 +95,7 @@ public class PermissionEntity {
         this.name = name;
     }
 
-    @Column(name="is_group", nullable=false)
+    @Column(name = "is_group", nullable = false)
     public boolean isGroup() {
         return group;
     }
@@ -104,7 +104,7 @@ public class PermissionEntity {
         this.group = group;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public String getDisplayName() {
         return displayName;
     }
@@ -113,7 +113,7 @@ public class PermissionEntity {
         this.displayName = displayName;
     }
 
-    @ManyToOne(optional=true)
+    @ManyToOne(optional = true)
     public PermissionEntity getParent() {
         return parent;
     }
@@ -122,7 +122,7 @@ public class PermissionEntity {
         this.parent = parent;
     }
 
-    @OneToMany(mappedBy="entity", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
     public Set<Entry> getPermissions() {
         return permissions;
     }
@@ -139,7 +139,7 @@ public class PermissionEntity {
         this.priority = priority;
     }
 
-    @OneToMany(mappedBy="group", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     public Set<Membership> getMemberships() {
         return memberships;
     }
@@ -148,7 +148,7 @@ public class PermissionEntity {
         this.memberships = memberships;
     }
 
-    @OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     public Set<Inheritance> getInheritancesAsParent() {
         return inheritancesAsParent;
     }
@@ -157,7 +157,7 @@ public class PermissionEntity {
         this.inheritancesAsParent = inheritancesAsParent;
     }
 
-    @OneToMany(mappedBy="child", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
     public Set<Inheritance> getInheritancesAsChild() {
         return inheritancesAsChild;
     }
@@ -184,7 +184,7 @@ public class PermissionEntity {
         return result;
     }
 
-    @OneToMany(mappedBy="entity", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
     public Set<EntityMetadata> getMetadata() {
         return metadata;
     }
@@ -215,9 +215,9 @@ public class PermissionEntity {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof PermissionEntity)) return false;
-        PermissionEntity o = (PermissionEntity)obj;
+        PermissionEntity o = (PermissionEntity) obj;
         return getName().equals(o.getName()) &&
-            isGroup() == o.isGroup();
+                isGroup() == o.isGroup();
     }
 
     @Override

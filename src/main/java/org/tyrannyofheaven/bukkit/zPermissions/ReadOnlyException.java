@@ -2,7 +2,7 @@ package org.tyrannyofheaven.bukkit.zPermissions;
 
 /**
  * Exception thrown when attempting a write operation when configured as read-only.
- * 
+ *
  * @author zerothangel
  */
 public class ReadOnlyException extends RuntimeException {

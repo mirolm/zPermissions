@@ -39,7 +39,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.storage.StorageStrategy;
 /**
  * Creates a dump file containing commands that can re-create the persistent
  * state.
- * 
+ *
  * @author zerothangel
  */
 public class ModelDumper {
@@ -96,8 +96,7 @@ public class ModelDumper {
                                 out.println(String.format("permissions group %s add %s",
                                         quoteArgForCommand(entity.getDisplayName()),
                                         quoteArgForCommand(membership.getMember() + "/" + membership.getDisplayName())));
-                            }
-                            else {
+                            } else {
                                 Calendar cal = Calendar.getInstance();
                                 cal.setTime(membership.getExpiration());
                                 out.println(String.format("permissions group %s add %s %s",
@@ -109,8 +108,7 @@ public class ModelDumper {
                     }
                 }
             }, true);
-        }
-        finally {
+        } finally {
             out.close();
         }
     }
@@ -148,7 +146,7 @@ public class ModelDumper {
                     name,
                     suffix,
                     quoteArgForCommand(me.getName()),
-                    (value instanceof String ? quoteArgForCommand((String)value) : value)));
+                    (value instanceof String ? quoteArgForCommand((String) value) : value)));
         }
     }
 

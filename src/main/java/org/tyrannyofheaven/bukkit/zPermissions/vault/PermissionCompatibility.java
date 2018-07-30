@@ -67,7 +67,7 @@ public abstract class PermissionCompatibility extends Permission {
     @Override
     public String[] getPlayerGroups(String world, String player) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player);
-        if (offlinePlayer == null) return new String[] { resolver.getDefaultGroup() };
+        if (offlinePlayer == null) return new String[]{resolver.getDefaultGroup()};
         return getPlayerGroups(world, offlinePlayer);
     }
 

@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 
 /**
  * A parameter that receives a value from the current CommandSession.
- * 
+ *
  * @author zerothangel
  */
 final class SessionParameter implements MethodParameter {
@@ -33,7 +33,7 @@ final class SessionParameter implements MethodParameter {
 
     /**
      * The name of the CommandSession value.
-     * 
+     *
      * @return the CommandSession value name
      */
     String getName() {
@@ -42,11 +42,11 @@ final class SessionParameter implements MethodParameter {
 
     /**
      * The type of this parameter.
-     * 
+     *
      * @return the parameter type
      */
     Class<?> getType() {
         return type;
     }
-    
+
 }

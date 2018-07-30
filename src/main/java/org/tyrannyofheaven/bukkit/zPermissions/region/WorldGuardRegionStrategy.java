@@ -123,9 +123,8 @@ public class WorldGuardRegionStrategy implements RegionStrategy, Listener {
     private void detectWorldGuardPlugin() {
         Plugin plugin = Bukkit.getPluginManager().getPlugin(RM_PLUGIN_NAME);
         if (plugin instanceof WorldGuardPlugin && plugin.isEnabled()) {
-            worldGuardPlugin = (WorldGuardPlugin)plugin;
-        }
-        else {
+            worldGuardPlugin = (WorldGuardPlugin) plugin;
+        } else {
             worldGuardPlugin = null;
         }
     }

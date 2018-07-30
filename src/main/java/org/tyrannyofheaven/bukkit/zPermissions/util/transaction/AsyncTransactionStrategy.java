@@ -21,7 +21,7 @@ import java.util.concurrent.Executor;
  * Asynchronous TransactionStrategy implementation that collects write operations
  * and then executes them (within the given TransactionStrategy) using the given
  * Executor.
- * 
+ *
  * @author zerothangel
  */
 public class AsyncTransactionStrategy implements TransactionStrategy {
@@ -76,20 +76,17 @@ public class AsyncTransactionStrategy implements TransactionStrategy {
                 T result = callback.doInTransaction();
                 success = true;
                 return result;
-            }
-            finally {
+            } finally {
                 TransactionRunnable transactionRunnable = transactionExecutor.end();
                 if (!transactionRunnable.isEmpty() && success) {
                     // Got something, execute it async
                     executor.execute(transactionRunnable);
                 }
             }
-        }
-        catch (Error | RuntimeException e) {
+        } catch (Error | RuntimeException e) {
             // No need to wrap these, just re-throw
             throw e;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new TransactionException(t);
         }
     }

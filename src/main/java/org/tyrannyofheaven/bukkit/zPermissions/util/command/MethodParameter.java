@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 
 /**
  * Marker interface for parameter metadata.
- * 
+ *
  * @author zerothangel
  */
 interface MethodParameter {

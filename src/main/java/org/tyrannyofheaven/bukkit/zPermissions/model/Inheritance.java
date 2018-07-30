@@ -8,12 +8,12 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="inheritances")
-@UniqueConstraint(columnNames={"child_id", "parent_id"})
+@Table(name = "inheritances")
+@UniqueConstraint(columnNames = {"child_id", "parent_id"})
 public class Inheritance implements Comparable<Inheritance> {
 
     private Long id;
-    
+
     private PermissionEntity child;
 
     private PermissionEntity parent;
@@ -29,8 +29,8 @@ public class Inheritance implements Comparable<Inheritance> {
         this.id = id;
     }
 
-    @Column(name="child_id")
-    @ManyToOne(optional=false)
+    @Column(name = "child_id")
+    @ManyToOne(optional = false)
     public PermissionEntity getChild() {
         return child;
     }
@@ -39,8 +39,8 @@ public class Inheritance implements Comparable<Inheritance> {
         this.child = child;
     }
 
-    @Column(name="parent_id")
-    @ManyToOne(optional=false)
+    @Column(name = "parent_id")
+    @ManyToOne(optional = false)
     public PermissionEntity getParent() {
         return parent;
     }
@@ -49,7 +49,7 @@ public class Inheritance implements Comparable<Inheritance> {
         this.parent = parent;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public int getOrdering() {
         return ordering;
     }
@@ -62,7 +62,7 @@ public class Inheritance implements Comparable<Inheritance> {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof Inheritance)) return false;
-        Inheritance o = (Inheritance)obj;
+        Inheritance o = (Inheritance) obj;
         return getParent().equals(o.getParent()) &&
                 getChild().equals(o.getChild());
     }

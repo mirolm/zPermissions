@@ -56,19 +56,19 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.Utils;
 /**
  * Handler for top-level commands:
  * <ul>
- *   <li>/permissions</li>
- *   <li>/promote</li>
- *   <li>/demote</li>
- *   <li>/setrank</li>
- *   <li>/unsetrank</li>
+ * <li>/permissions</li>
+ * <li>/promote</li>
+ * <li>/demote</li>
+ * <li>/setrank</li>
+ * <li>/unsetrank</li>
  * </ul>
- * 
+ *
  * @author zerothangel
  */
 public class RootCommands {
 
     private final ZPermissionsCore core;
-    
+
     private final StorageStrategy storageStrategy;
 
     private final PermissionsResolver resolver;
@@ -85,13 +85,13 @@ public class RootCommands {
 
     private static enum BroadcastScope {
         DEFAULT(true), QUIET(false), LOUD(true), QUIET_LOUD(false);
-        
+
         private final boolean shouldEcho;
-        
+
         private BroadcastScope(boolean shouldEcho) {
             this.shouldEcho = shouldEcho;
         }
-        
+
         public boolean isShouldEcho() {
             return shouldEcho;
         }
@@ -111,27 +111,27 @@ public class RootCommands {
 
     @Command("permissions")
     @Require({"zpermissions.player.view", "zpermissions.player.manage", "zpermissions.player.chat",
-        "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat",
-        "zpermissions.list", "zpermissions.check", "zpermissions.reload", "zpermissions.import", "zpermissions.export", "zpermissions.inspect",
-        "zpermissions.mygroups", "zpermissions.purge", "zpermissions.diff", "zpermissions.mychat"})
+            "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat",
+            "zpermissions.list", "zpermissions.check", "zpermissions.reload", "zpermissions.import", "zpermissions.export", "zpermissions.inspect",
+            "zpermissions.mygroups", "zpermissions.purge", "zpermissions.diff", "zpermissions.mychat"})
     public Object perm(HelpBuilder helpBuilder, CommandSender sender, String[] args) {
         if (args.length == 0) {
             helpBuilder.withCommandSender(sender)
-                .withHandler(sc)
-                .forCommand("player")
-                .forCommand("group")
-                .forCommand("list")
-                .forCommand("check")
-                .forCommand("inspect")
-                .forCommand("diff")
-                .forCommand("mygroups")
-                .forCommand("prefix")
-                .forCommand("suffix")
-                .forCommand("reload")
-                .forCommand("import")
-                .forCommand("export")
-                .forCommand("refresh")
-                .show();
+                    .withHandler(sc)
+                    .forCommand("player")
+                    .forCommand("group")
+                    .forCommand("list")
+                    .forCommand("check")
+                    .forCommand("inspect")
+                    .forCommand("diff")
+                    .forCommand("mygroups")
+                    .forCommand("prefix")
+                    .forCommand("suffix")
+                    .forCommand("reload")
+                    .forCommand("import")
+                    .forCommand("export")
+                    .forCommand("refresh")
+                    .show();
             abortBatchProcessing();
             return null;
         }
@@ -144,13 +144,11 @@ public class RootCommands {
         if (scope == BroadcastScope.DEFAULT) {
             if (config.isRankAdminBroadcast()) {
                 ToHMessageUtils.broadcastAdmin(plugin, format, args);
-            }
-            else {
+            } else {
                 ToHMessageUtils.broadcast(plugin, "zpermissions.notify." + notifyNode, format, args);
                 ToHLoggingUtils.log(plugin, format, args); // ensure it also goes to log
             }
-        }
-        else if (scope == BroadcastScope.QUIET)
+        } else if (scope == BroadcastScope.QUIET)
             ToHLoggingUtils.log(plugin, format, args);
         else
             ToHMessageUtils.broadcastMessage(plugin, format, args);
@@ -181,25 +179,23 @@ public class RootCommands {
                 playerGroupNames.addAll(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
                 if (playerGroupNames.isEmpty())
                     playerGroupNames.add(resolver.getDefaultGroup());
-        
+
                 // Determine what groups the player and the track have in common
                 playerGroupNames = getCommonGroups(playerGroupNames, track);
-                
+
                 if (playerGroupNames.size() > 1) {
                     // Hmm, player is member of 2 or more groups in track. Don't know
                     // what to do, so abort.
                     sendMessage(sender, colorize("{RED}Player is in more than one group in that track: {DARK_GREEN}%s"), delimitedString(", ", playerGroupNames));
                     abortBatchProcessing();
                     return false;
-                }
-                else if (playerGroupNames.isEmpty()) {
+                } else if (playerGroupNames.isEmpty()) {
                     // Player not in any group. Only valid for rankUp
                     if (rankUp) {
                         String group = track.get(0);
                         try {
                             storageStrategy.getPermissionService().addMember(group, uuid, playerName, null);
-                        }
-                        catch (MissingGroupException e) {
+                        } catch (MissingGroupException e) {
                             sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
                             abortBatchProcessing();
                             return false;
@@ -208,21 +204,19 @@ public class RootCommands {
                         if (scope.isShouldEcho() || verbose)
                             sendMessage(sender, colorize("{YELLOW}Adding {AQUA}%s{YELLOW} to {DARK_GREEN}%s"), playerName, group);
                         fireRankEvent(playerName, trackMetaData.getTrackName(), null, group);
-                    }
-                    else {
+                    } else {
                         sendMessage(sender, colorize("{RED}Player is not in any groups in that track."));
                         abortBatchProcessing();
                     }
                     return true;
-                }
-                else {
+                } else {
                     String oldGroup = playerGroupNames.iterator().next();
                     int rankIndex = track.indexOf(oldGroup);
                     assertFalse(rankIndex < 0); // should never happen...
-        
+
                     // Rank up or down
                     rankIndex += rankUp ? 1 : -1;
-        
+
                     // If now ranked below first rank, remove altogether
                     if (rankIndex < 0) {
                         storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
@@ -230,25 +224,23 @@ public class RootCommands {
                         if (scope.isShouldEcho() || verbose)
                             sendMessage(sender, colorize("{YELLOW}Removing {AQUA}%s{YELLOW} from {DARK_GREEN}%s"), playerName, oldGroup);
                         fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, null);
-                    }
-                    else {
+                    } else {
                         // Constrain rank to [1..track.size() - 1]
                         if (rankIndex >= track.size()) rankIndex = track.size() - 1;
-        
+
                         String newGroup = track.get(rankIndex);
-        
+
                         // Change groups
                         try {
                             storageStrategy.getPermissionService().addMember(newGroup, uuid, playerName, null);
-                        }
-                        catch (MissingGroupException e) {
+                        } catch (MissingGroupException e) {
                             sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
                             abortBatchProcessing();
                             return false;
                         }
                         if (!oldGroup.equalsIgnoreCase(newGroup))
                             storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
-        
+
                         announce(rankUp ? "promote" : "demote", scope, "%s %s %s from %s to %s", sender.getName(),
                                 (rankUp ? "promoted" : "demoted"),
                                 playerName,
@@ -262,12 +254,12 @@ public class RootCommands {
                                     newGroup);
                         fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, newGroup);
                     }
-                    
+
                     return false;
                 }
             }
         });
-        
+
         core.invalidateMetadataCache(playerName, uuid, false);
         core.refreshPlayer(uuid, RefreshCause.GROUP_CHANGE);
         core.refreshExpirations(uuid);
@@ -286,13 +278,13 @@ public class RootCommands {
 
     @Command("promote")
     @Require("zpermissions.promote")
-    public void promote(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose, @Option(value="player", completer="player") String playerName, @Option(value="track", optional=true, completer="track") String trackName) {
+    public void promote(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose, @Option(value = "player", completer = "player") String playerName, @Option(value = "track", optional = true, completer = "track") String trackName) {
         rankChange(sender, playerName, trackName, true, determineScope(quiet, loud), verbose);
     }
 
     @Command("demote")
     @Require("zpermissions.demote")
-    public void demote(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose,  @Option(value="player", completer="player") String playerName, @Option(value="track", optional=true, completer="track") String trackName) {
+    public void demote(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose, @Option(value = "player", completer = "player") String playerName, @Option(value = "track", optional = true, completer = "track") String trackName) {
         rankChange(sender, playerName, trackName, false, determineScope(quiet, loud), verbose);
     }
 
@@ -336,24 +328,22 @@ public class RootCommands {
                 playerGroupNames.addAll(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
                 if (playerGroupNames.isEmpty())
                     playerGroupNames.add(resolver.getDefaultGroup());
-        
+
                 // Determine what groups the player and the track have in common
                 playerGroupNames = getCommonGroups(playerGroupNames, track);
-                
+
                 if (playerGroupNames.size() > 1) {
                     // Hmm, player is member of 2 or more groups in track. Don't know
                     // what to do, so abort.
                     sendMessage(sender, colorize("{RED}Player is in more than one group in that track: {DARK_GREEN}%s"), delimitedString(", ", playerGroupNames));
                     abortBatchProcessing();
                     return false;
-                }
-                else if (playerGroupNames.isEmpty()) {
+                } else if (playerGroupNames.isEmpty()) {
                     if (rankName != null) {
                         // Not in any groups, just add to new group.
                         try {
                             storageStrategy.getPermissionService().addMember(rankName, uuid, playerName, null);
-                        }
-                        catch (MissingGroupException e) {
+                        } catch (MissingGroupException e) {
                             sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
                             abortBatchProcessing();
                             return false;
@@ -362,14 +352,12 @@ public class RootCommands {
                         if (scope.isShouldEcho() || verbose)
                             sendMessage(sender, colorize("{YELLOW}Adding {AQUA}%s{YELLOW} to {DARK_GREEN}%s"), playerName, rankName);
                         fireRankEvent(playerName, trackMetaData.getTrackName(), null, rankName);
-                    }
-                    else {
+                    } else {
                         sendMessage(sender, colorize("{RED}Player is not in any groups in that track."));
                         abortBatchProcessing();
                     }
                     return true;
-                }
-                else {
+                } else {
                     // Name of current (old) group
                     String oldGroup = playerGroupNames.iterator().next();
 
@@ -377,8 +365,7 @@ public class RootCommands {
                         // Add to new group
                         try {
                             storageStrategy.getPermissionService().addMember(rankName, uuid, playerName, null);
-                        }
-                        catch (MissingGroupException e) {
+                        } catch (MissingGroupException e) {
                             sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
                             abortBatchProcessing();
                             return false;
@@ -398,8 +385,7 @@ public class RootCommands {
                                     oldGroup,
                                     rankName);
                         fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, rankName);
-                    }
-                    else {
+                    } else {
                         // Remove from old group
                         storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
 
@@ -420,13 +406,13 @@ public class RootCommands {
 
     @Command("setrank")
     @Require("zpermissions.setrank")
-    public void setrank(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose, @Option(value="player", completer="player") String playerName, @Option("rank") String rankName, @Option(value="track", optional=true, completer="track") String trackName) {
+    public void setrank(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose, @Option(value = "player", completer = "player") String playerName, @Option("rank") String rankName, @Option(value = "track", optional = true, completer = "track") String trackName) {
         rankSet(sender, playerName, trackName, rankName, determineScope(quiet, loud), verbose);
     }
 
     @Command("unsetrank")
     @Require("zpermissions.unsetrank")
-    public void unsetrank(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose, @Option(value="player", completer="player") String playerName, @Option(value="track", optional=true, completer="track") String trackName) {
+    public void unsetrank(CommandSender sender, @Option("-q") boolean quiet, @Option("-Q") boolean loud, @Option("-v") boolean verbose, @Option(value = "player", completer = "player") String playerName, @Option(value = "track", optional = true, completer = "track") String trackName) {
         rankSet(sender, playerName, trackName, null, determineScope(quiet, loud), verbose);
     }
 
@@ -436,11 +422,10 @@ public class RootCommands {
         Set<String> result = new HashSet<>();
         for (String track : config.getTracks()) {
             boolean found = false;
-            for (String perm : new String[] { prefix + track, prefix + "*", "zpermissions.rank." + track, "zpermissions.rank.*" }) {
+            for (String perm : new String[]{prefix + track, prefix + "*", "zpermissions.rank." + track, "zpermissions.rank.*"}) {
                 if (sender.hasPermission(perm)) {
                     found = true; // continue search (for negations)
-                }
-                else if (sender.isPermissionSet(perm)) {
+                } else if (sender.isPermissionSet(perm)) {
                     found = false; // explicit negation
                     break;
                 }
@@ -460,14 +445,13 @@ public class RootCommands {
             if (playerTracks.size() == 1) {
                 // Exactly one choice, use it
                 trackName = playerTracks.iterator().next();
-            }
-            else {
+            } else {
                 // Fall back to configured default
                 trackName = config.getDefaultTrack();
             }
             sendMessage(sender, colorize("{GRAY}(Defaulting to track \"%s\")"), trackName);
         }
-        
+
         final List<String> track = config.getTrack(trackName);
         if (track == null || track.isEmpty()) {
             sendMessage(sender, colorize("{RED}Track has not been defined."));
@@ -501,9 +485,9 @@ public class RootCommands {
     }
 
     private static class TrackMetaData {
-        
+
         private final List<String> track;
-        
+
         private final String trackName;
 
         public TrackMetaData(List<String> track, String trackName) {
@@ -518,7 +502,7 @@ public class RootCommands {
         public String getTrackName() {
             return trackName;
         }
-        
+
     }
 
 }

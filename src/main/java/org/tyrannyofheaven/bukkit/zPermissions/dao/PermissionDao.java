@@ -28,7 +28,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
 /**
  * Data-access interface for zPermissions. Mainly concerned with CUD operations
  * (that is, CRUD without the R).
- * 
+ *
  * @author zerothangel
  */
 public interface PermissionDao {

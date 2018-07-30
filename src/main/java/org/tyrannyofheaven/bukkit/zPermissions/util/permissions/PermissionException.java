@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Exception thrown when a permissible does not have the required permission.
- * 
+ *
  * @author zerothangel
  */
 public class PermissionException extends RuntimeException {
@@ -30,14 +30,14 @@ public class PermissionException extends RuntimeException {
     private static final long serialVersionUID = 4064063141792654633L;
 
     private final List<String> permissions;
-    
+
     private final boolean all;
 
     private final boolean checkNegations;
 
     /**
      * Create a PermissionException for a single permission.
-     * 
+     *
      * @param permission name of the permission
      */
     public PermissionException(String permission) {
@@ -48,8 +48,8 @@ public class PermissionException extends RuntimeException {
 
     /**
      * Create a PermissionException for multiple permissions.
-     *  
-     * @param all true if all permissions are required
+     *
+     * @param all         true if all permissions are required
      * @param permissions name of permissions
      */
     public PermissionException(boolean all, boolean checkNegations, String... permissions) {
@@ -60,7 +60,7 @@ public class PermissionException extends RuntimeException {
 
     /**
      * Retrieve the associated permissions.
-     * 
+     *
      * @return the permissions
      */
     public List<String> getPermissions() {
@@ -69,7 +69,7 @@ public class PermissionException extends RuntimeException {
 
     /**
      * Retrieve whether or not all permissions are required.
-     * 
+     *
      * @return true if all permissions are required
      */
     public boolean isAll() {
@@ -78,7 +78,7 @@ public class PermissionException extends RuntimeException {
 
     /**
      * Retrieve whether or not negations were checked.
-     * 
+     *
      * @return true if negations were checked
      */
     public boolean isCheckNegations() {

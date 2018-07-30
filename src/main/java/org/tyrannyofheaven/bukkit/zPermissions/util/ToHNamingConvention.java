@@ -29,7 +29,7 @@ import com.avaje.ebean.config.UnderscoreNamingConvention;
  * Avaje {@link NamingConvention} implementation that accepts custom names for
  * mapped beans. Otherwise behaves the same as {@link UnderscoreNamingConvention},
  * the default used by Avaje.
- * 
+ *
  * @author zerothangel
  */
 public class ToHNamingConvention extends UnderscoreNamingConvention {
@@ -41,7 +41,7 @@ public class ToHNamingConvention extends UnderscoreNamingConvention {
     /**
      * Construct a new instance and configure it so it only accepts table name
      * mappings of the classes specified by {@link JavaPlugin#getDatabaseClasses()}.
-     * 
+     *
      * @param plugin the JavaPlugin subclass
      */
     public ToHNamingConvention(DBPlugin plugin, String defaultSchemaTableName) {
@@ -51,7 +51,7 @@ public class ToHNamingConvention extends UnderscoreNamingConvention {
         }
         this.defaultSchemaTableName = defaultSchemaTableName;
     }
-    
+
     /**
      * Clear all table name mappings.
      */
@@ -63,7 +63,7 @@ public class ToHNamingConvention extends UnderscoreNamingConvention {
 
     /**
      * Add a table name mapping for the given class.
-     * 
+     *
      * @param className the simple name of the class
      * @param tableName the table name. May be qualified with catalog/schema. May be null.
      */
@@ -83,8 +83,7 @@ public class ToHNamingConvention extends UnderscoreNamingConvention {
         String qualifiedTableName = tableNames.get(beanClass.getSimpleName());
         if (qualifiedTableName != null) {
             return new TableName(qualifiedTableName);
-        }
-        else if (beanClass == ToHSchemaVersion.class) {
+        } else if (beanClass == ToHSchemaVersion.class) {
             // Special handling of default name for schema version table
             TableName tableName = super.getTableName(beanClass);
             return new TableName(tableName.getCatalog(), tableName.getSchema(), defaultSchemaTableName);

@@ -31,8 +31,7 @@ public class VersionMain {
         VersionInfo versionInfo = getVersion(VersionMain.class);
         if (versionInfo != null) {
             System.out.println(versionInfo.getFullVersion());
-        }
-        else {
+        } else {
             System.err.println("Unable to find my jar file!");
             System.exit(1);
         }
@@ -49,12 +48,10 @@ public class VersionMain {
                 String version = jis.getManifest().getMainAttributes().getValue("Implementation-Version");
                 String build = jis.getManifest().getMainAttributes().getValue("Implementation-Build");
                 return new VersionInfo(artifactId, version, build);
-            }
-            finally {
+            } finally {
                 jis.close();
             }
-        }
-        else {
+        } else {
             return null;
         }
     }

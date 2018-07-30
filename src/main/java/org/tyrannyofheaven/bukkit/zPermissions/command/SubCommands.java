@@ -70,7 +70,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.Utils;
 
 /**
  * Handler for sub-commands of /permissions
- * 
+ *
  * @author zerothangel
  */
 public class SubCommands {
@@ -119,67 +119,67 @@ public class SubCommands {
         uuidCacheCommands = new UuidCacheCommands(uuidResolver);
     }
 
-    @Command(value={"player", "pl", "p"}, description="Player-related commands")
+    @Command(value = {"player", "pl", "p"}, description = "Player-related commands")
     @Require({"zpermissions.player.view", "zpermissions.player.manage", "zpermissions.player.chat"})
-    public PlayerCommands player(HelpBuilder helpBuilder, CommandSender sender, CommandSession session, @Option(value="player", nullable=true, completer="player") String playerName, String[] args) {
+    public PlayerCommands player(HelpBuilder helpBuilder, CommandSender sender, CommandSession session, @Option(value = "player", nullable = true, completer = "player") String playerName, String[] args) {
         if (args.length == 0) {
             // Display sub-command help
             helpBuilder.withCommandSender(sender)
-                .withHandler(playerCommand)
-                .forCommand("get")
-                .forCommand("set")
-                .forCommand("unset")
-                .forCommand("settemp")
-                .forCommand("purge")
-                .forCommand("groups")
-                .forCommand("setgroup")
-                .forCommand("addgroup")
-                .forCommand("removegroup")
-                .forCommand("show")
-                .forCommand("dump")
-                .forCommand("diff")
-                .forCommand("clone")
-                .forCommand("has")
-                .forCommand("metadata")
-                .forCommand("prefix")
-                .forCommand("suffix")
-                .forCommand("settrack")
-                .show();
+                    .withHandler(playerCommand)
+                    .forCommand("get")
+                    .forCommand("set")
+                    .forCommand("unset")
+                    .forCommand("settemp")
+                    .forCommand("purge")
+                    .forCommand("groups")
+                    .forCommand("setgroup")
+                    .forCommand("addgroup")
+                    .forCommand("removegroup")
+                    .forCommand("show")
+                    .forCommand("dump")
+                    .forCommand("diff")
+                    .forCommand("clone")
+                    .forCommand("has")
+                    .forCommand("metadata")
+                    .forCommand("prefix")
+                    .forCommand("suffix")
+                    .forCommand("settrack")
+                    .show();
             abortBatchProcessing();
             return null;
         }
-        
+
         // Stuff name into session for next handler
         session.setValue("entityName", playerName);
         return playerCommand;
     }
 
-    @Command(value={"group", "gr", "g"}, description="Group-related commands")
+    @Command(value = {"group", "gr", "g"}, description = "Group-related commands")
     @Require({"zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat"})
-    public CommonCommands group(HelpBuilder helpBuilder, CommandSender sender, CommandSession session, @Option(value="group", nullable=true, completer="group") String groupName, String[] args) {
+    public CommonCommands group(HelpBuilder helpBuilder, CommandSender sender, CommandSession session, @Option(value = "group", nullable = true, completer = "group") String groupName, String[] args) {
         if (args.length == 0) {
             // Display sub-command help
             helpBuilder.withCommandSender(sender)
-                .withHandler(groupCommand)
-                .forCommand("create")
-                .forCommand("get")
-                .forCommand("set")
-                .forCommand("unset")
-                .forCommand("purge")
-                .forCommand("members")
-                .forCommand("setparents")
-                .forCommand("setweight")
-                .forCommand("add")
-                .forCommand("remove")
-                .forCommand("show")
-                .forCommand("dump")
-                .forCommand("diff")
-                .forCommand("clone")
-                .forCommand("rename")
-                .forCommand("metadata")
-                .forCommand("prefix")
-                .forCommand("suffix")
-                .show();
+                    .withHandler(groupCommand)
+                    .forCommand("create")
+                    .forCommand("get")
+                    .forCommand("set")
+                    .forCommand("unset")
+                    .forCommand("purge")
+                    .forCommand("members")
+                    .forCommand("setparents")
+                    .forCommand("setweight")
+                    .forCommand("add")
+                    .forCommand("remove")
+                    .forCommand("show")
+                    .forCommand("dump")
+                    .forCommand("diff")
+                    .forCommand("clone")
+                    .forCommand("rename")
+                    .forCommand("metadata")
+                    .forCommand("prefix")
+                    .forCommand("suffix")
+                    .show();
             abortBatchProcessing();
             return null;
         }
@@ -189,17 +189,15 @@ public class SubCommands {
         return groupCommand;
     }
 
-    @Command(value={"list", "ls"}, description="List players or groups in the database")
+    @Command(value = {"list", "ls"}, description = "List players or groups in the database")
     @Require("zpermissions.list")
-    public void list(CommandSender sender, @Option(value={"-U", "--uuid"}) boolean showUuid, @Option(value="what", completer="constant:groups players") String what) {
+    public void list(CommandSender sender, @Option(value = {"-U", "--uuid"}) boolean showUuid, @Option(value = "what", completer = "constant:groups players") String what) {
         boolean group;
         if ("groups".startsWith(what)) {
             group = true;
-        }
-        else if ("players".startsWith(what)) {
+        } else if ("players".startsWith(what)) {
             group = false;
-        }
-        else {
+        } else {
             throw new ParseException("<what> should be 'groups' or 'players'");
         }
 
@@ -217,17 +215,16 @@ public class SubCommands {
 
         if (entityNames.isEmpty()) {
             sendMessage(sender, colorize("{YELLOW}No %s found."), group ? "groups" : "players");
-        }
-        else {
+        } else {
             for (String entityName : entityNames) {
                 sendMessage(sender, colorize("{DARK_GREEN}- %s"), entityName);
             }
         }
     }
 
-    @Command(value="check", description="Check against effective permissions")
+    @Command(value = "check", description = "Check against effective permissions")
     @Require("zpermissions.check")
-    public void check(CommandSender sender, @Option("permission") String permission, @Option(value="player", optional=true, completer="player") String playerName) {
+    public void check(CommandSender sender, @Option("permission") String permission, @Option(value = "player", optional = true, completer = "player") String playerName) {
         Player player;
         if (playerName == null) {
             // No player specified
@@ -237,9 +234,8 @@ public class SubCommands {
                 return;
             }
             // Use sender
-            player = (Player)sender;
-        }
-        else {
+            player = (Player) sender;
+        } else {
             // Checking perms for another player
             requirePermission(sender, "zpermissions.check.other");
 
@@ -261,9 +257,9 @@ public class SubCommands {
         sendMessage(sender, colorize("{AQUA}%s{YELLOW} does not set {GOLD}%s"), player.getName(), permission);
     }
 
-    @Command(value="inspect", description="Inspect effective permissions")
+    @Command(value = "inspect", description = "Inspect effective permissions")
     @Require("zpermissions.inspect")
-    public void inspect(CommandSender sender, @Option(value={"-f", "--filter"}, valueName="filter") String filter, @Option({"-v", "--verbose"}) boolean verbose, @Option(value="player", optional=true, completer="player") String playerName) {
+    public void inspect(CommandSender sender, @Option(value = {"-f", "--filter"}, valueName = "filter") String filter, @Option({"-v", "--verbose"}) boolean verbose, @Option(value = "player", optional = true, completer = "player") String playerName) {
         Player player;
         if (playerName == null) {
             // No player specified
@@ -273,9 +269,8 @@ public class SubCommands {
                 return;
             }
             // Use sender
-            player = (Player)sender;
-        }
-        else {
+            player = (Player) sender;
+        } else {
             // Checking perms for another player
             requirePermission(sender, "zpermissions.inspect.other");
 
@@ -292,20 +287,20 @@ public class SubCommands {
         for (PermissionAttachmentInfo pai : player.getEffectivePermissions()) {
             permissions.add(new Utils.PermissionInfo(pai.getPermission(), pai.getValue(), pai.getAttachment() != null ? pai.getAttachment().getPlugin().getName() : "default"));
         }
-        
+
         Utils.displayPermissions(plugin, sender, null, permissions, filter, sender instanceof ConsoleCommandSender || verbose);
     }
 
-    @Command(value="reload", description="Re-read config.yml")
+    @Command(value = "reload", description = "Re-read config.yml")
     @Require("zpermissions.reload")
     public void reload(CommandSender sender) {
         core.reload();
         sendMessage(sender, colorize("{WHITE}config.yml{YELLOW} reloaded"));
     }
 
-    @Command(value="refresh", description="Re-read permissions from storage")
+    @Command(value = "refresh", description = "Re-read permissions from storage")
     @Require("zpermissions.refresh")
-    public void refresh(CommandSender sender, @Option(value={ "-c", "--conditional" }, optional=true) Boolean conditional) {
+    public void refresh(CommandSender sender, @Option(value = {"-c", "--conditional"}, optional = true) Boolean conditional) {
         if (conditional == null)
             conditional = Boolean.FALSE; // backwards compatibility
         core.refresh(!conditional, new Runnable() {
@@ -329,9 +324,9 @@ public class SubCommands {
         throw new ParseException("Invalid filename.");
     }
 
-    @Command(value={"import", "restore"}, description="Import a dump of the database")
+    @Command(value = {"import", "restore"}, description = "Import a dump of the database")
     @Require("zpermissions.import")
-    public void import_command(final CommandSender sender, @Option(value="filename", completer="dump-dir") String filename) {
+    public void import_command(final CommandSender sender, @Option(value = "filename", completer = "dump-dir") String filename) {
         File inFile = sanitizeFilename(config.getDumpDirectory(), filename);
         try {
             // Ensure database is empty
@@ -354,20 +349,18 @@ public class SubCommands {
             // Execute commands
             if (CommandReader.read(Bukkit.getServer(), sender, inFile, plugin)) {
                 sendMessage(sender, colorize("{YELLOW}Import complete."));
-            }
-            else {
+            } else {
                 sendMessage(sender, colorize("{RED}Import failed."));
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             sendMessage(sender, colorize("{RED}Error importing; see server log."));
             log(plugin, Level.SEVERE, "Error importing:", e);
         }
     }
-    
-    @Command(value={"export", "dump"}, description="Export a dump of the database")
+
+    @Command(value = {"export", "dump"}, description = "Export a dump of the database")
     @Require("zpermissions.export")
-    public void export(CommandSender sender, @Option(value="filename", completer="dump-dir") String filename) {
+    public void export(CommandSender sender, @Option(value = "filename", completer = "dump-dir") String filename) {
         File outFile = sanitizeFilename(config.getDumpDirectory(), filename);
         try {
             if (!config.getDumpDirectory().exists()) {
@@ -378,40 +371,39 @@ public class SubCommands {
             }
             modelDumper.dump(outFile);
             sendMessage(sender, colorize("{YELLOW}Export completed."));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             sendMessage(sender, colorize("{RED}Error exporting; see server log."));
             log(plugin, Level.SEVERE, "Error exporting:", e);
         }
     }
 
-    @Command(value="mygroups", description="List groups you are a member of")
+    @Command(value = "mygroups", description = "List groups you are a member of")
     @Require("zpermissions.mygroups")
     public void mygroups(CommandSender sender, @Option({"-v", "--verbose"}) boolean verbose) {
         if (!(sender instanceof Player)) {
             sendMessage(sender, colorize("{RED}Command only valid for players."));
             return;
         }
-        
-        List<Membership> memberships = storageStrategy.getPermissionService().getGroups(((Player)sender).getUniqueId());
+
+        List<Membership> memberships = storageStrategy.getPermissionService().getGroups(((Player) sender).getUniqueId());
         if (!verbose)
             memberships = Utils.filterExpired(memberships);
         Collections.reverse(memberships); // Order from highest to lowest
 
         String groups = Utils.displayGroups(resolver.getDefaultGroup(), memberships);
-        
+
         sendMessage(sender, colorize("{YELLOW}You are a member of: %s"), groups);
     }
 
-    @Command(value="prefix", description="Modify your chat prefix")
+    @Command(value = "prefix", description = "Modify your chat prefix")
     @Require("zpermissions.mychat")
-    public void prefix(final CommandSender sender, @Option({"-c", "--clear"}) boolean clear, @Option(value="prefix", optional=true) String prefix, String[] rest) {
+    public void prefix(final CommandSender sender, @Option({"-c", "--clear"}) boolean clear, @Option(value = "prefix", optional = true) String prefix, String[] rest) {
         selfServeChat(sender, MetadataConstants.PREFIX_KEY, clear, prefix, rest);
     }
 
-    @Command(value="suffix", description="Modify your chat suffix")
+    @Command(value = "suffix", description = "Modify your chat suffix")
     @Require("zpermissions.mychat")
-    public void suffix(final CommandSender sender, @Option({"-c", "--clear"}) boolean clear, @Option(value="suffix", optional=true) String suffix, String[] rest) {
+    public void suffix(final CommandSender sender, @Option({"-c", "--clear"}) boolean clear, @Option(value = "suffix", optional = true) String suffix, String[] rest) {
         selfServeChat(sender, MetadataConstants.SUFFIX_KEY, clear, suffix, rest);
     }
 
@@ -421,13 +413,11 @@ public class SubCommands {
             return;
         }
         if ((value != null && !value.isEmpty()) || rest.length > 0) {
-            setPlayerMetadataString((Player)sender, metadataName, value, rest);
-        }
-        else if (clear) {
-            unsetPlayerMetadataString((Player)sender, metadataName);
-        }
-        else {
-            showPlayerMetadataString((Player)sender, metadataName);
+            setPlayerMetadataString((Player) sender, metadataName, value, rest);
+        } else if (clear) {
+            unsetPlayerMetadataString((Player) sender, metadataName);
+        } else {
+            showPlayerMetadataString((Player) sender, metadataName);
         }
     }
 
@@ -443,8 +433,7 @@ public class SubCommands {
         if (result == null) {
             sendMessage(sender, colorize("{YELLOW}You do not have a {GOLD}%s"), metadataName);
             abortBatchProcessing();
-        }
-        else {
+        } else {
             sendMessage(sender, colorize("{YELLOW}Your {GOLD}%s{YELLOW} is {GREEN}%s"), metadataName, result);
             sendMessage(sender, colorize("{GRAY}(Add -c option to clear)"));
         }
@@ -455,7 +444,7 @@ public class SubCommands {
         final StringBuilder stringValue = new StringBuilder(value);
         if (rest.length > 0) {
             stringValue.append(' ')
-                .append(ToHStringUtils.delimitedString(" ", (Object[])rest));
+                    .append(ToHStringUtils.delimitedString(" ", (Object[]) rest));
         }
         storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -476,21 +465,20 @@ public class SubCommands {
                 return storageStrategy.getPermissionService().unsetMetadata(player.getName(), player.getUniqueId(), false, metadataName);
             }
         });
-        
+
         if (result) {
             sendMessage(player, colorize("{YELLOW}Your {GOLD}%s{YELLOW} has been unset"), metadataName);
             core.invalidateMetadataCache(player.getName(), player.getUniqueId(), false);
-        }
-        else {
+        } else {
             sendMessage(player, colorize("{YELLOW}You do not have a {GOLD}%s"), metadataName);
             abortBatchProcessing();
         }
     }
 
-    @Command(value="diff", description="Compare effective permissions of a player")
-    public void diff(CommandSender sender, final @Option(value={"-r", "--region", "--regions"}, valueName="regions") String regions, final @Option(value={"-R", "--other-region", "--other-region"}, valueName="other-regions") String otherRegions,
-            final @Option(value={"-w", "--world"}, valueName="world") String world, final @Option(value={"-W", "--other-world"}, valueName="other-world") String otherWorld,
-            final @Option(value={"-f", "--filter"}, valueName="filter") String filter, final @Option(value="player", completer="player") String player, final @Option(value="other-player", completer="player", optional=true) String otherPlayer) {
+    @Command(value = "diff", description = "Compare effective permissions of a player")
+    public void diff(CommandSender sender, final @Option(value = {"-r", "--region", "--regions"}, valueName = "regions") String regions, final @Option(value = {"-R", "--other-region", "--other-region"}, valueName = "other-regions") String otherRegions,
+                     final @Option(value = {"-w", "--world"}, valueName = "world") String world, final @Option(value = {"-W", "--other-world"}, valueName = "other-world") String otherWorld,
+                     final @Option(value = {"-f", "--filter"}, valueName = "filter") String filter, final @Option(value = "player", completer = "player") String player, final @Option(value = "other-player", completer = "player", optional = true) String otherPlayer) {
         final SubCommands realThis = this;
         commandUuidResolver.resolveUsername(sender, player, false, new CommandUuidResolverHandler() {
             @Override
@@ -507,8 +495,8 @@ public class SubCommands {
     }
 
     private void diff(CommandSender sender, String regions, String otherRegions,
-            String world, String otherWorld,
-            String filter, String player, final UUID uuid, String otherPlayer, final UUID otherUuid) {
+                      String world, String otherWorld,
+                      String filter, String player, final UUID uuid, String otherPlayer, final UUID otherUuid) {
         List<String> header = new ArrayList<>();
 
         // Parse qualifiers for first player
@@ -520,8 +508,7 @@ public class SubCommands {
             worldName = determineWorldName(sender, world, player, header);
             if (worldName == null) return;
             regionNames = parseRegions(regions);
-        }
-        else {
+        } else {
             // Player must be online
             if (p == null) {
                 sendMessage(sender, colorize("{RED}Player is not online."));
@@ -543,8 +530,7 @@ public class SubCommands {
             otherWorldName = determineWorldName(sender, otherWorld, otherPlayer, header);
             if (otherWorldName == null) return;
             otherRegionNames = parseRegions(otherRegions);
-        }
-        else {
+        } else {
             otherWorldName = null;
             otherRegionNames = Collections.emptySet();
         }
@@ -559,7 +545,7 @@ public class SubCommands {
             }, true);
             Map<String, Boolean> permissions = new HashMap<>();
             Utils.calculateChildPermissions(permissions, rootPermissions, false);
-            
+
             Map<String, Boolean> otherRootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
                 public Map<String, Boolean> doInTransaction() throws Exception {
@@ -578,8 +564,7 @@ public class SubCommands {
                             (otherRegionNames.isEmpty() ? "" : "[" + ToHStringUtils.delimitedString(",", otherRegionNames) + "]")),
                     String.format(colorize("{YELLOW}Players on %s%s have identical effective permissions."), otherWorldName,
                             (otherRegionNames.isEmpty() ? "" : "[" + ToHStringUtils.delimitedString(",", otherRegionNames) + "]")), filter);
-        }
-        else {
+        } else {
             // Diff Bukkit effective permissions against zPerms effective permissions
             Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
@@ -609,16 +594,14 @@ public class SubCommands {
             String worldName;
             if (sender instanceof Player) {
                 // Use sender's world
-                worldName = ((Player)sender).getWorld().getName();
-            }
-            else {
+                worldName = ((Player) sender).getWorld().getName();
+            } else {
                 // Default to first world
                 worldName = Bukkit.getWorlds().get(0).getName();
             }
             header.add(String.format(colorize("{GRAY}(Assuming world \"%s\" for player \"%s\")"), worldName, player));
             return worldName.toLowerCase();
-        }
-        else {
+        } else {
             // Just verify that the given world exists
             if (Bukkit.getWorld(world) == null) {
                 sendMessage(sender, colorize("{RED}Invalid world for player \"%s\"."), player);
@@ -638,25 +621,21 @@ public class SubCommands {
         return result;
     }
 
-    @Command(value="purge", description="Delete all players and groups")
+    @Command(value = "purge", description = "Delete all players and groups")
     @Require("zpermissions.purge")
-    public void purge(CommandSender sender, @Option(value="code", optional=true) Integer code) {
+    public void purge(CommandSender sender, @Option(value = "code", optional = true) Integer code) {
         if (purgeCode != null) {
             if (purgeCode.getTimestamp() < System.currentTimeMillis() - PURGE_CODE_EXPIRATION) {
                 // Past expiration
                 sendMessage(sender, colorize("{RED}Too slow. Try again without code."));
                 purgeCode = null;
-            }
-            else if (!purgeCode.getExecutor().equals(sender.getName())) {
+            } else if (!purgeCode.getExecutor().equals(sender.getName())) {
                 sendMessage(sender, colorize("{RED}Confirmation pending for %s. Ignored."), purgeCode.getExecutor());
-            }
-            else if (code == null) {
+            } else if (code == null) {
                 sendMessage(sender, colorize("{RED}Confirmation pending. Try again with code."));
-            }
-            else if (purgeCode.getCode() != code) {
+            } else if (purgeCode.getCode() != code) {
                 sendMessage(sender, colorize("{RED}Code mismatch. Try again."));
-            }
-            else {
+            } else {
                 storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                     @Override
                     public void doInTransactionWithoutResult() throws Exception {
@@ -673,17 +652,15 @@ public class SubCommands {
                 broadcastAdmin(plugin, "%s performed full permissions purge", sender.getName());
                 sendMessage(sender, colorize("{YELLOW}Full permissions purge successful."));
                 purgeCode = null;
-                
+
                 core.invalidateMetadataCache();
                 core.refreshPlayers();
                 core.refreshExpirations();
             }
-        }
-        else {
+        } else {
             if (code != null) {
                 sendMessage(sender, colorize("{RED}No purge pending. Try again without code."));
-            }
-            else {
+            } else {
                 int codeNumber = 100000 + random.nextInt(900000); // random 6 digit number
                 purgeCode = new PurgeCode(sender.getName(), codeNumber, System.currentTimeMillis());
                 sendMessage(sender, colorize("{YELLOW}Issue {DARK_GRAY}/permissions purge %d{YELLOW} to confirm."), codeNumber);
@@ -691,7 +668,7 @@ public class SubCommands {
         }
     }
 
-    @Command(value={"cleanup", "gc"}, description="Perform optional cleanup of permissions storage")
+    @Command(value = {"cleanup", "gc"}, description = "Perform optional cleanup of permissions storage")
     @Require("zpermissions.cleanup")
     public void cleanup(CommandSender sender) {
         storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
@@ -709,7 +686,7 @@ public class SubCommands {
                         }
                     }
                 }
-                
+
                 // This is going to be slow and inefficient since PermissionService scans each member
                 for (Membership membership : toDelete) {
                     storageStrategy.getPermissionService().removeMember(membership.getGroup().getDisplayName(), membership.getUuid());
@@ -726,37 +703,35 @@ public class SubCommands {
         core.refreshExpirations();
     }
 
-    @Command(value="search", description="Search for players or groups that have a specific permission")
+    @Command(value = "search", description = "Search for players or groups that have a specific permission")
     @Require("zpermissions.search")
-    public void search(CommandSender sender, @Option(value={"-U", "--uuid"}) boolean showUuid, @Option(value={"-p", "--players"}) boolean searchPlayers, @Option(value={"-g", "--groups"}) boolean searchGroups,
-            @Option(value={"-e", "--effective"}) boolean effective, @Option(value={"-w", "--world"}, valueName="world", completer="world") String worldName,
-            @Option(value={"-r", "--region", "--regions"}, valueName="regions") String regions, @Option("permission") String permission) {
+    public void search(CommandSender sender, @Option(value = {"-U", "--uuid"}) boolean showUuid, @Option(value = {"-p", "--players"}) boolean searchPlayers, @Option(value = {"-g", "--groups"}) boolean searchGroups,
+                       @Option(value = {"-e", "--effective"}) boolean effective, @Option(value = {"-w", "--world"}, valueName = "world", completer = "world") String worldName,
+                       @Option(value = {"-r", "--region", "--regions"}, valueName = "regions") String regions, @Option("permission") String permission) {
         if (!(sender instanceof ConsoleCommandSender)) {
             sendMessage(sender, colorize("{GRAY}(Results only available on console.)"));
         }
-        
+
         if (!searchPlayers && !searchGroups) {
             // Default to both
             searchPlayers = true;
             searchGroups = true;
         }
-        
+
         Set<String> regionNames = Collections.emptySet();
         if (effective) {
             // Figure out world
             if (worldName == null) {
                 if (sender instanceof Player) {
                     // Use issuer's world
-                    worldName = ((Player)sender).getWorld().getName();
+                    worldName = ((Player) sender).getWorld().getName();
                     sendMessage(sender, colorize("{GRAY}(Using current world: %s. Use -w to specify a world.)"), worldName);
-                }
-                else {
+                } else {
                     // Default to first world
                     worldName = Bukkit.getWorlds().get(0).getName();
                     sendMessage(sender, colorize("{GRAY}(Use -w to specify a world. Defaulting to \"%s\")"), worldName);
                 }
-            }
-            else {
+            } else {
                 // Just verify it exists
                 if (Bukkit.getWorld(worldName) == null) {
                     sendMessage(sender, colorize("{RED}Invalid world."));
@@ -766,7 +741,7 @@ public class SubCommands {
             worldName = worldName.toLowerCase();
             regionNames = parseRegions(regions);
         }
-        
+
         if (!ToHStringUtils.hasText(permission)) {
             throw new ParseException("Permission cannot be empty");
         }
@@ -781,12 +756,12 @@ public class SubCommands {
                 players.add(entity.getUuid());
             }
         }
-        
+
         List<String> groups = Collections.emptyList();
         if (searchGroups) {
             groups = storageStrategy.getPermissionService().getEntityNames(true);
         }
-        
+
         // Create and configure search task
         SearchTask searchTask = new SearchTask(plugin, storageStrategy, resolver, permission, players, groups, effective, worldName, regionNames, showUuid);
         searchTask.setBatchSize(config.getSearchBatchSize());
@@ -798,16 +773,16 @@ public class SubCommands {
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, searchTask);
     }
 
-    @Command(value="uuid-cache", description="UUID cache control")
+    @Command(value = "uuid-cache", description = "UUID cache control")
     @Require("zpermissions.uuid-cache")
     public UuidCacheCommands uuidCache(HelpBuilder helpBuilder, CommandSender sender, String[] args) {
         if (args.length == 0) {
             // Display sub-command help
             helpBuilder.withCommandSender(sender)
-                .withHandler(uuidCacheCommands)
-                .forCommand("invalidate")
-                .forCommand("invalidate-all")
-                .show();
+                    .withHandler(uuidCacheCommands)
+                    .forCommand("invalidate")
+                    .forCommand("invalidate-all")
+                    .show();
             abortBatchProcessing();
             return null;
         }
@@ -820,7 +795,7 @@ public class SubCommands {
         private final String executor;
 
         private final int code;
-        
+
         private final long timestamp;
 
         private PurgeCode(String executor, int code, long timestamp) {

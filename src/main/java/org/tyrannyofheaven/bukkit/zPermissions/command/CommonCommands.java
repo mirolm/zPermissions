@@ -59,7 +59,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.Utils;
 /**
  * Handler for common commands between "/permissions group" and
  * "/permissions player"
- * 
+ *
  * @author zerothangel
  */
 public abstract class CommonCommands {
@@ -84,6 +84,7 @@ public abstract class CommonCommands {
 
     /**
      * Instantiate this handler.
+     *
      * @param group true if this is handling groups
      */
     protected CommonCommands(ZPermissionsCore core, StorageStrategy storageStrategy, PermissionsResolver resolver, ZPermissionsConfig config, Plugin plugin, CommandUuidResolver uuidResolver, boolean group) {
@@ -94,7 +95,7 @@ public abstract class CommonCommands {
         this.plugin = plugin;
         this.uuidResolver = uuidResolver;
         this.group = group;
-        
+
         metadataCommands = new MetadataCommands(core, storageStrategy, uuidResolver, group);
     }
 
@@ -125,12 +126,11 @@ public abstract class CommonCommands {
                 return storageStrategy.getPermissionService().getPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission());
             }
         }, true);
-        
+
         if (result == null) {
             sendMessage(sender, colorize("%s%s{YELLOW} does not set {GOLD}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, permission);
             abortBatchProcessing();
-        }
-        else {
+        } else {
             sendMessage(sender, colorize("%s%s{YELLOW} sets {GOLD}%s{YELLOW} to {GREEN}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, permission, result);
         }
     }
@@ -147,7 +147,7 @@ public abstract class CommonCommands {
     private void _set0(CommandSender sender, final String name, final UUID uuid, String permission, final Boolean value) {
         // Get world/permission
         final QualifiedPermission wp = new QualifiedPermission(permission);
-    
+
         // Don't allow messing with the dynamic permission
         if (checkDynamicPermission(sender, wp.getPermission())) return;
 
@@ -159,17 +159,15 @@ public abstract class CommonCommands {
                     storageStrategy.getPermissionService().setPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission(), value == null ? Boolean.TRUE : value);
                 }
             });
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             handleMissingGroup(sender, e);
             return;
         }
-    
+
         sendMessage(sender, colorize("{GOLD}%s{YELLOW} set to {GREEN}%s{YELLOW} for %s%s"), permission, value == null ? Boolean.TRUE : value, group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name);
         if (!group) {
             core.refreshPlayer(uuid, RefreshCause.COMMAND);
-        }
-        else {
+        } else {
             core.refreshAffectedPlayers(name);
         }
     }
@@ -186,7 +184,7 @@ public abstract class CommonCommands {
     private void _unset0(CommandSender sender, final String name, final UUID uuid, String permission) {
         // Get world/permission
         final QualifiedPermission wp = new QualifiedPermission(permission);
-    
+
         // Don't allow messing with the dynamic permission
         if (checkDynamicPermission(sender, wp.getPermission())) return;
 
@@ -204,8 +202,7 @@ public abstract class CommonCommands {
                 core.refreshAffectedPlayers(name);
             else
                 core.refreshPlayer(uuid, RefreshCause.COMMAND);
-        }
-        else {
+        } else {
             sendMessage(sender, colorize("%s%s{RED} does not set {GOLD}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, permission);
             abortBatchProcessing();
         }
@@ -213,8 +210,8 @@ public abstract class CommonCommands {
 
     /**
      * Verifies given permission does not start with the dynamic permission prefix.
-     * 
-     * @param sender the CommandSender to complain to if it does
+     *
+     * @param sender     the CommandSender to complain to if it does
      * @param permission the permission (must be unqualified)
      * @return true if it starts with the prefix, false otherwise
      */
@@ -243,7 +240,7 @@ public abstract class CommonCommands {
                 return storageStrategy.getPermissionService().deleteEntity(name, uuid, group);
             }
         });
-        
+
         if (result) {
             sendMessage(sender, colorize("{YELLOW}%s %s%s{YELLOW} deleted"),
                     (group ? "Group" : "Player"),
@@ -255,8 +252,7 @@ public abstract class CommonCommands {
             else
                 core.refreshPlayer(uuid, RefreshCause.COMMAND);
             core.refreshExpirations();
-        }
-        else {
+        } else {
             sendMessage(sender, colorize("{RED}%s not found."), group ? "Group" : "Player");
             abortBatchProcessing();
         }
@@ -284,7 +280,7 @@ public abstract class CommonCommands {
         for (String region : regionNames) {
             regions.add(region.toLowerCase());
         }
-        
+
         final String lworldName = worldName.toLowerCase();
         Map<String, Boolean> rootPermissions;
         try {
@@ -296,14 +292,12 @@ public abstract class CommonCommands {
                         if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
                             throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
                         return resolver.resolveGroup(name.toLowerCase(), lworldName, regions);
-                    }
-                    else {
+                    } else {
                         return resolver.resolvePlayer(uuid, lworldName, regions).getPermissions();
                     }
                 }
             }, true);
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             handleMissingGroup(sender, e);
             return;
         }
@@ -311,7 +305,7 @@ public abstract class CommonCommands {
         // Recursively determine all child permissions
         Map<String, Boolean> permissions = new HashMap<>();
         Utils.calculateChildPermissions(permissions, rootPermissions, false);
-        
+
         Utils.displayPermissions(plugin, sender, header, permissions, filter);
     }
 
@@ -320,18 +314,16 @@ public abstract class CommonCommands {
         if (worldName == null) {
             // Determine a default world
             if (sender instanceof Player) {
-                worldName = ((Player)sender).getWorld().getName();
+                worldName = ((Player) sender).getWorld().getName();
                 header.add(String.format(colorize("{GRAY}(Using current world: %s. Use -w to specify a world.)"), worldName));
-            }
-            else {
+            } else {
                 List<World> worlds = Bukkit.getWorlds();
                 if (!worlds.isEmpty()) {
                     worldName = worlds.get(0).getName();
                     header.add(String.format(colorize("{GRAY}(Use -w to specify a world. Defaulting to \"%s\")"), worldName));
                 }
             }
-        }
-        else {
+        } else {
             // Validate world name
             World world = Bukkit.getWorld(worldName);
             if (world == null) {
@@ -373,7 +365,7 @@ public abstract class CommonCommands {
         for (String region : regionNames) {
             regions.add(region.toLowerCase());
         }
-        
+
         // Grab permissions from zPerms
         final String lworldName = worldName.toLowerCase();
         Map<String, Boolean> rootPermissions;
@@ -385,14 +377,12 @@ public abstract class CommonCommands {
                         if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
                             throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
                         return resolver.resolveGroup(name.toLowerCase(), lworldName, regions);
-                    }
-                    else {
+                    } else {
                         return resolver.resolvePlayer(uuid, lworldName, regions).getPermissions();
                     }
                 }
             }, true);
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             handleMissingGroup(sender, e);
             return;
         }
@@ -411,21 +401,19 @@ public abstract class CommonCommands {
                         if (storageStrategy.getPermissionService().getEntity(otherName, null, true) == null)
                             throw new MissingGroupException(otherName); // Don't really want to handle it in the transaction...
                         return resolver.resolveGroup(otherName.toLowerCase(), lworldName, regions);
-                    }
-                    else {
+                    } else {
                         return resolver.resolvePlayer(otherUuid, lworldName, regions).getPermissions();
                     }
                 }
             }, true);
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             handleMissingGroup(sender, e);
             return;
         }
 
         Map<String, Boolean> otherPermissions = new HashMap<>();
         Utils.calculateChildPermissions(otherPermissions, otherRootPermissions, false);
-        
+
         Utils.displayPermissionsDiff(plugin, sender, permissions, otherPermissions, header,
                 String.format(colorize("%s%s {WHITE}adds {YELLOW}the following permissions:"),
                         (group ? ChatColor.DARK_GREEN : ChatColor.AQUA),
@@ -442,15 +430,15 @@ public abstract class CommonCommands {
     protected final MetadataCommands _metadata(HelpBuilder helpBuilder, CommandSender sender, String[] args) {
         if (args.length == 0) {
             helpBuilder.withCommandSender(sender)
-                .withHandler(metadataCommands)
-                .forCommand("get")
-                .forCommand("set")
-                .forCommand("setint")
-                .forCommand("setreal")
-                .forCommand("setbool")
-                .forCommand("unset")
-                .forCommand("show")
-                .show();
+                    .withHandler(metadataCommands)
+                    .forCommand("get")
+                    .forCommand("set")
+                    .forCommand("setint")
+                    .forCommand("setreal")
+                    .forCommand("setbool")
+                    .forCommand("unset")
+                    .forCommand("show")
+                    .show();
             abortBatchProcessing();
             return null;
         }
@@ -503,7 +491,7 @@ public abstract class CommonCommands {
                     abortBatchProcessing();
                     return;
                 }
-                
+
                 // Create if group
                 if (group) {
                     storageStrategy.getPermissionService().createGroup(destination);
@@ -528,8 +516,7 @@ public abstract class CommonCommands {
                     for (PermissionEntity parent : entity.getParents())
                         parentNames.add(parent.getDisplayName());
                     storageStrategy.getPermissionService().setParents(destination, parentNames);
-                }
-                else {
+                } else {
                     // Player-specific stuff
                     for (Membership membership : memberships) {
                         storageStrategy.getPermissionService().addMember(membership.getGroup().getDisplayName(), destinationUuid, destination, membership.getExpiration());
@@ -549,15 +536,15 @@ public abstract class CommonCommands {
                             }
                             storageStrategy.getPermissionService().setParents(child.getDisplayName(), newParents);
                         }
-                        
+
                         // Add players to destination
                         for (Membership membership : entity.getMemberships()) {
                             storageStrategy.getPermissionService().addMember(destination, membership.getUuid(), membership.getDisplayName(), membership.getExpiration());
                         }
                     }
-                    
+
                     // NB Nothing more to do for players
-                    
+
                     // Delete original
                     storageStrategy.getPermissionService().deleteEntity(name, sourceUuid, group);
                 }
@@ -586,8 +573,7 @@ public abstract class CommonCommands {
     protected final void _prefix(CommandSender sender, String name, String prefix, String[] rest) {
         if ((prefix != null && !prefix.isEmpty()) || rest.length > 0) {
             metadataCommands.set(sender, name, MetadataConstants.PREFIX_KEY, prefix, rest);
-        }
-        else {
+        } else {
             metadataCommands.unset(sender, name, MetadataConstants.PREFIX_KEY);
         }
     }
@@ -595,8 +581,7 @@ public abstract class CommonCommands {
     protected final void _suffix(CommandSender sender, String name, String suffix, String[] rest) {
         if ((suffix != null && !suffix.isEmpty()) || rest.length > 0) {
             metadataCommands.set(sender, name, MetadataConstants.SUFFIX_KEY, suffix, rest);
-        }
-        else {
+        } else {
             metadataCommands.unset(sender, name, MetadataConstants.SUFFIX_KEY);
         }
     }
@@ -625,7 +610,7 @@ public abstract class CommonCommands {
 
     private void addGroupMember(CommandSender sender, final String groupName, final UUID playerUuid, final String playerName, String duration, String[] args, final boolean add, final boolean addNoReset) {
         final Date expiration = Utils.parseDurationTimestamp(duration, args);
-    
+
         // Add player to group.
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
@@ -636,16 +621,15 @@ public abstract class CommonCommands {
                     storageStrategy.getPermissionService().addMember(groupName, playerUuid, playerName, newExpiration);
                 }
             });
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             handleMissingGroup(sender, e);
             return;
         }
-    
+
         sendMessage(sender, colorize("{AQUA}%s{YELLOW} added to {DARK_GREEN}%s"), playerName, groupName);
         core.invalidateMetadataCache(playerName, playerUuid, false);
         core.refreshPlayer(playerUuid, RefreshCause.GROUP_CHANGE);
-        
+
         if (expiration != null)
             core.refreshExpirations(playerUuid);
     }
@@ -667,14 +651,13 @@ public abstract class CommonCommands {
                 return storageStrategy.getPermissionService().removeMember(groupName, playerUuid);
             }
         });
-    
+
         if (result) {
             sendMessage(sender, colorize("{AQUA}%s{YELLOW} removed from {DARK_GREEN}%s"), playerName, groupName);
             core.invalidateMetadataCache(playerName, playerUuid, false);
             core.refreshPlayer(playerUuid, RefreshCause.GROUP_CHANGE);
             core.refreshExpirations(playerUuid);
-        }
-        else {
+        } else {
             sendMessage(sender, colorize("{DARK_GREEN}%s{RED} does not exist or {AQUA}%s{RED} is not a member"), groupName, playerName);
             abortBatchProcessing();
         }
@@ -697,8 +680,8 @@ public abstract class CommonCommands {
                             // Sanity
                             if (previousDuration < 0L)
                                 previousDuration = 0L;
-                        }
-                        else if (addNoReset) return null; // Exists and is permanent, don't touch expiration if requested
+                        } else if (addNoReset)
+                            return null; // Exists and is permanent, don't touch expiration if requested
                         break;
                     }
                 }
@@ -706,7 +689,7 @@ public abstract class CommonCommands {
                 long newDuration = expiration.getTime() - now.getTime();
                 if (newDuration < 0L)
                     newDuration = 0L;
-                
+
                 // Set new expiration
                 newExpiration = new Date(now.getTime() + previousDuration + newDuration);
             }

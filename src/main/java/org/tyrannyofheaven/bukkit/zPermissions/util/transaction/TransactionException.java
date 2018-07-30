@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.transaction;
 
 /**
  * Exception thrown when the callback throws an exception.
- * 
+ *
  * @author zerothangel
  */
 public class TransactionException extends RuntimeException {

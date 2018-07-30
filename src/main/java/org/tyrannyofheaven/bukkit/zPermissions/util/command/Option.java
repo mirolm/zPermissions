@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  * optional by default), you must use a wrapper type. Otherwise you will get
  * errors. Note however, that optional boolean parameters are OK (they will
  * default to false).
- * 
+ *
  * @author zerothangel
  */
 @Documented
@@ -46,7 +46,7 @@ public @interface Option {
      * this is ignored for boolean/Boolean flags.
      */
     public String valueName() default "";
-    
+
     /**
      * Whether or not this parameter is optional. Flags are always optional,
      * regardless of this setting.

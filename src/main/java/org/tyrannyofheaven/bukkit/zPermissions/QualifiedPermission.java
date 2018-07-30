@@ -21,7 +21,7 @@ import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasTex
  * Holder/parser for world-specific permissions as specified on the command-line.
  * Permissions with no world specifier assume the world is null (i.e. global
  * permission). Permissions specific to a world should be "&lt;world>:&lt;permission>"
- * 
+ *
  * @author zerothangel
  */
 public class QualifiedPermission {
@@ -29,7 +29,7 @@ public class QualifiedPermission {
     private final String region;
 
     private final String world;
-    
+
     private final String permission;
 
     public QualifiedPermission(String qualifiedPermission) {
@@ -38,8 +38,7 @@ public class QualifiedPermission {
         if (parts.length == 1) {
             // No region
             region = null;
-        }
-        else {
+        } else {
             region = parts[0];
             qualifiedPermission = parts[1];
         }
@@ -50,8 +49,7 @@ public class QualifiedPermission {
             // No world
             world = null;
             permission = parts[0];
-        }
-        else {
+        } else {
             world = parts[0];
             permission = parts[1];
         }
@@ -64,7 +62,7 @@ public class QualifiedPermission {
             world = null;
         if (!hasText(permission))
             throw new IllegalArgumentException("permission must have a value");
-        
+
         this.region = region;
         this.world = world;
         this.permission = permission;
@@ -72,6 +70,7 @@ public class QualifiedPermission {
 
     /**
      * Return the region if this is a region-specific permission
+     *
      * @return
      */
     public String getRegion() {
@@ -80,7 +79,7 @@ public class QualifiedPermission {
 
     /**
      * Return the name of the world if this is a world-specific permission.
-     * 
+     *
      * @return the name of the world or null if global
      */
     public String getWorld() {
@@ -89,7 +88,7 @@ public class QualifiedPermission {
 
     /**
      * Return the permission.
-     * 
+     *
      * @return the permission
      */
     public String getPermission() {

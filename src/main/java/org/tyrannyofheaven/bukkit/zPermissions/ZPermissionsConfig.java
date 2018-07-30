@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * Holds configuration data used by other modules, namely the command handlers.
- * 
+ *
  * @author zerothangel
  */
 public interface ZPermissionsConfig {
@@ -44,17 +44,17 @@ public interface ZPermissionsConfig {
     public boolean isVaultMetadataIncludesGroup();
 
     public boolean isVaultGroupTestUsesAssignedOnly();
-    
+
     public boolean isVaultGetGroupsUsesAssignedOnly();
 
     public boolean isInheritedMetadata();
 
     public String getVaultPlayerPrefixFormat();
-    
+
     public String getVaultPlayerSuffixFormat();
 
     public int getSearchBatchSize();
-    
+
     public int getSearchDelay();
 
     public boolean isServiceMetadataPrefixHack();

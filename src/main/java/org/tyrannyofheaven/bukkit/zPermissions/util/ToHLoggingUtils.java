@@ -23,7 +23,7 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * More convenient and consistent logging.
- * 
+ *
  * @author zerothangel
  */
 public class ToHLoggingUtils {
@@ -42,22 +42,21 @@ public class ToHLoggingUtils {
 
     /**
      * Log a message.
-     * 
+     *
      * @param plugin the plugin
-     * @param level the log level
+     * @param level  the log level
      * @param format the format message
-     * @param args the format args. Note that if the last argument is a
-     *   Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
-     *   It will not be available for the format.
+     * @param args   the format args. Note that if the last argument is a
+     *               Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
+     *               It will not be available for the format.
      */
     public static void log(Plugin plugin, Level level, String format, Object... args) {
         Logger logger = plugin.getLogger();
         if (logger.isLoggable(level)) { // Avoid unnecessary String.format() calls
             if (args.length > 0 && args[args.length - 1] instanceof Throwable) {
                 // Last argument is a Throwable, treat accordingly
-                logger.log(level, createLogMessage(format, Arrays.copyOf(args, args.length - 1)), (Throwable)args[args.length - 1]);
-            }
-            else {
+                logger.log(level, createLogMessage(format, Arrays.copyOf(args, args.length - 1)), (Throwable) args[args.length - 1]);
+            } else {
                 logger.log(level, createLogMessage(format, args));
             }
         }
@@ -65,12 +64,12 @@ public class ToHLoggingUtils {
 
     /**
      * Log a message at INFO level.
-     * 
+     *
      * @param plugin the plugin
      * @param format the format message
-     * @param args the format args. Note that if the last argument is a
-     *   Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
-     *   It will not be available for the format.
+     * @param args   the format args. Note that if the last argument is a
+     *               Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
+     *               It will not be available for the format.
      */
     public static void log(Plugin plugin, String format, Object... args) {
         log(plugin, Level.INFO, format, args);
@@ -78,12 +77,12 @@ public class ToHLoggingUtils {
 
     /**
      * Log a message at CONFIG level.
-     * 
+     *
      * @param plugin the plugin
      * @param format the format message
-     * @param args the format args. Note that if the last argument is a
-     *   Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
-     *   It will not be available for the format.
+     * @param args   the format args. Note that if the last argument is a
+     *               Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
+     *               It will not be available for the format.
      */
     public static void debug(Plugin plugin, String format, Object... args) {
         log(plugin, Level.CONFIG, format, args);
@@ -91,12 +90,12 @@ public class ToHLoggingUtils {
 
     /**
      * Log a message at WARNING level.
-     * 
+     *
      * @param plugin the plugin
      * @param format the format message
-     * @param args the format args. Note that if the last argument is a
-     *   Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
-     *   It will not be available for the format.
+     * @param args   the format args. Note that if the last argument is a
+     *               Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
+     *               It will not be available for the format.
      */
     public static void warn(Plugin plugin, String format, Object... args) {
         log(plugin, Level.WARNING, format, args);
@@ -104,12 +103,12 @@ public class ToHLoggingUtils {
 
     /**
      * Log a message at SEVERE level.
-     * 
+     *
      * @param plugin the plugin
      * @param format the format message
-     * @param args the format args. Note that if the last argument is a
-     *   Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
-     *   It will not be available for the format.
+     * @param args   the format args. Note that if the last argument is a
+     *               Throwable, it is removed and passed to {@link java.util.logging.Logger#log(Level, String, Throwable)}.
+     *               It will not be available for the format.
      */
     public static void error(Plugin plugin, String format, Object... args) {
         log(plugin, Level.SEVERE, format, args);

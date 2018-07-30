@@ -25,7 +25,7 @@ import org.bukkit.permissions.Permissible;
 
 /**
  * Holds a chain of CommandInvocations. Used for generating the usage string.
- * 
+ *
  * @author zerothangel
  */
 final class InvocationChain {
@@ -53,22 +53,22 @@ final class InvocationChain {
     // Generate a usage string
     String getUsageString(UsageOptions usageOptions, boolean withDescription) {
         boolean first = true;
-        
+
         StringBuilder usage = new StringBuilder();
         usage.append(usageOptions.getPreamble());
-        for (Iterator<CommandInvocation> i = chain.iterator(); i.hasNext();) {
+        for (Iterator<CommandInvocation> i = chain.iterator(); i.hasNext(); ) {
             CommandInvocation ci = i.next();
             if (first) {
                 usage.append('/');
                 first = false;
             }
             usage.append(ci.getLabel());
-            
+
             CommandMetaData cmd = ci.getCommandMetaData();
             if (!cmd.getFlagOptions().isEmpty() || !cmd.getPositionalArguments().isEmpty()) {
                 usage.append(' ');
-                
-                for (Iterator<OptionMetaData> j = cmd.getFlagOptions().iterator(); j.hasNext();) {
+
+                for (Iterator<OptionMetaData> j = cmd.getFlagOptions().iterator(); j.hasNext(); ) {
                     OptionMetaData omd = j.next();
                     usage.append(usageOptions.getFlagStart());
                     usage.append(omd.getName());
@@ -82,11 +82,11 @@ final class InvocationChain {
                     if (j.hasNext())
                         usage.append(' ');
                 }
-                
+
                 if (!cmd.getFlagOptions().isEmpty() && !cmd.getPositionalArguments().isEmpty())
                     usage.append(' ');
 
-                for (Iterator<OptionMetaData> j = cmd.getPositionalArguments().iterator(); j.hasNext();) {
+                for (Iterator<OptionMetaData> j = cmd.getPositionalArguments().iterator(); j.hasNext(); ) {
                     OptionMetaData omd = j.next();
                     usage.append(usageOptions.getParameterStart(omd.isOptional()));
                     usage.append(omd.getName());
@@ -95,7 +95,7 @@ final class InvocationChain {
                         usage.append(' ');
                 }
             }
-            
+
             // Add varargs description, if any
             if (cmd.getRest() != null) {
                 usage.append(usageOptions.getVarargsStart());
@@ -116,7 +116,7 @@ final class InvocationChain {
                 usage.append(cmd.getDescription());
             }
         }
-        
+
         usage.append(usageOptions.getPostamble());
 
         return usage.toString();

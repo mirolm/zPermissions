@@ -27,7 +27,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 /**
  * Listener installed if things don't initialize properly. Allows no one to
  * log in.
- * 
+ *
  * @author zerothangel
  */
 public class ZPermissionsFallbackListener implements Listener {
@@ -40,7 +40,7 @@ public class ZPermissionsFallbackListener implements Listener {
         this.kickOpsOnError = kickOpsOnError;
     }
 
-    @EventHandler(priority=EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
         if (kickOpsOnError || !event.getPlayer().isOp())
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, KICK_MESSAGE);

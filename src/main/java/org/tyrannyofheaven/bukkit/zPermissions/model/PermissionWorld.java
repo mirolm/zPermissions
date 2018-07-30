@@ -22,16 +22,16 @@ import javax.persistence.UniqueConstraint;
 
 /**
  * Represents a world that permission entries may be associated with.
- * 
+ *
  * @author zerothangel
  */
 @Entity
-@Table(name="worlds")
-@UniqueConstraint(columnNames="name")
+@Table(name = "worlds")
+@UniqueConstraint(columnNames = "name")
 public class PermissionWorld {
 
     private Long id;
-    
+
     private String name;
 
     @Id
@@ -55,7 +55,7 @@ public class PermissionWorld {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof PermissionWorld)) return false;
-        PermissionWorld o = (PermissionWorld)obj;
+        PermissionWorld o = (PermissionWorld) obj;
         return getName() == null ? o.getName() == null : getName().equals(o.getName());
     }
 

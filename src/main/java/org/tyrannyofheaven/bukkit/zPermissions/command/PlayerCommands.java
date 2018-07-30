@@ -55,7 +55,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.Utils;
 /**
  * Handler for player sub-commands. Expects the CommandSession to contain the
  * name of the player in <code>entityName</code>.
- * 
+ *
  * @author zerothangel
  */
 public class PlayerCommands extends CommonCommands {
@@ -66,63 +66,63 @@ public class PlayerCommands extends CommonCommands {
 
     // Common commands
 
-    @Command(value="get", description="View a permission")
+    @Command(value = "get", description = "View a permission")
     @Require("zpermissions.player.view")
     public void get(CommandSender sender, final @Session("entityName") String name, @Option("permission") String permission) {
         super._get(sender, name, permission);
     }
 
-    @Command(value="set", description="Set a permission")
+    @Command(value = "set", description = "Set a permission")
     @Require("zpermissions.player.manage")
-    public void set(CommandSender sender, final @Session("entityName") String name, @Option("permission") String permission, final @Option(value="value", optional=true) Boolean value) {
+    public void set(CommandSender sender, final @Session("entityName") String name, @Option("permission") String permission, final @Option(value = "value", optional = true) Boolean value) {
         super._set(sender, name, permission, value);
     }
 
-    @Command(value="unset", description="Remove a permission")
+    @Command(value = "unset", description = "Remove a permission")
     @Require("zpermissions.player.manage")
     public void unset(CommandSender sender, final @Session("entityName") String name, @Option("permission") String permission) {
         super._unset(sender, name, permission);
     }
 
-    @Command(value="purge", description="Delete this player") // doh!
+    @Command(value = "purge", description = "Delete this player") // doh!
     @Require("zpermissions.player.manage")
     public void delete(CommandSender sender, final @Session("entityName") String name) {
         super._delete(sender, name);
     }
 
-    @Command(value="dump", description="Display permissions for this player", varargs="region...")
+    @Command(value = "dump", description = "Display permissions for this player", varargs = "region...")
     @Require("zpermissions.player.view")
-    public void dump(CommandSender sender, final @Session("entityName") String name, @Option(value={"-w", "--world"}, valueName="world", completer="world") String worldName, @Option(value={"-f", "--filter"}, valueName="filter") String filter, String[] regionNames) {
+    public void dump(CommandSender sender, final @Session("entityName") String name, @Option(value = {"-w", "--world"}, valueName = "world", completer = "world") String worldName, @Option(value = {"-f", "--filter"}, valueName = "filter") String filter, String[] regionNames) {
         super._dump(sender, name, worldName, filter, regionNames);
     }
 
-    @Command(value="diff", description="Compare effective permissions of this player with another", varargs="region...")
+    @Command(value = "diff", description = "Compare effective permissions of this player with another", varargs = "region...")
     @Require("zpermissions.player.view")
-    public void diff(CommandSender sender, final @Session("entityName") String name, @Option(value={"-w", "--world"}, valueName="world", completer="world") String worldName, @Option(value={"-f", "--filter"}, valueName="filter") String filter, @Option("other") final String otherName, String[] regionNames) {
+    public void diff(CommandSender sender, final @Session("entityName") String name, @Option(value = {"-w", "--world"}, valueName = "world", completer = "world") String worldName, @Option(value = {"-f", "--filter"}, valueName = "filter") String filter, @Option("other") final String otherName, String[] regionNames) {
         super._diff(sender, name, worldName, filter, otherName, regionNames);
     }
 
-    @Command(value={"metadata", "meta", "md"}, description="Metadata-related commands")
+    @Command(value = {"metadata", "meta", "md"}, description = "Metadata-related commands")
     @Require({"zpermissions.player.view", "zpermissions.player.manage", "zpermissions.player.chat"})
     public MetadataCommands metadata(HelpBuilder helpBuilder, CommandSender sender, String[] args) {
         return super._metadata(helpBuilder, sender, args);
     }
 
-    @Command(value="prefix", description="Set chat prefix for this player")
+    @Command(value = "prefix", description = "Set chat prefix for this player")
     @Require("zpermissions.player.chat")
-    public void prefix(CommandSender sender, @Session("entityName") String name, @Option(value="prefix", optional=true) String prefix, String[] rest) {
+    public void prefix(CommandSender sender, @Session("entityName") String name, @Option(value = "prefix", optional = true) String prefix, String[] rest) {
         super._prefix(sender, name, prefix, rest);
     }
 
-    @Command(value="suffix", description="Set chat suffix for this player")
+    @Command(value = "suffix", description = "Set chat suffix for this player")
     @Require("zpermissions.player.chat")
-    public void suffix(CommandSender sender, @Session("entityName") String name, @Option(value="suffix", optional=true) String suffix, String[] rest) {
+    public void suffix(CommandSender sender, @Session("entityName") String name, @Option(value = "suffix", optional = true) String suffix, String[] rest) {
         super._suffix(sender, name, suffix, rest);
     }
 
     // Player-specific commands
 
-    @Command(value="groups", description="List groups this player is a member of")
+    @Command(value = "groups", description = "List groups this player is a member of")
     @Require("zpermissions.player.view")
     public void getGroups(CommandSender sender, @Session("entityName") String name) {
         uuidResolver.resolveUsername(sender, name, false, new CommandUuidResolverHandler() {
@@ -142,9 +142,9 @@ public class PlayerCommands extends CommonCommands {
         sendMessage(sender, colorize("{AQUA}%s{YELLOW} is a member of: %s"), name, groups);
     }
 
-    @Command(value={"setgroup", "group"}, description="Set this player's singular group")
+    @Command(value = {"setgroup", "group"}, description = "Set this player's singular group")
     @Require("zpermissions.player.manage")
-    public void setGroup(CommandSender sender, final @Session("entityName") String playerName, final @Option({"-a", "--add"}) boolean add, final @Option({"-A", "--add-no-reset"}) boolean addNoReset, final @Option(value="group", completer="group") String groupName, final @Option(value="duration/timestamp", optional=true) String duration, final String[] args) {
+    public void setGroup(CommandSender sender, final @Session("entityName") String playerName, final @Option({"-a", "--add"}) boolean add, final @Option({"-A", "--add-no-reset"}) boolean addNoReset, final @Option(value = "group", completer = "group") String groupName, final @Option(value = "duration/timestamp", optional = true) String duration, final String[] args) {
         uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
             @Override
             public void process(CommandSender sender, String name, UUID uuid, boolean group) {
@@ -165,8 +165,7 @@ public class PlayerCommands extends CommonCommands {
                     storageStrategy.getPermissionService().setGroup(uuid, playerName, groupName, newExpiration);
                 }
             });
-        }
-        catch (MissingGroupException e) {
+        } catch (MissingGroupException e) {
             handleMissingGroup(sender, e);
             return;
         }
@@ -174,26 +173,26 @@ public class PlayerCommands extends CommonCommands {
         sendMessage(sender, colorize("{AQUA}%s{YELLOW}'s group set to {DARK_GREEN}%s"), playerName, groupName);
         core.invalidateMetadataCache(playerName, uuid, false);
         core.refreshPlayer(uuid, RefreshCause.GROUP_CHANGE);
-        
+
         if (expiration != null)
             core.refreshExpirations(uuid);
     }
 
-    @Command(value={"addgroup", "add"}, description="Add this player to a group")
+    @Command(value = {"addgroup", "add"}, description = "Add this player to a group")
     @Require("zpermissions.player.manage")
-    public void addGroup(CommandSender sender, @Session("entityName") String playerName, @Option({"-a", "--add"}) boolean add, final @Option({"-A", "--add-no-reset"}) boolean addNoReset, @Option(value="group", completer="group") String groupName, @Option(value="duration/timestamp", optional=true) String duration, String[] args) {
+    public void addGroup(CommandSender sender, @Session("entityName") String playerName, @Option({"-a", "--add"}) boolean add, final @Option({"-A", "--add-no-reset"}) boolean addNoReset, @Option(value = "group", completer = "group") String groupName, @Option(value = "duration/timestamp", optional = true) String duration, String[] args) {
         addGroupMember(sender, groupName, playerName, duration, args, add, addNoReset);
     }
 
-    @Command(value={"removegroup", "rmgroup", "remove", "rm"}, description="Remove this player from a group")
+    @Command(value = {"removegroup", "rmgroup", "remove", "rm"}, description = "Remove this player from a group")
     @Require("zpermissions.player.manage")
-    public void removeGroup(CommandSender sender, @Session("entityName") String playerName, @Option(value="group", completer="group") String groupName) {
+    public void removeGroup(CommandSender sender, @Session("entityName") String playerName, @Option(value = "group", completer = "group") String groupName) {
         removeGroupMember(sender, groupName, playerName);
     }
 
-    @Command(value={"show", "sh"}, description="Show information about a player")
+    @Command(value = {"show", "sh"}, description = "Show information about a player")
     @Require("zpermissions.player.view")
-    public void show(CommandSender sender, @Session("entityName") String playerName, final @Option(value={"-f", "--filter"}, valueName="filter") String filter) {
+    public void show(CommandSender sender, @Session("entityName") String playerName, final @Option(value = {"-f", "--filter"}, valueName = "filter") String filter) {
         uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
             @Override
             public void process(CommandSender sender, String name, UUID uuid, boolean group) {
@@ -220,24 +219,24 @@ public class PlayerCommands extends CommonCommands {
         for (Entry e : Utils.sortPermissions(entity.getPermissions())) {
             if (filter != null && !(
                     (e.getRegion() != null && e.getRegion().getName().contains(filter)) ||
-                    (e.getWorld() != null && e.getWorld().getName().contains(filter)) ||
-                    e.getPermission().contains(filter)))
+                            (e.getWorld() != null && e.getWorld().getName().contains(filter)) ||
+                            e.getPermission().contains(filter)))
                 continue;
             lines.add(formatEntry(sender, e));
         }
         ToHMessageUtils.displayLines(plugin, sender, lines);
     }
 
-    @Command(value={"settemp", "temp", "tmp"}, description="Set a temporary permission")
+    @Command(value = {"settemp", "temp", "tmp"}, description = "Set a temporary permission")
     @Require("zpermissions.player.manage")
-    public void settemp(CommandSender sender, @Session("entityName") String playerName, @Option("permission") String permission, @Option(value="value", optional=true) Boolean value, @Option(value={"-t", "--timeout"}, valueName="timeout") Integer timeout) {
+    public void settemp(CommandSender sender, @Session("entityName") String playerName, @Option("permission") String permission, @Option(value = "value", optional = true) Boolean value, @Option(value = {"-t", "--timeout"}, valueName = "timeout") Integer timeout) {
         Player player = Bukkit.getPlayer(playerName);
         if (player == null) {
             sendMessage(sender, colorize("{RED}Player is not online."));
             abortBatchProcessing();
             return;
         }
-        
+
         if (timeout == null)
             timeout = config.getDefaultTempPermissionTimeout();
         if (timeout <= 0) {
@@ -253,7 +252,7 @@ public class PlayerCommands extends CommonCommands {
         sendMessage(sender, colorize("{GOLD}%s{YELLOW} set to {GREEN}%s{YELLOW} for {AQUA}%s{YELLOW} for %d second%s"), permission, value == null ? Boolean.TRUE : value, player.getName(), timeout, timeout == 1 ? "" : "s");
     }
 
-    @Command(value="has", description="Bukkit hasPermission() check")
+    @Command(value = "has", description = "Bukkit hasPermission() check")
     @Require("zpermissions.player.view")
     public void has(CommandSender sender, @Session("entityName") String playerName, @Option("permission") String permission) {
         Player player = Bukkit.getPlayer(playerName);
@@ -266,18 +265,17 @@ public class PlayerCommands extends CommonCommands {
         sendMessage(sender, colorize("{GREEN}%s"), player.hasPermission(permission));
     }
 
-    @Command(value="settrack", description="Set track which determines primary group for Vault")
+    @Command(value = "settrack", description = "Set track which determines primary group for Vault")
     @Require("zpermissions.player.chat")
-    public void settrack(CommandSender sender, @Session("entityName") String playerName, @Option(value="track", optional=true, completer="track") String track) {
+    public void settrack(CommandSender sender, @Session("entityName") String playerName, @Option(value = "track", optional = true, completer = "track") String track) {
         if (ToHStringUtils.hasText(track)) {
             getMetadataCommands().set(sender, playerName, MetadataConstants.PRIMARY_GROUP_TRACK_KEY, track, new String[0]);
-        }
-        else {
+        } else {
             getMetadataCommands().unset(sender, playerName, MetadataConstants.PRIMARY_GROUP_TRACK_KEY);
         }
     }
 
-    @Command(value={"clone", "copy", "cp"}, description="Clone this player")
+    @Command(value = {"clone", "copy", "cp"}, description = "Clone this player")
     @Require("zpermissions.player.manage")
     public void clone(CommandSender sender, @Session("entityName") String playerName, @Option("new-player") String destination) {
         super.clone(sender, playerName, destination, false);

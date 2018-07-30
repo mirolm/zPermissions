@@ -27,14 +27,14 @@ import javax.persistence.TemporalType;
  * Avaje entity class for use with {@link ToHDatabaseUtils#upgradeDatabase(org.bukkit.plugin.java.JavaPlugin, com.avaje.ebean.config.NamingConvention, ClassLoader, String)}.
  * Requires that the plugin also use {@link ToHNamingConvention} when creating the EbeanServer.
  * This ensures this entity has a plugin-specific name.
- * 
+ *
  * @author zerothangel
  */
 @Entity
 public class ToHSchemaVersion {
 
     private long version;
-    
+
     private Date timestamp;
 
     @Id
@@ -46,7 +46,7 @@ public class ToHSchemaVersion {
         this.version = version;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     public Date getTimestamp() {
         return timestamp;
@@ -60,7 +60,7 @@ public class ToHSchemaVersion {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof ToHSchemaVersion)) return false;
-        ToHSchemaVersion o = (ToHSchemaVersion)obj;
+        ToHSchemaVersion o = (ToHSchemaVersion) obj;
         return getVersion() == o.getVersion();
     }
 

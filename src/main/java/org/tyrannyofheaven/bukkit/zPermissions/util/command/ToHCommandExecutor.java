@@ -39,7 +39,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.permissions.PermissionUtils;
 
 /**
  * A Bukkit CommandExecutor implementation that ties everything together.
- * 
+ *
  * @author zerothangel
  */
 public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
@@ -60,8 +60,8 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
 
     /**
      * Create an instance.
-     * 
-     * @param plugin the associated plugin
+     *
+     * @param plugin   the associated plugin
      * @param handlers the handler objects
      */
     public ToHCommandExecutor(T plugin, Object... handlers) {
@@ -71,7 +71,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
         this.plugin = plugin;
 
         rootHandlerExecutor = new HandlerExecutor<>(plugin, usageOptions, handlers);
-        
+
         // Register default TypeCompleters
         registerTypeCompleter("constant", new ConstantTypeCompleter());
         registerTypeCompleter("player", new PlayerTypeCompleter());
@@ -90,7 +90,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
             throw new IllegalArgumentException("name must have a value");
         if (typeCompleter == null)
             throw new IllegalArgumentException("typeCompleter cannot be null");
-        
+
         typeCompleterRegistry.put(name, typeCompleter);
         return this;
     }
@@ -98,7 +98,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
     public ToHCommandExecutor<T> setUsageOptions(UsageOptions usageOptions) {
         if (usageOptions == null)
             throw new IllegalArgumentException("usageOptions cannot be null");
-        
+
         this.usageOptions = usageOptions;
         return this;
     }
@@ -127,20 +127,18 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
 
         try {
             if (quoteAware)
-                args = split(ToHStringUtils.delimitedString(" ", (Object[])args), true);
+                args = split(ToHStringUtils.delimitedString(" ", (Object[]) args), true);
 
             // NB: We use command.getName() rather than label. This allows the
             // user to freely add aliases by editing plugin.yml. However,
             // this also makes aliases in @Command mostly useless.
             rootHandlerExecutor.execute(sender, command.getName(), label, args, invChain, new CommandSession());
             return true;
-        }
-        catch (PermissionException e) {
+        } catch (PermissionException e) {
             displayPermissionException(sender, e);
             abortBatchProcessing();
             return true;
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             // Show message if one was given
             if (hasText(e.getMessage()))
                 sendMessage(sender, "%s%s", ChatColor.RED, e.getMessage());
@@ -148,12 +146,10 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
                 sendMessage(sender, invChain.getUsageString(usageOptions));
             abortBatchProcessing();
             return true;
-        }
-        catch (Error e) {
+        } catch (Error e) {
             // Re-throw Errors
             throw e;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             if (exceptionHandler != null && exceptionHandler.handleException(sender, command, label, args, t)) {
                 // NB It is up to the CommandExceptionHandler whether or not to call abortBatchProcessing()
                 return true;
@@ -175,13 +171,12 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
                 // Have at least one
                 query = args[args.length - 1];
                 argsNoQuery = Arrays.copyOfRange(args, 0, args.length - 1);
-            }
-            else {
+            } else {
                 query = "";
                 argsNoQuery = args;
             }
 
-            args = split(ToHStringUtils.delimitedString(" ", (Object[])argsNoQuery), false);
+            args = split(ToHStringUtils.delimitedString(" ", (Object[]) argsNoQuery), false);
             // Extend and add query
             args = Arrays.copyOfRange(args, 0, args.length + 1);
             args[args.length - 1] = query;
@@ -189,21 +184,17 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
 
         try {
             return rootHandlerExecutor.getTabCompletions(sender, command.getName(), alias, args, null, null, typeCompleterRegistry);
-        }
-        catch (PermissionException e) {
+        } catch (PermissionException e) {
             displayPermissionException(sender, e);
             return Collections.emptyList();
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             // Show message
             if (hasText(e.getMessage()))
                 sendMessage(sender, "%s%s", ChatColor.RED, e.getMessage());
             return Collections.emptyList();
-        }
-        catch (Error e) {
+        } catch (Error e) {
             throw e;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             warn(plugin, "Tab completion exception:", t);
             return Collections.emptyList();
         }
@@ -212,8 +203,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
     private void displayPermissionException(CommandSender sender, PermissionException e) {
         if (verbosePermissionErrorPermission == null || sender.hasPermission(verbosePermissionErrorPermission)) {
             PermissionUtils.displayPermissionException(sender, e);
-        }
-        else {
+        } else {
             sendMessage(sender, ChatColor.RED + "You don't have permission to do this.");
         }
     }
@@ -228,61 +218,53 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
             char c = input.charAt(i);
 
             switch (state) {
-            case NORMAL:
-                if (c == '\\') {
-                    // Start of escape sequence
-                    state = SplitState.ESCAPED;
-                }
-                else if (c == '"') {
-                    // Open quotes
-                    state = SplitState.QUOTED;
-                }
-                else {
-                    if (current.length() == 0) {
-                        // Current token empty, skip leading white spaces
-                        if (!Character.isWhitespace(c))
+                case NORMAL:
+                    if (c == '\\') {
+                        // Start of escape sequence
+                        state = SplitState.ESCAPED;
+                    } else if (c == '"') {
+                        // Open quotes
+                        state = SplitState.QUOTED;
+                    } else {
+                        if (current.length() == 0) {
+                            // Current token empty, skip leading white spaces
+                            if (!Character.isWhitespace(c))
+                                current.append(c);
+                        } else if (Character.isWhitespace(c)) {
+                            // End of token
+                            result.add(current.toString());
+                            current = new StringBuilder();
+                        } else {
                             current.append(c);
+                        }
                     }
-                    else if (Character.isWhitespace(c)) {
-                        // End of token
-                        result.add(current.toString());
-                        current = new StringBuilder();
-                    }
-                    else {
+                    break;
+                case ESCAPED:
+                case QUOTED_ESCAPED:
+                    if (c == '\\') {
+                        current.append('\\');
+                    } else if (c == '"') {
+                        current.append('"');
+                    } else {
+                        // Not a valid escape
+                        current.append('\\');
                         current.append(c);
                     }
-                }
-                break;
-            case ESCAPED:
-            case QUOTED_ESCAPED:
-                if (c == '\\') {
-                    current.append('\\');
-                }
-                else if (c == '"') {
-                    current.append('"');
-                }
-                else {
-                    // Not a valid escape
-                    current.append('\\');
-                    current.append(c);
-                }
-                state = state == SplitState.ESCAPED ? SplitState.NORMAL : SplitState.QUOTED;
-                break;
-            case QUOTED:
-                if (c == '\\') {
-                    state = SplitState.QUOTED_ESCAPED;
-                }
-                else if (c == '"') {
-                    // Close quotes
-                    state = SplitState.NORMAL;
-                }
-                else {
-                    // Append unconditionally
-                    current.append(c);
-                }
-                break;
-            default:
-                throw new AssertionError("Unhandled SplitState." + state);
+                    state = state == SplitState.ESCAPED ? SplitState.NORMAL : SplitState.QUOTED;
+                    break;
+                case QUOTED:
+                    if (c == '\\') {
+                        state = SplitState.QUOTED_ESCAPED;
+                    } else if (c == '"') {
+                        // Close quotes
+                        state = SplitState.NORMAL;
+                    } else {
+                        // Append unconditionally
+                        current.append(c);
+                    }
+                    break;
+                default:
+                    throw new AssertionError("Unhandled SplitState." + state);
             }
         }
 

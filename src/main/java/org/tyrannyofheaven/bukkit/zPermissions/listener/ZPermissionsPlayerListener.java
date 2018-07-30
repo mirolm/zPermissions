@@ -34,13 +34,13 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 /**
  * PlayerListener for zPermissions. Simply updates or removes the zPermissions
  * permissions as appropriate.
- * 
+ *
  * @author zerothangel
  */
 public class ZPermissionsPlayerListener implements Listener {
 
     private final ZPermissionsCore core;
-    
+
     private final Plugin plugin;
 
     private final UuidResolver uuidResolver;
@@ -51,7 +51,7 @@ public class ZPermissionsPlayerListener implements Listener {
         this.uuidResolver = uuidResolver;
     }
 
-    @EventHandler(priority=EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
             // Update display name
@@ -60,14 +60,14 @@ public class ZPermissionsPlayerListener implements Listener {
     }
 
     // Do this early for the benefit of anything listening on the same event
-    @EventHandler(priority=EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
         debug(plugin, "%s logged in", event.getPlayer().getName());
         core.setBukkitPermissions(event.getPlayer(), event.getPlayer().getLocation(), true, null);
         // NB don't bother with expirations until join
     }
 
-    @EventHandler(priority=EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLoginMonitor(PlayerLoginEvent event) {
         // If they aren't sticking around...
         if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
@@ -77,7 +77,7 @@ public class ZPermissionsPlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority=EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         debug(plugin, "%s joining", event.getPlayer().getName());
         // NB eventCause is null because it's a given that the player's permissions has changed on join
@@ -92,13 +92,13 @@ public class ZPermissionsPlayerListener implements Listener {
         });
     }
 
-    @EventHandler(priority=EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoinMonitor(PlayerJoinEvent event) {
         // Make default group membership explicit, if configured to do so...
         core.handleExplicitDefaultGroupMembership(event.getPlayer().getUniqueId(), event.getPlayer().getName());
     }
 
-    @EventHandler(priority=EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         debug(plugin, "%s quitting", event.getPlayer().getName());
         core.removeBukkitPermissions(event.getPlayer(), false); // They're leaving, no need to recalc
@@ -113,7 +113,7 @@ public class ZPermissionsPlayerListener implements Listener {
         uuidResolver.preload(event.getPlayer().getName(), event.getPlayer().getUniqueId());
     }
 
-    @EventHandler(priority=EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         core.setBukkitPermissions(event.getPlayer(), event.getPlayer().getLocation(), false, RefreshCause.MOVEMENT);
     }

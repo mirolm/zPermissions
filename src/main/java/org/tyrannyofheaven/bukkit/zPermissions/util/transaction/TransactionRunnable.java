@@ -26,7 +26,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrat
 /**
  * A Runnable that holds a sequence of writing Runnables to be executed
  * transactionally.
- * 
+ *
  * @author zerothangel
  */
 class TransactionRunnable implements Runnable, TransactionCallback<Object> {
@@ -64,11 +64,9 @@ class TransactionRunnable implements Runnable, TransactionCallback<Object> {
     public void run() {
         try {
             getTransactionStrategy().execute(this, readOnly);
-        }
-        catch (Error e) {
+        } catch (Error e) {
             throw e;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             logger.log(Level.SEVERE, "Error executing transaction", t);
         }
     }

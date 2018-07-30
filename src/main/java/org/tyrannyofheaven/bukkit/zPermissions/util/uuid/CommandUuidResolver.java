@@ -57,8 +57,7 @@ public class CommandUuidResolver {
         if (skip || name == null) {
             // Simple case: no need to resolve because skip is true or name is null, run inline
             handler.process(sender, name, null, skip);
-        }
-        else {
+        } else {
             // See if it's UUID or UUID/DisplayName
             UuidDisplayName udn = parseUuidDisplayName(name);
             if (udn != null) {
@@ -67,39 +66,33 @@ public class CommandUuidResolver {
                 if (player != null && player.getName() != null) {
                     // Use last known name
                     displayName = player.getName();
-                }
-                else {
+                } else {
                     // Default display name (either what was passed in or the UUID in string form)
                     displayName = hasText(udn.getDisplayName()) ? udn.getDisplayName() : udn.getUuid().toString();
                 }
                 handler.process(sender, displayName, udn.getUuid(), skip);
-            }
-            else {
+            } else {
                 // Is the named player online?
                 @SuppressWarnings("deprecation")
-				Player player = Bukkit.getPlayerExact(name);
+                Player player = Bukkit.getPlayerExact(name);
                 if (player != null) {
                     // Simply run inline, no explicit lookup necessary
                     handler.process(sender, player.getName(), player.getUniqueId(), skip);
-                }
-                else if (forceInline) {
+                } else if (forceInline) {
                     // Lookup & run inline
                     udn = uuidResolver.resolve(name);
                     if (udn == null) {
                         fail(sender, name);
-                    }
-                    else {
+                    } else {
                         handler.process(sender, udn.getDisplayName(), udn.getUuid(), skip);
                     }
-                }
-                else {
+                } else {
                     // Check if cached by resolver
                     udn = uuidResolver.resolve(name, true);
                     if (udn != null) {
                         // If so, run inline
                         handler.process(sender, udn.getDisplayName(), udn.getUuid(), skip);
-                    }
-                    else {
+                    } else {
                         // As an absolute last resort, resolve and run async
                         sendMessage(sender, colorize("{GRAY}(Resolving UUID...)"));
                         Runnable task = new UsernameResolverHandlerRunnable(this, plugin, uuidResolver, sender, name, skip, handler);
@@ -117,7 +110,7 @@ public class CommandUuidResolver {
         private final CommandUuidResolver commandUuidResolver;
 
         private final Plugin plugin;
-        
+
         private final UuidResolver uuidResolver;
 
         private final CommandSender sender;
@@ -135,7 +128,7 @@ public class CommandUuidResolver {
             this.plugin = plugin;
             this.uuidResolver = uuidResolver;
             this.sender = sender instanceof Player ? null : sender;
-            this.senderUuid = sender instanceof Player ? ((Player)sender).getUniqueId() : null;
+            this.senderUuid = sender instanceof Player ? ((Player) sender).getUniqueId() : null;
             this.name = name;
             this.skip = skip;
             this.handler = handler;
@@ -161,8 +154,7 @@ public class CommandUuidResolver {
                     if (sender != null) {
                         if (udn == null) {
                             commandUuidResolver.fail(sender, name);
-                        }
-                        else {
+                        } else {
                             handler.process(sender, udn.getDisplayName(), udn.getUuid(), skip);
                         }
                     }

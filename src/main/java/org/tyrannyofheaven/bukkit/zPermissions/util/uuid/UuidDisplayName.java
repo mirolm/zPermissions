@@ -18,15 +18,15 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.uuid;
 import java.util.UUID;
 
 public class UuidDisplayName {
-    
+
     private final UUID uuid;
-    
+
     private final String displayName;
 
     public UuidDisplayName(UUID uuid, String displayName) {
         if (uuid == null)
             throw new IllegalArgumentException("uuid cannot be null");
-        
+
         this.uuid = uuid;
         this.displayName = displayName;
     }
@@ -38,5 +38,5 @@ public class UuidDisplayName {
     public String getDisplayName() {
         return displayName;
     }
-    
+
 }

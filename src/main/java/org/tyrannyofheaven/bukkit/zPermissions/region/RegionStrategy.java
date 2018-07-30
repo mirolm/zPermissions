@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 /**
  * Generic strategy for region support. Only requirement from region plugins is
  * being able to return a set of region names that contain a given location.
- * 
+ *
  * @author zerothangel
  */
 public interface RegionStrategy {
@@ -32,16 +32,16 @@ public interface RegionStrategy {
 
     /**
      * Returns the name of the region manager.
-     * 
+     *
      * @return the name of the region manager
      */
     public String getName();
 
     /**
      * Returns whether or not this region plugin is present.
-     * 
+     *
      * @return true if present. In which case this strategy will be used as the
-     *     main RegionStrategy and {@link #init()} will be called.
+     * main RegionStrategy and {@link #init()} will be called.
      */
     public boolean isPresent();
 
@@ -56,7 +56,7 @@ public interface RegionStrategy {
 
     /**
      * Returns whether this RegionStrategy is ready.
-     * 
+     *
      * @return true if ready to receive calls to {@link #getRegions(Location)}.
      */
     public boolean isEnabled();
@@ -71,11 +71,11 @@ public interface RegionStrategy {
 
     /**
      * Retrieve the name of all regions that contain the given ocation.
-     * 
+     *
      * @param location the location
-     * @param player the player in question (for supplemental info)
+     * @param player   the player in question (for supplemental info)
      * @return name of containing regions or empty set. Never null. Region names
-     *     must be in all lowercase.
+     * must be in all lowercase.
      */
     public Set<String> getRegions(Location location, Player player);
 

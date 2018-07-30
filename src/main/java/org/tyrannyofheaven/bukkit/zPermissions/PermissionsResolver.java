@@ -40,7 +40,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.Utils;
 
 /**
  * Responsible for resolving a player's effective permissions.
- * 
+ *
  * @author zerothangel
  */
 public class PermissionsResolver {
@@ -81,9 +81,9 @@ public class PermissionsResolver {
 
     /**
      * Set group permission format strings.
-     * 
+     *
      * @param groupPermissionFormats the group permission format strings,
-     *   suitable for use with {@link String#format(String, Object...)}
+     *                               suitable for use with {@link String#format(String, Object...)}
      */
     public void setGroupPermissionFormats(Collection<String> groupPermissionFormats) {
         this.groupPermissionFormats.clear();
@@ -93,9 +93,9 @@ public class PermissionsResolver {
 
     /**
      * Set group permission format strings for assigned groups.
-     * 
+     *
      * @param assignedGroupPermissionFormats the group permission format strings,
-     *   suitable for use with {@link String#format(String, Object...)}
+     *                                       suitable for use with {@link String#format(String, Object...)}
      */
     public void setAssignedGroupPermissionFormats(Collection<String> assignedGroupPermissionFormats) {
         this.assignedGroupPermissionFormats.clear();
@@ -105,7 +105,7 @@ public class PermissionsResolver {
 
     /**
      * Set name of the default group.
-     * 
+     *
      * @param defaultGroup name of the default group
      */
     public void setDefaultGroup(String defaultGroup) {
@@ -129,7 +129,7 @@ public class PermissionsResolver {
 
     /**
      * Retrieve the configured default group.
-     * 
+     *
      * @return the default group
      */
     public String getDefaultGroup() {
@@ -161,7 +161,7 @@ public class PermissionsResolver {
      * Sets whether not the default group should be included in assigned permissions.
      * If false, the default group will never be listed as an assigned permission,
      * even if it is explicitly assigned.
-     * 
+     *
      * @param includeDefaultInAssigned false if the default group should never be included in assigned permissions
      */
     public void setIncludeDefaultInAssigned(boolean includeDefaultInAssigned) {
@@ -195,10 +195,11 @@ public class PermissionsResolver {
      * Resolve a player's permissions. Any permissions declared on the player
      * should override group permissions.
      * NB: world and regions should all be in lowercase!
-     * @param uuid TODO
-     * @param world the desination world name in lowercase or null
-     * @param regions the name of the regions containing the destination, all
-     *   in lowercase
+     *
+     * @param uuid       TODO
+     * @param world      the desination world name in lowercase or null
+     * @param regions    the name of the regions containing the destination, all
+     *                   in lowercase
      * @param playerName the player's name
      * @return effective permissions for this player
      */
@@ -210,7 +211,7 @@ public class PermissionsResolver {
             // If no groups, use the default group
             groups.add(getDefaultGroup());
         }
- 
+
         // Resolve each group in turn (highest priority resolved last)
         debug("Groups for %s: %s", playerName, groups);
 
@@ -222,18 +223,17 @@ public class PermissionsResolver {
 
         List<Entry> entries = new ArrayList<>();
         resolveGroupHelper(entries, groups, resolveOrder);
-        
+
         Map<String, Boolean> permissions;
         if (isInterleavedPlayerPermissions()) {
             // Player-specific permissions overrides group permissions (at same level)
             entries.addAll(getPermissionService().getEntries(playerName, uuid, false));
 
             permissions = applyPermissions(entries, regions, world);
-        }
-        else {
+        } else {
             // Apply all player-specific permissions at the end
             permissions = applyPermissions(entries, regions, world);
-            
+
             permissions.putAll(applyPermissions(getPermissionService().getEntries(playerName, uuid, false), regions, world));
         }
 
@@ -244,11 +244,11 @@ public class PermissionsResolver {
      * Resolve a group's permissions. The permissions from the group's furthest
      * ancestor are applied first, followed by each succeeding ancestor. (And
      * finally ending with the group itself.)
-     * 
+     *
      * @param groupName the group's name
-     * @param world the destination world name in lowercase or null
-     * @param regions the name of the regions containing the destination, all
-     *   in lowercase
+     * @param world     the destination world name in lowercase or null
+     * @param regions   the name of the regions containing the destination, all
+     *                  in lowercase
      * @return effective permissions for this group
      */
     public Map<String, Boolean> resolveGroup(String groupName, String world, Set<String> regions) {
@@ -269,14 +269,13 @@ public class PermissionsResolver {
             ancestry.add(getDefaultGroup());
         }
         debug("Ancestry for %s: %s", group, ancestry);
-        
+
         for (String ancestor : ancestry) {
             if (isOpaqueInheritance()) {
                 // Last appearance wins
                 resolveOrder.remove(ancestor);
                 resolveOrder.add(ancestor);
-            }
-            else {
+            } else {
                 // First appearance wins
                 if (!resolveOrder.contains(ancestor))
                     resolveOrder.add(ancestor);
@@ -339,7 +338,7 @@ public class PermissionsResolver {
             // Set alias cache
             worldAliasCache.put(world, alias);
         }
-        return alias != NULL_ALIAS ? (String)alias : null;
+        return alias != NULL_ALIAS ? (String) alias : null;
     }
 
     // Apply an entity's permissions to the permission map. Universal permissions
@@ -357,14 +356,12 @@ public class PermissionsResolver {
         for (Entry e : entries) {
             if (e.getRegion() == null && e.getWorld() == null) {
                 permissions.put(e.getPermission(), e.isValue());
-            }
-            else if (e.getRegion() != null && e.getWorld() == null) {
+            } else if (e.getRegion() != null && e.getWorld() == null) {
                 // Universal region-specific (should these really be supported?)
                 if (regions.contains(e.getRegion().getName())) {
                     addRegionPermission(regionPermissions, e);
                 }
-            }
-            else if (e.getWorld().getName().equals(world) || e.getWorld().getName().equals(worldAlias)) {
+            } else if (e.getWorld().getName().equals(world) || e.getWorld().getName().equals(worldAlias)) {
                 worldPermissions.add(e);
             }
         }
@@ -378,23 +375,20 @@ public class PermissionsResolver {
                 // Non region-specific
                 if (e.getWorld().getName().equals(worldAlias)) {
                     permissions.put(e.getPermission(), e.isValue());
-                }
-                else {
+                } else {
                     specificWorldPermissions.put(e.getPermission(), e.isValue());
                 }
-            }
-            else {
+            } else {
                 if (regions.contains(e.getRegion().getName())) {
                     if (e.getWorld().getName().equals(worldAlias)) {
                         addRegionPermission(regionWorldAliasPermissions, e);
-                    }
-                    else {
+                    } else {
                         addRegionPermission(regionWorldPermissions, e);
                     }
                 }
             }
         }
-        
+
         permissions.putAll(specificWorldPermissions);
 
         // Override with universal, region-specific permissions
@@ -403,7 +397,7 @@ public class PermissionsResolver {
         // Finally, override with region- and world-specific permissions
         applyRegionPermissions(permissions, regionWorldAliasPermissions, regions);
         applyRegionPermissions(permissions, regionWorldPermissions, regions);
-        
+
         return permissions;
     }
 
@@ -436,22 +430,22 @@ public class PermissionsResolver {
             // If no groups, use the default group
             groups.add(getDefaultGroup());
         }
- 
+
         // Resolve each group in turn (highest priority resolved last)
         List<String> resolveOrder = new ArrayList<>();
         for (String group : groups) {
             calculateResolutionOrder(resolveOrder, group);
         }
-        
+
         List<EntityMetadata> metadata = new ArrayList<>();
         for (String group : resolveOrder) {
             metadata.addAll(getPermissionService().getAllMetadata(group, null, true));
         }
-        
+
         // NB There's only one level, so interleavedPlayerPermissions doesn't matter
         // Always resolve player last
         metadata.addAll(getPermissionService().getAllMetadata(playerName, uuid, false));
-        
+
         return new MetadataResult(applyMetadata(metadata), new LinkedHashSet<>(resolveOrder));
     }
 
@@ -463,7 +457,7 @@ public class PermissionsResolver {
         for (String group : resolveOrder) {
             metadata.addAll(getPermissionService().getAllMetadata(group, null, true));
         }
-        
+
         return new MetadataResult(applyMetadata(metadata), new LinkedHashSet<>(resolveOrder));
     }
 
@@ -480,11 +474,11 @@ public class PermissionsResolver {
     }
 
     public static class ResolverResult {
-        
+
         private final Map<String, Boolean> permissions;
-        
+
         private final Set<String> groups;
-        
+
         private ResolverResult(Map<String, Boolean> permissions, Set<String> groups) {
             this.permissions = permissions;
             this.groups = groups;
@@ -497,13 +491,13 @@ public class PermissionsResolver {
         public Set<String> getGroups() {
             return groups;
         }
-        
+
     }
 
     public static class MetadataResult {
-        
+
         private final Map<String, Object> metadata;
-        
+
         private final Set<String> groups;
 
         public MetadataResult(Map<String, Object> metadata, Set<String> groups) {

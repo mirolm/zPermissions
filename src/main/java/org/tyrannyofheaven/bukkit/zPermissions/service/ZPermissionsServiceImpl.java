@@ -46,7 +46,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.Utils;
 
 /**
  * Simple implementation of {@link ZPermissionsService}.
- * 
+ *
  * @author zerothangel
  */
 public class ZPermissionsServiceImpl implements ZPermissionsService {
@@ -108,7 +108,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     private PermissionsResolver getResolver() {
         return resolver;
     }
-    
+
     private PermissionService getPermissionService() {
         return permissionService;
     }
@@ -131,7 +131,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     @Override
     public Set<String> getAllGroups() {
         Set<String> groups = new HashSet<>();
-        
+
         for (String groupName : getPermissionService().getEntityNames(true)) {
             groups.add(groupName);
         }
@@ -259,7 +259,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
         if (player == null) return Collections.emptyMap();
         UUID uuid = player.getUniqueId();
-        
+
         return getPlayerPermissions(worldName, regionNames, uuid);
     }
 
@@ -295,7 +295,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     @Override
     public Set<String> getAllPlayers() {
         Set<String> players = new HashSet<>();
-        
+
         for (String playerName : getPermissionService().getEntityNames(false)) {
             players.add(playerName);
         }
@@ -306,7 +306,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     @Override
     public Set<UUID> getAllPlayersUUID() {
         Set<UUID> players = new HashSet<>();
-        
+
         for (PermissionEntity player : getPermissionService().getEntities(false)) {
             players.add(player.getUuid());
         }
@@ -333,7 +333,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             throw new IllegalArgumentException("groupName must have a value");
         // PermissionService returns them in alphabetical order. This interface doesn't care
         // about ordering.
-        
+
         Set<UUID> members = new HashSet<>();
 
         for (Membership membership : Utils.filterExpired(getPermissionService().getMembers(groupName))) {
@@ -375,8 +375,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
                     try {
                         String value = isPrefix ? getPlayerPrefix(uuid) : getPlayerSuffix(uuid);
                         return type.cast(value);
-                    }
-                    finally {
+                    } finally {
                         playerPrefixHandlerLoopAvoidance.set(null);
                     }
                 }
@@ -406,13 +405,12 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             throw new IllegalArgumentException("type cannot be null");
         if (!validMetadataTypes.contains(type))
             throw new IllegalArgumentException("Unsupported metadata type");
-        
+
         Object value;
         if (config.isInheritedMetadata()) {
             // Use metadata manager to resolve metadata
             value = getMetadataManager().getMetadata(name, uuid, group, metadataName);
-        }
-        else {
+        } else {
             value = getTransactionStrategy().execute(new TransactionCallback<Object>() {
                 @Override
                 public Object doInTransaction() throws Exception {
@@ -429,9 +427,9 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
         else if (value.getClass() == type)
             return type.cast(value); // Same type, good to go
         else if (type == Integer.class && value.getClass() == Long.class)
-            return type.cast(((Number)value).intValue()); // Convert
+            return type.cast(((Number) value).intValue()); // Convert
         else if (type == Float.class && value.getClass() == Double.class)
-            return type.cast(((Number)value).floatValue()); // Convert
+            return type.cast(((Number) value).floatValue()); // Convert
 
         throw new IllegalStateException("Mismatched metadata type: " + value.getClass().getSimpleName() + "; expecting: " + type.getSimpleName());
     }
@@ -451,7 +449,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     public List<String> getTrackGroups(String trackName) {
         if (!hasText(trackName))
             throw new IllegalArgumentException("trackName must have a value");
-        
+
         List<String> result = getZPermissionsConfig().getTrack(trackName);
         if (result == null || result.isEmpty())
             throw new IllegalStateException("Track has not been defined");
@@ -491,8 +489,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
                 if (!trackGroups.isEmpty())
                     return trackGroups.iterator().next(); // return highest-ranked group in given track
             }
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             warn(plugin, "Bad property '%s' for %s; is it a string and does the track exist?", MetadataConstants.PRIMARY_GROUP_TRACK_KEY, canonicalizeUuid(uuid));
         }
 

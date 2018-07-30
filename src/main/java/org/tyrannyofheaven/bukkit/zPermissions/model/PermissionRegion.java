@@ -22,16 +22,16 @@ import javax.persistence.UniqueConstraint;
 
 /**
  * Represents a region that permission entries may be associated with.
- * 
+ *
  * @author zerothangel
  */
 @Entity
-@Table(name="regions")
-@UniqueConstraint(columnNames="name")
+@Table(name = "regions")
+@UniqueConstraint(columnNames = "name")
 public class PermissionRegion {
 
     private Long id;
-    
+
     private String name;
 
     @Id
@@ -55,7 +55,7 @@ public class PermissionRegion {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof PermissionRegion)) return false;
-        PermissionRegion o = (PermissionRegion)obj;
+        PermissionRegion o = (PermissionRegion) obj;
         return getName() == null ? o.getName() == null : getName().equals(o.getName());
     }
 

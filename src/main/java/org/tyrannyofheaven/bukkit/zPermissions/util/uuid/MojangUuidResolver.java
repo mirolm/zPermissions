@@ -63,8 +63,7 @@ public class MojangUuidResolver implements UuidResolver {
         try {
             UuidDisplayName udn = cache.get(username.toLowerCase());
             return udn != NULL_UDN ? udn : null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -79,8 +78,7 @@ public class MojangUuidResolver implements UuidResolver {
             UuidDisplayName udn = cache.asMap().get(username.toLowerCase());
             if (udn == null) return null;
             return udn != NULL_UDN ? udn : null; // NB Can't tell between "not cached" and "maps to null"
-        }
-        else return resolve(username); // Same as normal version
+        } else return resolve(username); // Same as normal version
     }
 
     @Override
@@ -142,8 +140,7 @@ public class MojangUuidResolver implements UuidResolver {
         UUID uuid;
         try {
             uuid = uncanonicalizeUuid(uuidString);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return null;
         }
 
@@ -156,7 +153,7 @@ public class MojangUuidResolver implements UuidResolver {
         String body = JSONValue.toJSONString(usernames);
 
         URL url = new URL("https://api.mojang.com/profiles/" + AGENT);
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
@@ -164,13 +161,12 @@ public class MojangUuidResolver implements UuidResolver {
         connection.setDoOutput(true);
         connection.setConnectTimeout(15000);
         connection.setReadTimeout(15000);
-        
+
         DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
         try {
             writer.write(body.getBytes(Charsets.UTF_8));
             writer.flush();
-        }
-        finally {
+        } finally {
             writer.close();
         }
 
@@ -178,30 +174,29 @@ public class MojangUuidResolver implements UuidResolver {
         JSONArray profiles;
         try {
             JSONParser parser = new JSONParser(); // NB Not thread safe
-            profiles = (JSONArray)parser.parse(reader);
-        }
-        finally {
+            profiles = (JSONArray) parser.parse(reader);
+        } finally {
             reader.close();
         }
-        
+
         return convertResponse(profiles);
     }
 
     private List<Profile> convertResponse(JSONArray profiles) {
         List<Profile> result = new ArrayList<>();
         for (Object obj : profiles) {
-            JSONObject jsonProfile = (JSONObject)obj;
-            String id = (String)jsonProfile.get("id");
-            String name = (String)jsonProfile.get("name");
+            JSONObject jsonProfile = (JSONObject) obj;
+            String id = (String) jsonProfile.get("id");
+            String name = (String) jsonProfile.get("name");
             result.add(new Profile(id, name));
         }
         return result;
     }
 
     private static class Profile {
-        
+
         private final String id;
-        
+
         private final String name;
 
         private Profile(String id, String name) {

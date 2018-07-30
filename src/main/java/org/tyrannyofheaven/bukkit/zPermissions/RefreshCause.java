@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions;
 
 /**
  * Cause of refresh event. Internal use only.
- * 
+ *
  * @author zerothangel
  */
 public enum RefreshCause {

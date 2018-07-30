@@ -44,7 +44,7 @@ import com.avaje.ebean.EbeanServer;
 /**
  * Avaje PermissionDao implementation. All database operations are handed off
  * to the given Executor.
- * 
+ *
  * @author zerothangel
  */
 public class AvajePermissionDao implements PermissionDao {
@@ -170,7 +170,7 @@ public class AvajePermissionDao implements PermissionDao {
                         region = inconsistentRegion(regionName);
                     }
                 }
-                
+
                 PermissionWorld world = null;
                 if (worldName != null) {
                     world = getEbeanServer().find(PermissionWorld.class).where()
@@ -180,7 +180,7 @@ public class AvajePermissionDao implements PermissionDao {
                         world = inconsistentWorld(worldName);
                     }
                 }
-                
+
                 Entry dbEntry = getEbeanServer().find(Entry.class).where()
                         .eq("entity", entity)
                         .eq("region", region)
@@ -194,7 +194,7 @@ public class AvajePermissionDao implements PermissionDao {
                     dbEntry.setWorld(world);
                     dbEntry.setPermission(permission);
                 }
-                
+
                 dbEntry.setValue(value);
                 getEbeanServer().save(dbEntry);
             }
@@ -232,7 +232,7 @@ public class AvajePermissionDao implements PermissionDao {
                         return;
                     }
                 }
-                
+
                 PermissionWorld world = null;
                 if (worldName != null) {
                     world = getEbeanServer().find(PermissionWorld.class).where()
@@ -243,7 +243,7 @@ public class AvajePermissionDao implements PermissionDao {
                         return;
                     }
                 }
-                
+
                 Entry dbEntry = getEbeanServer().find(Entry.class).where()
                         .eq("entity", entity)
                         .eq("region", region)
@@ -311,7 +311,7 @@ public class AvajePermissionDao implements PermissionDao {
                     databaseInconsistency();
                     return;
                 }
-                
+
                 if (group) {
                     getEbeanServer().delete(getEbeanServer().find(Inheritance.class).where()
                             .eq("child", dbEntity)
@@ -360,7 +360,7 @@ public class AvajePermissionDao implements PermissionDao {
                     databaseInconsistency();
                     return;
                 }
-                
+
                 getEbeanServer().delete(dbMembership);
             }
         });
@@ -384,7 +384,7 @@ public class AvajePermissionDao implements PermissionDao {
                         dbParent = inconsistentEntity(parentName, true);
                     }
                 }
-                
+
                 PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
                         .eq("name", name.toLowerCase())
                         .eq("group", true)
@@ -392,7 +392,7 @@ public class AvajePermissionDao implements PermissionDao {
                 if (dbEntity == null) {
                     dbEntity = inconsistentEntity(name, true);
                 }
-                
+
                 dbEntity.setParent(dbParent);
                 getEbeanServer().save(dbEntity);
             }
@@ -424,7 +424,7 @@ public class AvajePermissionDao implements PermissionDao {
                 if (parent == null) {
                     parent = inconsistentEntity(parentName, true);
                 }
-                
+
                 Inheritance dbInheritance = getEbeanServer().find(Inheritance.class).where()
                         .eq("child", child)
                         .eq("parent", parent)
@@ -444,7 +444,7 @@ public class AvajePermissionDao implements PermissionDao {
     public void deleteInheritance(Inheritance inheritance) {
         final String childName = inheritance.getChild().getDisplayName();
         final String parentName = inheritance.getParent().getDisplayName();
-        
+
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -466,7 +466,7 @@ public class AvajePermissionDao implements PermissionDao {
                     databaseInconsistency();
                     return;
                 }
-                
+
                 Inheritance dbInheritance = getEbeanServer().find(Inheritance.class).where()
                         .eq("child", child)
                         .eq("parent", parent)
@@ -475,7 +475,7 @@ public class AvajePermissionDao implements PermissionDao {
                     databaseInconsistency();
                     return;
                 }
-                
+
                 getEbeanServer().delete(dbInheritance);
             }
         });
@@ -572,7 +572,7 @@ public class AvajePermissionDao implements PermissionDao {
         final boolean group = metadata.getEntity().isGroup();
         final String metadataName = metadata.getName().toLowerCase();
         final Object value = metadata.getValue();
-        
+
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -606,7 +606,7 @@ public class AvajePermissionDao implements PermissionDao {
         final String name = metadata.getEntity().getName();
         final boolean group = metadata.getEntity().isGroup();
         final String metadataName = metadata.getName();
-        
+
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -683,7 +683,7 @@ public class AvajePermissionDao implements PermissionDao {
                     databaseInconsistency();
                     return;
                 }
-                
+
                 dbMembership.setDisplayName(displayName);
                 getEbeanServer().save(dbMembership);
             }
@@ -733,12 +733,11 @@ public class AvajePermissionDao implements PermissionDao {
                 newInheritance.setChild(newGroup);
                 newInheritance.setParent(parentEntity);
                 newInheritance.setOrdering(0);
-                
+
                 // Linkages
                 newGroup.getInheritancesAsChild().add(newInheritance);
                 parentEntity.getInheritancesAsParent().add(newInheritance);
-            }
-            else {
+            } else {
                 List<Inheritance> inheritances = getEbeanServer().find(Inheritance.class).where()
                         .eq("child", group)
                         .join("parent", "displayName")
@@ -750,7 +749,7 @@ public class AvajePermissionDao implements PermissionDao {
                     newInheritance.setChild(newGroup);
                     newInheritance.setParent(parentEntity);
                     newInheritance.setOrdering(inheritance.getOrdering());
-                    
+
                     // Linkages
                     newGroup.getInheritancesAsChild().add(newInheritance);
                     parentEntity.getInheritancesAsParent().add(newInheritance);
@@ -766,11 +765,11 @@ public class AvajePermissionDao implements PermissionDao {
                 newMembership.setGroup(newGroup);
                 newMembership.setExpiration(membership.getExpiration());
                 newGroup.getMemberships().add(newMembership);
-                
+
                 rememberMembership(memoryState, newMembership);
             }
         }
-        
+
         permissionService.setMemoryState(memoryState);
     }
 
@@ -798,7 +797,7 @@ public class AvajePermissionDao implements PermissionDao {
             newMetadata.setEntity(entity);
             entity.getMetadata().add(newMetadata);
         }
-        
+
         entity.updateMetadataMap();
     }
 

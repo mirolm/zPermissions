@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.dao;
 
 /**
  * Thrown for any errors originating within PermissionService.
- * 
+ *
  * @author zerothangel
  */
 public class PermissionServiceException extends RuntimeException {

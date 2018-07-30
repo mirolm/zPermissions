@@ -18,15 +18,15 @@ package org.tyrannyofheaven.bukkit.zPermissions.util;
 /**
  * Simple holder for the names of common metadata properties. These properties
  * have no intrinsic significance but do affect Vault.
- * 
+ *
  * @author zerothangel
  */
 public class MetadataConstants {
 
     public static final String PREFIX_KEY = "prefix";
-    
+
     public static final String SUFFIX_KEY = "suffix";
-    
+
     public static final String PRIMARY_GROUP_TRACK_KEY = "Vault.primary-group.track";
 
     private MetadataConstants() {

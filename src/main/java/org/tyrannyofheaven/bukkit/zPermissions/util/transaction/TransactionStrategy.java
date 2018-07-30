@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.transaction;
 
 /**
  * Back-end-independent interface for performing operations within a transaction.
- * 
+ *
  * @author zerothangel
  */
 public interface TransactionStrategy {
@@ -25,7 +25,7 @@ public interface TransactionStrategy {
     /**
      * Execute the given callback within a transaction suitable for this
      * implementation. The transaction is considered read-write.
-     * 
+     *
      * @param callback the callback
      * @return the result of the callback
      */
@@ -34,7 +34,7 @@ public interface TransactionStrategy {
     /**
      * Execute the given callback within a transaction suitable for this
      * implementation.
-     * 
+     *
      * @param callback the callback
      * @param readOnly true if this transaction should be considered read-only
      * @return the result of the callback

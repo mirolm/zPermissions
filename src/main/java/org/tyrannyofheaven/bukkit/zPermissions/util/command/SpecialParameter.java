@@ -18,16 +18,16 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 /**
  * One of the special parameters types that automatically receive a value
  * from the framework.
- * 
+ *
  * @author zerothangel
  */
 final class SpecialParameter implements MethodParameter {
 
     private final Type type;
-    
+
     /**
      * Create a SpecialParameter instance.
-     * 
+     *
      * @param type the special type of parameter
      */
     SpecialParameter(Type type) {
@@ -39,7 +39,7 @@ final class SpecialParameter implements MethodParameter {
 
     /**
      * Retrieve the SpecialParameter type.
-     * 
+     *
      * @return the type
      */
     Type getType() {
@@ -51,12 +51,12 @@ final class SpecialParameter implements MethodParameter {
          * org.bukkit.Server
          */
         SERVER,
-        
+
         /**
          * org.bukkit.plugin.Plugin or subclasses
          */
         PLUGIN,
-        
+
         /**
          * org.bukkit.plugin.CommandSender
          */

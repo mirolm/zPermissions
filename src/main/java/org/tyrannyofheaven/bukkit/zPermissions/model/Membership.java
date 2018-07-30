@@ -32,12 +32,12 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
 
 /**
  * Represents group membership.
- * 
+ *
  * @author zerothangel
  */
 @Entity
-@Table(name="memberships")
-@UniqueConstraint(columnNames={"member", "group_id"})
+@Table(name = "memberships")
+@UniqueConstraint(columnNames = {"member", "group_id"})
 public class Membership {
 
     private Long id;
@@ -75,8 +75,8 @@ public class Membership {
         this.displayName = displayName;
     }
 
-    @Column(name="group_id")
-    @ManyToOne(optional=false)
+    @Column(name = "group_id")
+    @ManyToOne(optional = false)
     public PermissionEntity getGroup() {
         return group;
     }
@@ -103,9 +103,9 @@ public class Membership {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof Membership)) return false;
-        Membership o = (Membership)obj;
+        Membership o = (Membership) obj;
         return getMember().equals(o.getMember()) &&
-            getGroup().equals(o.getGroup());
+                getGroup().equals(o.getGroup());
     }
 
     @Override

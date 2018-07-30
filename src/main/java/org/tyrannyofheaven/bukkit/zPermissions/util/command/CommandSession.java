@@ -21,16 +21,16 @@ import java.util.Map;
 /**
  * Provides an easy method to pass values between handlers without having to
  * instantiate a new handler for each invocation or break thread safety.
- * 
+ *
  * @author zerothangel
  */
 public final class CommandSession {
 
     private final Map<String, Object> data = new HashMap<>();
-    
+
     /**
      * Retrieves a session value.
-     * 
+     *
      * @param name the name of the value
      * @return the value or null
      */
@@ -41,9 +41,9 @@ public final class CommandSession {
     /**
      * Retrieves a session value. Throws an exception if the value is not found
      * or is of the wrong type.
-     * 
-     * @param <T> the value type
-     * @param name the name of the value
+     *
+     * @param <T>   the value type
+     * @param name  the name of the value
      * @param clazz the expected value type
      * @return the value
      */
@@ -52,8 +52,7 @@ public final class CommandSession {
         if (obj != null) {
             if (clazz.isAssignableFrom(obj.getClass())) {
                 return clazz.cast(obj);
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException(String.format("Session value '%s' not assignable from type %s", name, clazz));
             }
         }
@@ -62,8 +61,8 @@ public final class CommandSession {
 
     /**
      * Sets a session value.
-     * 
-     * @param name the name of the value
+     *
+     * @param name  the name of the value
      * @param value the value to set
      */
     public void setValue(String name, Object value) {
@@ -72,7 +71,7 @@ public final class CommandSession {
 
     /**
      * Removes a session value.
-     * 
+     *
      * @param name the name of the value
      */
     public void removeValue(String name) {

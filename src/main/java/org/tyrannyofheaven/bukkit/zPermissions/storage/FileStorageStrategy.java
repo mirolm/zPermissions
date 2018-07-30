@@ -38,7 +38,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
 
 /**
  * StorageStrategy for FilePermissionService.
- * 
+ *
  * @author zerothangel
  */
 public class FileStorageStrategy implements StorageStrategy, TransactionStrategy, Runnable {
@@ -71,12 +71,10 @@ public class FileStorageStrategy implements StorageStrategy, TransactionStrategy
             try {
                 permissionDao.load(saveFile);
                 initialized = true;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 log(plugin, Level.SEVERE, "Error loading permissions database:", e);
             }
-        }
-        else {
+        } else {
             initialized = true;
         }
     }
@@ -104,12 +102,10 @@ public class FileStorageStrategy implements StorageStrategy, TransactionStrategy
             log(plugin, "Waiting up to %d seconds for pending write operations...", timeout);
             if (!executorService.awaitTermination(timeout, TimeUnit.SECONDS)) {
                 log(plugin, Level.WARNING, "Timed out before all write operations could finish; expect inconsistencies :(");
-            }
-            else {
+            } else {
                 log(plugin, "All write operations done.");
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             // Do nothing
         }
     }
@@ -123,11 +119,10 @@ public class FileStorageStrategy implements StorageStrategy, TransactionStrategy
 
                 try {
                     permissionDao.load(saveFile);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     log(plugin, Level.SEVERE, "Error loading permissions database:", e);
                 }
-                
+
                 if (finishTask != null)
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, finishTask);
             }
@@ -169,12 +164,10 @@ public class FileStorageStrategy implements StorageStrategy, TransactionStrategy
                 }
             }
             return result;
-        }
-        catch (Error | RuntimeException e) {
+        } catch (Error | RuntimeException e) {
             // No need to wrap these, just re-throw
             throw e;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new TransactionException(t);
         }
     }
@@ -193,8 +186,7 @@ public class FileStorageStrategy implements StorageStrategy, TransactionStrategy
     private void save() {
         try {
             permissionDao.save(saveFile);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log(plugin, Level.SEVERE, "Error saving permissions database:", e);
         }
     }

@@ -3,7 +3,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command.reader;
 /**
  * Thrown when {@link CommandReader#read(org.bukkit.Server, org.bukkit.command.CommandSender, java.io.InputStream, boolean)}
  * and friends encounter an error.
- * 
+ *
  * @author zerothangel
  */
 public class CommandReaderException extends RuntimeException {

@@ -20,7 +20,7 @@ import java.util.concurrent.Executor;
 /**
  * Simple Executor implementation that simply queues up Runnables within a
  * TransactionRunnable.
- * 
+ *
  * @author zerothangel
  */
 class TransactionExecutor implements Executor {

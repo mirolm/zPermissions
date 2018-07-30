@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * Metadata for a command.
- * 
+ *
  * @author zerothangel
  */
 final class CommandMetaData {
@@ -51,24 +51,24 @@ final class CommandMetaData {
     private final String completer;
 
     private final List<OptionMetaData> flagOptions;
-    
+
     private final List<OptionMetaData> positionalArguments;
 
     /**
      * Create a CommandMetaData with the given arguments.
-     * 
-     * @param handler the handler object
-     * @param method the associated method in the handler object
-     * @param options method parameters
+     *
+     * @param handler     the handler object
+     * @param method      the associated method in the handler object
+     * @param options     method parameters
      * @param permissions required permissions, if any
-     * @param requireAll true if all permissions are required
+     * @param requireAll  true if all permissions are required
      */
     public CommandMetaData(Object handler, Method method, List<MethodParameter> options, String[] permissions, boolean requireAll, boolean checkNegations, String description, boolean hasRest, String rest, String completer) {
         if (handler == null)
             throw new IllegalArgumentException("handler cannot be null");
         if (method == null)
             throw new IllegalArgumentException("method cannot be null");
-        
+
         if (options == null)
             options = Collections.emptyList();
         if (permissions == null)
@@ -91,28 +91,27 @@ final class CommandMetaData {
         this.completer = completer;
 
         this.parameters = Collections.unmodifiableList(new ArrayList<>(options));
-        
+
         List<OptionMetaData> flagOptions = new ArrayList<>();
         List<OptionMetaData> positionalArguments = new ArrayList<>();
         for (MethodParameter mp : this.parameters) {
             if (mp instanceof OptionMetaData) {
-                OptionMetaData omd = (OptionMetaData)mp;
+                OptionMetaData omd = (OptionMetaData) mp;
                 if (omd.isArgument()) {
                     positionalArguments.add(omd);
-                }
-                else {
+                } else {
                     flagOptions.add(omd);
                 }
             }
         }
-        
+
         this.flagOptions = Collections.unmodifiableList(flagOptions);
         this.positionalArguments = Collections.unmodifiableList(positionalArguments);
     }
 
     /**
      * Return the method parameter metadata.
-     * 
+     *
      * @return list of MethodParameters
      */
     public List<MethodParameter> getParameters() {
@@ -121,7 +120,7 @@ final class CommandMetaData {
 
     /**
      * Return metadata for any flags.
-     * 
+     *
      * @return set of OptionMetaData for any associated flags
      */
     public List<OptionMetaData> getFlagOptions() {
@@ -130,7 +129,7 @@ final class CommandMetaData {
 
     /**
      * Return metadata for any positional arguments.
-     * 
+     *
      * @return list of OptionMetaData for any positional arguments
      */
     public List<OptionMetaData> getPositionalArguments() {
@@ -139,7 +138,7 @@ final class CommandMetaData {
 
     /**
      * Returns the handler object.
-     * 
+     *
      * @return the handler object
      */
     public Object getHandler() {
@@ -148,7 +147,7 @@ final class CommandMetaData {
 
     /**
      * Returns the handler method.
-     * 
+     *
      * @return the handler method.
      */
     public Method getMethod() {
@@ -157,9 +156,9 @@ final class CommandMetaData {
 
     /**
      * Returns the permissions, if any.
-     * 
+     *
      * @return an array of 0 or more permission names. Will never be
-     *   <code>null</code>.
+     * <code>null</code>.
      */
     public String[] getPermissions() {
         return permissions;
@@ -167,7 +166,7 @@ final class CommandMetaData {
 
     /**
      * Returns whether or not all permissions are required.
-     * 
+     *
      * @return true if all permissions are required
      */
     public boolean isRequireAll() {
@@ -176,7 +175,7 @@ final class CommandMetaData {
 
     /**
      * Returns whether or not permission negations should be explicitly checked.
-     * 
+     *
      * @return true if permissions negations should be explicitly checked
      */
     public boolean isCheckNegations() {
@@ -185,7 +184,7 @@ final class CommandMetaData {
 
     /**
      * Returns the associated command description.
-     * 
+     *
      * @return the description
      */
     public String getDescription() {
@@ -194,7 +193,7 @@ final class CommandMetaData {
 
     /**
      * Returns whether or not this command has a varargs parameter.
-     * 
+     *
      * @return true if a varargs parameter is present
      */
     public boolean hasRest() {
@@ -203,7 +202,7 @@ final class CommandMetaData {
 
     /**
      * Returns the description of the varargs parameter.
-     * 
+     *
      * @return the description of the varargs parameter
      */
     public String getRest() {
@@ -212,7 +211,7 @@ final class CommandMetaData {
 
     /**
      * Returns the name of the registered TypeCompleter for each vararg word.
-     * 
+     *
      * @return the TypeCompleter to use for varargs
      */
     public String getCompleter() {

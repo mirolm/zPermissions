@@ -25,22 +25,22 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="metadata")
-@UniqueConstraint(columnNames={"entity_id", "name"})
+@Table(name = "metadata")
+@UniqueConstraint(columnNames = {"entity_id", "name"})
 public class EntityMetadata {
 
     private Long id;
-    
+
     private PermissionEntity entity;
-    
+
     private String name;
 
     private String stringValue;
-    
+
     private Long integerValue;
-    
+
     private Double realValue;
-    
+
     private Boolean booleanValue;
 
     @Id
@@ -52,8 +52,8 @@ public class EntityMetadata {
         this.id = id;
     }
 
-    @JoinColumn(name="entity_id")
-    @ManyToOne(optional=false)
+    @JoinColumn(name = "entity_id")
+    @ManyToOne(optional = false)
     public PermissionEntity getEntity() {
         return entity;
     }
@@ -62,7 +62,7 @@ public class EntityMetadata {
         this.entity = entity;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -124,24 +124,18 @@ public class EntityMetadata {
         setBooleanValue(null);
 
         if (value instanceof String) {
-            setStringValue((String)value);
-        }
-        else if (value instanceof Integer) {
-            setIntegerValue(((Number)value).longValue());
-        }
-        else if (value instanceof Long) {
-            setIntegerValue((Long)value);
-        }
-        else if (value instanceof Float) {
-            setRealValue(((Number)value).doubleValue());
-        }
-        else if (value instanceof Double) {
-            setRealValue((Double)value);
-        }
-        else if (value instanceof Boolean) {
-            setBooleanValue((Boolean)value);
-        }
-        else
+            setStringValue((String) value);
+        } else if (value instanceof Integer) {
+            setIntegerValue(((Number) value).longValue());
+        } else if (value instanceof Long) {
+            setIntegerValue((Long) value);
+        } else if (value instanceof Float) {
+            setRealValue(((Number) value).doubleValue());
+        } else if (value instanceof Double) {
+            setRealValue((Double) value);
+        } else if (value instanceof Boolean) {
+            setBooleanValue((Boolean) value);
+        } else
             throw new IllegalArgumentException("Invalid metadata value");
     }
 
@@ -149,7 +143,7 @@ public class EntityMetadata {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof EntityMetadata)) return false;
-        EntityMetadata o = (EntityMetadata)obj;
+        EntityMetadata o = (EntityMetadata) obj;
         return getEntity().equals(o.getEntity()) &&
                 getName().equals(o.getName());
     }

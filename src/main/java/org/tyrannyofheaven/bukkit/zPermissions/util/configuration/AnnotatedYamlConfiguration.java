@@ -17,7 +17,7 @@ import com.google.common.base.Joiner;
 /**
  * Version of {@link YamlConfiguration} that supports comments with every root-level
  * property.
- * 
+ *
  * @author zerothangel
  */
 public class AnnotatedYamlConfiguration extends YamlConfiguration {
@@ -37,14 +37,14 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
         yamlOptions.setIndent(options().indent());
         yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        
+
         StringBuilder builder = new StringBuilder();
         builder.append(buildHeader());
         if (builder.length() > 0)
             builder.append('\n'); // Newline after header, if present
 
         // Iterate over each root-level property and dump
-        for (Iterator<Map.Entry<String, Object>> i = getValues(false).entrySet().iterator(); i.hasNext();) {
+        for (Iterator<Map.Entry<String, Object>> i = getValues(false).entrySet().iterator(); i.hasNext(); ) {
             Map.Entry<String, Object> entry = i.next();
 
             // Output comment, if present
@@ -52,7 +52,7 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
             if (comment != null) {
                 builder.append(buildComment(comment));
             }
-            
+
             // Dump property
             builder.append(yaml.dump(Collections.singletonMap(entry.getKey(), entry.getValue())));
 
@@ -62,17 +62,17 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
         }
 
         String dump = builder.toString();
-        
+
         if (dump.equals(BLANK_CONFIG)) {
             dump = "";
         }
-        
+
         return dump;
     }
 
     /**
      * Format a multi-line property comment.
-     * 
+     *
      * @param comment the original comment string
      * @return the formatted comment string
      */
@@ -88,7 +88,7 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
 
     /**
      * Returns a root-level comment.
-     * 
+     *
      * @param key the property key
      * @return the comment or <code>null</code>
      */
@@ -98,24 +98,23 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
 
     /**
      * Set a root-level comment.
-     * 
-     * @param key the property key
+     *
+     * @param key     the property key
      * @param comment the comment. May be <code>null</code>, in which case the comment
-     *   is removed.
+     *                is removed.
      */
     public void setComment(String key, String... comment) {
         if (comment != null && comment.length > 0) {
             String s = Joiner.on('\n').join(comment);
             comments.put(key, s);
-        }
-        else {
+        } else {
             comments.remove(key);
         }
     }
 
     /**
      * Returns root-level comments.
-     * 
+     *
      * @return map of root-level comments
      */
     public Map<String, String> getComments() {
@@ -124,7 +123,7 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
 
     /**
      * Set root-level comments from a map.
-     * 
+     *
      * @param comments comment map
      */
     public void setComments(Map<String, String> comments) {

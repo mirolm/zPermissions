@@ -94,10 +94,9 @@ public class AvajeBulkUuidConverter implements BulkUuidConverter {
 
             // Commit
             getEbeanServer().commitTransaction();
-            
+
             log(plugin, "Migration done");
-        }
-        finally {
+        } finally {
             getEbeanServer().endTransaction();
         }
     }
@@ -145,8 +144,7 @@ public class AvajeBulkUuidConverter implements BulkUuidConverter {
                 entity.setName(canonicalizeUuid(udn.getUuid()));
                 entity.setDisplayName(udn.getDisplayName());
                 toSave.add(entity);
-            }
-            else {
+            } else {
                 toDelete.add(entity);
                 warn(plugin, "Unable to migrate '%s' -- failed to lookup UUID", entity.getDisplayName());
             }
@@ -164,8 +162,7 @@ public class AvajeBulkUuidConverter implements BulkUuidConverter {
                 membership.setMember(canonicalizeUuid(udn.getUuid()));
                 membership.setDisplayName(udn.getDisplayName());
                 toSave.add(membership);
-            }
-            else {
+            } else {
                 toDelete.add(membership);
                 warn(plugin, "Unable to migrate '%s' (member of '%s') -- failed to lookup UUID", membership.getDisplayName(), membership.getGroup().getDisplayName());
             }

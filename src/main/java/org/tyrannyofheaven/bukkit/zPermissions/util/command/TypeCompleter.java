@@ -21,17 +21,17 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Responsible for generating possible values for tab-completion.
- * 
+ *
  * @author zerothangel
  */
 public interface TypeCompleter {
 
     /**
      * Generate possible values for the given parameter type and argument.
-     * 
-     * @param clazz the parameter type
-     * @param arg the argument. May be null.
-     * @param sender TODO
+     *
+     * @param clazz   the parameter type
+     * @param arg     the argument. May be null.
+     * @param sender  TODO
      * @param partial start of string to match for completion. May be empty, never null.
      * @return
      */

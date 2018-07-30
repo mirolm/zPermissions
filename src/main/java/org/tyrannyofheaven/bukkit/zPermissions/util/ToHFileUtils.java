@@ -40,7 +40,7 @@ import com.google.common.base.Charsets;
 
 /**
  * File utilities.
- * 
+ *
  * @author zerothangel
  */
 public class ToHFileUtils {
@@ -57,8 +57,8 @@ public class ToHFileUtils {
 
     /**
      * Copy an InputStream to a file.
-     * 
-     * @param input the InputStream
+     *
+     * @param input   the InputStream
      * @param outFile the output File
      * @throws IOException
      */
@@ -70,44 +70,41 @@ public class ToHFileUtils {
             while ((readLen = input.read(buffer)) != -1) {
                 os.write(buffer, 0, readLen);
             }
-        }
-        finally {
+        } finally {
             os.close();
         }
     }
 
     /**
      * Copy a resource (using a class's classloader) to a file.
-     * 
-     * @param clazz the class
+     *
+     * @param clazz        the class
      * @param resourceName resource name relative to the class
-     * @param outFile the output File
+     * @param outFile      the output File
      * @throws IOException
      */
     public static void copyResourceToFile(Class<?> clazz, String resourceName, File outFile) throws IOException {
         InputStream is = clazz.getResourceAsStream(resourceName);
         try {
             copyFile(is, outFile);
-        }
-        finally {
+        } finally {
             is.close();
         }
     }
 
     /**
      * Copies a resource relative to the Plugin class to a file.
-     * 
-     * @param plugin the plugin
+     *
+     * @param plugin       the plugin
      * @param resourceName resource name relative to plugin's class
-     * @param outFile the output file
+     * @param outFile      the output file
      * @return true if successful, false otherwise
      */
     public static boolean copyResourceToFile(Plugin plugin, String resourceName, File outFile) {
         try {
             copyResourceToFile(plugin.getClass(), resourceName, outFile);
             return true;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log(plugin, Level.SEVERE, "Error copying %s to %s", resourceName, outFile, e);
             return false;
         }
@@ -118,11 +115,11 @@ public class ToHFileUtils {
      * from the given resource file. (Note: the resource is loaded relative to the
      * plugin class.) The Configuration may also use comments read from the given
      * comments file.
-     *  
-     * @param plugin the plugin
-     * @param configDir the parent directory of the config file
-     * @param configName the name of the config file
-     * @param mustExist set to true if the file must exist (will throw FileNotFoundException if config not present)
+     *
+     * @param plugin       the plugin
+     * @param configDir    the parent directory of the config file
+     * @param configName   the name of the config file
+     * @param mustExist    set to true if the file must exist (will throw FileNotFoundException if config not present)
      * @param defaultsName the path of the defaults resource, relative to the plugin class. May be <code>null</code>.
      * @param commentsName the path of the comments resource, relative to the plugin class. May be <code>null</code>.
      * @return the Configuration object, with defaults and comments appropriately set
@@ -134,13 +131,11 @@ public class ToHFileUtils {
         AnnotatedYamlConfiguration config = new AnnotatedYamlConfiguration();
         try {
             config.load(configFile);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             if (mustExist)
                 throw e;
             // Otherwise, ignore...
-        }
-        catch (IOException | InvalidConfigurationException e) {
+        } catch (IOException | InvalidConfigurationException e) {
             ToHLoggingUtils.error(plugin, "Error reading configuration %s", configFile, e);
         }
 
@@ -151,8 +146,7 @@ public class ToHFileUtils {
                 try (Reader reader = new InputStreamReader(defaultsInput, Charsets.UTF_8)) {
                     Configuration defaults = YamlConfiguration.loadConfiguration(reader);
                     config.setDefaults(defaults);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     // Ignored (thrown by close)
                 }
             }
@@ -169,8 +163,7 @@ public class ToHFileUtils {
                         commentsMap.put(entry.getKey(), entry.getValue().toString());
                     }
                     config.setComments(commentsMap);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     // Ignored (thrown by close)
                 }
             }
@@ -184,10 +177,10 @@ public class ToHFileUtils {
      * from the given resource file. (Note: the resource is loaded relative to the
      * plugin class.) The Configuration may also use comments read from the given
      * comments file.
-     *  
-     * @param plugin the plugin
-     * @param configDir the parent directory of the config file
-     * @param configName the name of the config file
+     *
+     * @param plugin       the plugin
+     * @param configDir    the parent directory of the config file
+     * @param configName   the name of the config file
      * @param defaultsName the path of the defaults resource, relative to the plugin class. May be <code>null</code>.
      * @param commentsName the path of the comments resource, relative to the plugin class. May be <code>null</code>.
      * @return the Configuration object, with defaults and comments appropriately set
@@ -195,8 +188,7 @@ public class ToHFileUtils {
     public static FileConfiguration getConfig(Plugin plugin, File configDir, String configName, String defaultsName, String commentsName) {
         try {
             return getConfig(plugin, configDir, configName, false, defaultsName, commentsName);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             // Should never get here because we set mustExist to false
             throw new AssertionError();
         }
@@ -207,7 +199,7 @@ public class ToHFileUtils {
      * and set it up with the appropriate defaults and comments resources, if present.
      * The defaults and comments resources are expected to be at config.yml and
      * config-comments.yml respectively, in the same package as the plugin's class.
-     * 
+     *
      * @param plugin the plugin
      * @return the Configuration object, appropriately configured with defaults and comments
      */
@@ -217,10 +209,10 @@ public class ToHFileUtils {
 
     /**
      * Attempt to save a FileConfiguration.
-     * 
-     * @param plugin the plugin
-     * @param config the FileConfiguration to save
-     * @param configDir the parent directory of the file
+     *
+     * @param plugin     the plugin
+     * @param config     the FileConfiguration to save
+     * @param configDir  the parent directory of the file
      * @param configName the config filename
      */
     public static void saveConfig(Plugin plugin, FileConfiguration config, File configDir, String configName) {
@@ -229,12 +221,11 @@ public class ToHFileUtils {
         // First try saving
         try {
             config.save(newConfigFile);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             ToHLoggingUtils.error(plugin, "Error saving configuration %s", newConfigFile, e);
             return;
         }
-        
+
         File backupConfigFile = new File(configDir, configName + "~");
 
         // Delete old backup (might be necessary on some platforms)
@@ -242,11 +233,11 @@ public class ToHFileUtils {
             ToHLoggingUtils.error(plugin, "Error deleting configuration %s", backupConfigFile);
             // Continue despite failure
         }
-        
+
         File configFile = new File(configDir, configName);
 
         // If only we had access to hardlinks, this could all be atomic.
-        
+
         // Back up old config
         if (configFile.exists() && !configFile.renameTo(backupConfigFile)) {
             ToHLoggingUtils.error(plugin, "Error renaming %s to %s", configFile, backupConfigFile);
@@ -262,7 +253,7 @@ public class ToHFileUtils {
 
     /**
      * Save a FileConfiguration as the plugin's standard config.yml.
-     * 
+     *
      * @param plugin the plugin
      * @param config the FileConfiguration
      */
@@ -272,9 +263,9 @@ public class ToHFileUtils {
 
     /**
      * Upgrade the standard configuration file, if necessary.
-     * 
-     * @param plugin the plugin
-     * @param config the FileConfiguration
+     *
+     * @param plugin         the plugin
+     * @param config         the FileConfiguration
      * @param currentVersion the expected version, should be > 0
      */
     public static void upgradeConfig(Plugin plugin, FileConfiguration config) {

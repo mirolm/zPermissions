@@ -17,13 +17,13 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 
 /**
  * Holder for a command invocation. Used for generating the usage string.
- * 
+ *
  * @author zerothangel
  */
 final class CommandInvocation {
 
     private final String label;
-    
+
     private final CommandMetaData commandMetaData;
 
     CommandInvocation(String label, CommandMetaData commandMetaData) {
@@ -33,7 +33,7 @@ final class CommandInvocation {
 
     /**
      * Returns the name of the command. May be an alias.
-     * 
+     *
      * @return the command label
      */
     public String getLabel() {
@@ -42,7 +42,7 @@ final class CommandInvocation {
 
     /**
      * Returns the associated CommandMetaData.
-     * 
+     *
      * @return the CommandMetaData
      */
     public CommandMetaData getCommandMetaData() {

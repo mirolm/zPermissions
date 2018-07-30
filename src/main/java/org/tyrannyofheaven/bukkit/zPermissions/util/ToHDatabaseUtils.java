@@ -59,11 +59,11 @@ public class ToHDatabaseUtils {
     /**
      * Create an EbeanServer instance for a plugin, installing an optional
      * {@link NamingConvention} implementation.
-     * 
-     * @param plugin the JavaPlugin subclass
-     * @param classLoader the plugin's class loader
+     *
+     * @param plugin           the JavaPlugin subclass
+     * @param classLoader      the plugin's class loader
      * @param namingConvention NamingConvention instance or null
-     * @param config Configuration instance for external database configuration or null
+     * @param config           Configuration instance for external database configuration or null
      * @return new EbeanServer instance
      */
     // R.I.P. BUKKIT-3919
@@ -88,9 +88,8 @@ public class ToHDatabaseUtils {
         ConfigurationSection node = config != null ? config.getConfigurationSection("database") : null;
         if (node == null) {
             // Let Bukkit configure
-        	throw new NullPointerException("Database config not found! Copy the settings from your old bukkit.yml");
-        }
-        else {
+            throw new NullPointerException("Database config not found! Copy the settings from your old bukkit.yml");
+        } else {
             DataSourceConfig ds = new DataSourceConfig();
             ds.setDriver(node.getString("driver"));
             ds.setUrl(node.getString("url"));
@@ -116,7 +115,7 @@ public class ToHDatabaseUtils {
         Thread.currentThread().setContextClassLoader(classLoader);
         EbeanServer ebeanServer = EbeanServerFactory.create(db);
         Thread.currentThread().setContextClassLoader(previous);
-        
+
         return ebeanServer;
     }
 
@@ -129,8 +128,8 @@ public class ToHDatabaseUtils {
 
     /**
      * Given a Configuration, populate a {@link ToHNamingConvention}.
-     * 
-     * @param config the Configuration
+     *
+     * @param config           the Configuration
      * @param namingConvention a ToHNamingConvention instance
      */
     public static void populateNamingConvention(Configuration config, ToHNamingConvention namingConvention) {
@@ -152,12 +151,12 @@ public class ToHDatabaseUtils {
      * Database schema upgrade logic. Maintains a simple schema version table.
      * Generates that or the entire schema as appropriate. Runs schema update
      * scripts from a certain path.
-     * 
-     * @param ebeanServer the EbeanServer
+     *
+     * @param ebeanServer      the EbeanServer
      * @param namingConvention the associated NamingConvention
-     * @param classLoader the plugin's class loader
-     * @param pluginEntity any entity class (aside from ToHSchemaVersion) used by the plugin
-     * @param updatePath path to the root of the update scripts
+     * @param classLoader      the plugin's class loader
+     * @param pluginEntity     any entity class (aside from ToHSchemaVersion) used by the plugin
+     * @param updatePath       path to the root of the update scripts
      */
     public static void upgradeDatabase(DBPlugin plugin, NamingConvention namingConvention, ClassLoader classLoader, String updatePath) throws IOException {
         if (plugin == null)
@@ -185,7 +184,7 @@ public class ToHDatabaseUtils {
         log(plugin, Level.CONFIG, "Selected %s as plugin-specific entity", pluginEntity.getSimpleName());
 
         EbeanServer ebeanServer = plugin.getDatabase();
-        SpiEbeanServer spiEbeanServer = (SpiEbeanServer)ebeanServer;
+        SpiEbeanServer spiEbeanServer = (SpiEbeanServer) ebeanServer;
         DdlGenerator ddlGenerator = spiEbeanServer.getDdlGenerator();
 
         // Check schema version
@@ -195,13 +194,12 @@ public class ToHDatabaseUtils {
         try {
             schemaVersions = ebeanServer.find(ToHSchemaVersion.class).orderBy("version").findList();
             createSchemaVersionTable = false;
-        }
-        catch (PersistenceException e) {
+        } catch (PersistenceException e) {
             log(plugin, Level.WARNING, "Schema version table not present");
             schemaVersions = Collections.emptyList();
             createSchemaVersionTable = true;
         }
-        
+
         // Extract highest version
         ToHSchemaVersion schemaVersion = null;
         if (!schemaVersions.isEmpty())
@@ -216,8 +214,7 @@ public class ToHDatabaseUtils {
                 //   Check plugin-specific table
                 ebeanServer.find(pluginEntity).findRowCount();
                 log(plugin, "Found plugin-specific table");
-            }
-            catch (PersistenceException e) {
+            } catch (PersistenceException e) {
                 //   If error, create entire schema
                 log(plugin, Level.WARNING, "Plugin-specific table not present");
                 createFullSchema = true;
@@ -227,8 +224,7 @@ public class ToHDatabaseUtils {
                 // Takes precedence over createSchemaVersionTable
                 log(plugin, "Creating full plugin schema...");
                 ddlGenerator.runScript(false, ddlGenerator.generateCreateDdl());
-            }
-            else if (createSchemaVersionTable) {
+            } else if (createSchemaVersionTable) {
                 log(plugin, "Creating schema version table...");
                 ddlGenerator.runScript(false, generateSchemaVersionTableDdl(spiEbeanServer, namingConvention));
             }
@@ -238,7 +234,7 @@ public class ToHDatabaseUtils {
             schemaVersion.setVersion(1L);
             saveSchemaVersion(ebeanServer, schemaVersion);
         }
-        
+
         log(plugin, "Current schema version: %s", schemaVersion);
 
         // Check for update scripts
@@ -247,7 +243,7 @@ public class ToHDatabaseUtils {
         String commonUpdatePath = updatePath + "/common/";
 
         // Loop
-        for (;;) {
+        for (; ; ) {
             //   Check for existence of schema+1 update script
             String updateScriptName = String.format("V%d_update.sql", schemaVersion.getVersion() + 1L);
             InputStream is = classLoader.getResourceAsStream(dbUpdatePath + updateScriptName);
@@ -265,8 +261,7 @@ public class ToHDatabaseUtils {
                         updateContent = subsituteTableNames(namingConvention, plugin.getDatabaseClasses(), updateContent);
                         ddlGenerator.runScript(false, updateContent);
                     }
-                }
-                finally {
+                } finally {
                     is.close();
                 }
 
@@ -276,8 +271,7 @@ public class ToHDatabaseUtils {
                 saveSchemaVersion(ebeanServer, newSchemaVersion);
 
                 schemaVersion = newSchemaVersion;
-            }
-            else {
+            } else {
                 // No more versions
                 log(plugin, Level.CONFIG, "Schema update done");
                 break;
@@ -293,7 +287,7 @@ public class ToHDatabaseUtils {
         List<BeanDescriptor<?>> descriptors = new ArrayList<>(1);
         descriptors.add(spiEbeanServer.getBeanDescriptor(ToHSchemaVersion.class));
         VisitorUtil.visit(descriptors, create);
-        
+
         // Don't really need this, but full schema gen creates it
         CreateSequenceVisitor createSequence = new CreateSequenceVisitor(ctx);
         VisitorUtil.visit(descriptors, createSequence);
@@ -313,8 +307,7 @@ public class ToHDatabaseUtils {
         try {
             ebeanServer.save(schemaVersion);
             ebeanServer.commitTransaction();
-        }
-        finally {
+        } finally {
             ebeanServer.endTransaction();
         }
     }

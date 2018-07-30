@@ -55,7 +55,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
 
 /**
  * Collection of static utils, constants, etc.
- * 
+ *
  * @author zerothangel
  */
 public class Utils {
@@ -124,7 +124,7 @@ public class Utils {
 
     public static List<PermissionEntity> sortGroups(Collection<PermissionEntity> groups) {
         LinkedList<PermissionEntity> scanList = new LinkedList<>();
-        
+
         // Seed with parent-less groups
         for (PermissionEntity group : groups) {
             if (group.getParents().isEmpty())
@@ -137,13 +137,13 @@ public class Utils {
         // BFS from queue to get total ordering
         while (!scanList.isEmpty()) {
             PermissionEntity group = scanList.remove();
-            
+
             // Add to result
             result.add(group);
-            
+
             // Grab children and add to end of scanList
             List<PermissionEntity> children = new ArrayList<>(group.getChildrenNew());
-            
+
             // Sort children alphabetically
             Collections.sort(children, PERMISSION_ENTITY_ALPHA_COMPARATOR);
 
@@ -214,11 +214,10 @@ public class Utils {
             String source;
             if (verbose) {
                 source = pi.getSource() != null ? (ChatColor.RED + " [" + pi.getSource() + "]") : "";
-            }
-            else {
+            } else {
                 boolean notMine = pi.getSource() != null &&
                         !plugin.getName().equals(pi.getSource());
-                source = notMine? (ChatColor.RED + " *") : "";
+                source = notMine ? (ChatColor.RED + " *") : "";
             }
             lines.add(String.format(colorize("{DARK_GREEN}- {GOLD}%s{DARK_GREEN}: {GREEN}%s%s"), key, pi.getValue(), source));
             found = true;
@@ -238,13 +237,12 @@ public class Utils {
 
         Date now = new Date();
         StringBuilder sb = new StringBuilder();
-        for (Iterator<Membership> i = memberships.iterator(); i.hasNext();) {
+        for (Iterator<Membership> i = memberships.iterator(); i.hasNext(); ) {
             Membership membership = i.next();
             if (membership.getExpiration() == null || membership.getExpiration().after(now)) {
                 sb.append(ChatColor.DARK_GREEN);
                 gotGroup = true;
-            }
-            else
+            } else
                 sb.append(ChatColor.GRAY);
 
             sb.append(membership.getGroup().getDisplayName());
@@ -303,11 +301,11 @@ public class Utils {
     public static Date parseDurationTimestamp(String duration, String[] args) {
         if (!ToHStringUtils.hasText(duration))
             return null;
-        
+
         if (duration != null) {
             // Append args, if present
             if (args.length > 0)
-                duration = duration + " " + ToHStringUtils.delimitedString(" ", (Object[])args);
+                duration = duration + " " + ToHStringUtils.delimitedString(" ", (Object[]) args);
         }
 
         duration = duration.trim();
@@ -343,24 +341,21 @@ public class Utils {
             cal.add(unitsInt, durationInt);
             cal.set(Calendar.MILLISECOND, 0);
             return cal.getTime();
-        }
-        else {
+        } else {
             // Try ISO 8601 date
             duration = duration.toUpperCase(); // Make sure that 'T' is capitalized
             try {
                 Calendar cal = DatatypeConverter.parseDateTime(duration);
                 cal.set(Calendar.MILLISECOND, 0);
                 return cal.getTime();
-            }
-            catch (IllegalArgumentException e2) {
+            } catch (IllegalArgumentException e2) {
                 // One last try. Append :00
                 // WHY U SO STRICT DatatypeConverter?!
                 try {
                     Calendar cal = DatatypeConverter.parseDateTime(duration + ":00");
                     cal.set(Calendar.MILLISECOND, 0);
                     return cal.getTime();
-                }
-                catch (IllegalArgumentException e3) {
+                } catch (IllegalArgumentException e3) {
                     throw new ParseException("Invalid value: duration/timestamp"); // NB Should match option name
                 }
             }
@@ -371,12 +366,12 @@ public class Utils {
     public static String dateToString(Date date) {
         if (date == null)
             throw new IllegalArgumentException("date cannot be null");
-        
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        
+
         String result = DatatypeConverter.printDateTime(cal);
-        
+
         if (result.length() < 16)
             return result;
         else
@@ -385,20 +380,20 @@ public class Utils {
 
     /**
      * Display a diff between two sets of permissions.
-     * 
-     * @param plugin the plugin
-     * @param sender the CommandSender to output results to
-     * @param permissions the first set of permissions
+     *
+     * @param plugin           the plugin
+     * @param sender           the CommandSender to output results to
+     * @param permissions      the first set of permissions
      * @param otherPermissions the second set of permissions
-     * @param header a header to display, if any. May be null.
-     * @param addedHeader Header to display for added entries
-     * @param removedHeader Header to display for removed entries
-     * @param changedHeader Header to display for modified entries
-     * @param sameMessage Message to display if permission sets are identical
-     * @param filter TODO
+     * @param header           a header to display, if any. May be null.
+     * @param addedHeader      Header to display for added entries
+     * @param removedHeader    Header to display for removed entries
+     * @param changedHeader    Header to display for modified entries
+     * @param sameMessage      Message to display if permission sets are identical
+     * @param filter           TODO
      */
     public static void displayPermissionsDiff(Plugin plugin, CommandSender sender, Map<String, Boolean> permissions, Map<String, Boolean> otherPermissions, List<String> header,
-            String addedHeader, String removedHeader, String changedHeader, String sameMessage, String filter) {
+                                              String addedHeader, String removedHeader, String changedHeader, String sameMessage, String filter) {
         if (header == null)
             header = Collections.emptyList();
 
@@ -408,14 +403,14 @@ public class Utils {
         // Now we diff
         Set<String> added = new HashSet<>(otherPermissions.keySet());
         added.removeAll(permissions.keySet());
-        
+
         Set<String> removed = new HashSet<>(permissions.keySet());
         removed.removeAll(otherPermissions.keySet());
-        
+
         Set<String> changed = new HashSet<>(permissions.keySet());
         changed.retainAll(otherPermissions.keySet());
         // Now we know what's common, actually determine what's different
-        for (Iterator<String> i = changed.iterator(); i.hasNext();) {
+        for (Iterator<String> i = changed.iterator(); i.hasNext(); ) {
             String key = i.next();
             if (permissions.get(key).equals(otherPermissions.get(key))) {
                 // Same thing, so remove from set
@@ -430,18 +425,18 @@ public class Utils {
             displayPermissions(plugin, sender, lines, header0, getPermissionsSubset(otherPermissions, added), filter);
             header0.clear();
         }
-        
+
         if (!removed.isEmpty()) {
             header0.add(removedHeader);
             displayPermissions(plugin, sender, lines, header0, getPermissionsSubset(permissions, removed), filter);
             header0.clear();
         }
-        
+
         if (!changed.isEmpty()) {
             header0.add(changedHeader);
             displayPermissions(plugin, sender, lines, header0, getPermissionsSubset(otherPermissions, changed), filter);
         }
-        
+
         if (added.isEmpty() && removed.isEmpty() && changed.isEmpty()) {
             lines.addAll(header0);
             lines.add(sameMessage);
@@ -465,9 +460,9 @@ public class Utils {
             String key = me.getKey().toLowerCase();
             Permission perm = Bukkit.getPluginManager().getPermission(key);
             boolean value = me.getValue() ^ invert;
-            
+
             permissions.put(key, value);
-            
+
             if (perm != null) {
                 calculateChildPermissions(permissions, perm.getChildren(), !value);
             }
@@ -492,13 +487,13 @@ public class Utils {
     }
 
     public static class PermissionInfo {
-        
+
         private final String permission;
-        
+
         private final boolean value;
-        
+
         private final String source;
-        
+
         public PermissionInfo(String permission, boolean value, String source) {
             if (!ToHStringUtils.hasText(permission))
                 throw new IllegalArgumentException("permission must have a value");

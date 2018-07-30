@@ -54,14 +54,13 @@ public class UuidUtils {
         if (m.matches()) {
             String uuidString = m.group(1);
             String displayName = m.group(2);
-            
+
             if (uuidString.length() == 32)
                 uuidString = shortUuidToLong(uuidString);
             UUID uuid;
             try {
                 uuid = UUID.fromString(uuidString);
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 return null;
             }
             return new UuidDisplayName(uuid, displayName);

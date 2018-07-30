@@ -16,13 +16,13 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
  * Update, Delete) operations. Reading can also be handled here, but since reading
  * always involves reading the full store in one shot, it normally falls under
  * the purview of the matching StorageStrategy's init() & refresh() methods.
- * 
+ *
  * There are a few rules to follow when implementing each method:
  * 1. NEVER block. If you must perform blocking I/O, do it asynchronously.
  * 2. Never modify the passed-in object.
  * 3. You may want to make a copy of any pertinent properties of the passed-in
  *    object. It may not be wise to hold on to it, especially if acting async.
- * 
+ *
  * There are at least two styles of implementation:
  * 1. Implement each method normally, e.g. createEntity() will actually perform
  *    I/O to create that entity somewhere. AvajePermissionDao is an example.
@@ -31,12 +31,12 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
  *    getPlayer()/getGroups()/getWorlds()/getRegions() methods to get a snapshot
  *    of the current state which is then written out somewhere. FilePermissionDao
  *    is an example.
- *    
+ *
  *    Note, getPlayer()/getGroups() etc. should be in a single synchronized block,
  *    synchronized on the InMemoryPermissionService instance. Also note that
  *    the returned collections and objects by getPlayer() etc. MUST NEVER be
  *    modified.
- * 
+ *
  * Note, createRegion(), createWorld(), createEntity() should do nothing if the
  * object in question already exists.
  */

@@ -28,7 +28,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;
 public class DirTypeCompleter implements TypeCompleter {
 
     private final ZPermissionsConfig config;
-    
+
     public DirTypeCompleter(ZPermissionsConfig config) {
         // Dump directory is modifyable via reload, so we have to do this...
         this.config = config;

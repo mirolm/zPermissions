@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 /**
  * Core operations (usually concerning the online permissions system aka Bukkit)
  * called by command handlers and event handlers.
- * 
+ *
  * @author zerothangel
  */
 public interface ZPermissionsCore {
@@ -62,17 +62,17 @@ public interface ZPermissionsCore {
     public void removeBukkitPermissions(Player player, boolean recalculate);
 
     // Utility
-    
+
     public Set<String> getRegions(Location location, Player player);
 
-    public void logExternalChange(String message, Object...args);
+    public void logExternalChange(String message, Object... args);
 
     public void updateDisplayName(UUID uuid, String displayName);
 
     public void handleExplicitDefaultGroupMembership(final UUID uuid, final String displayName);
 
     // Metadata cache management
-    
+
     public void invalidateMetadataCache(String name, UUID uuid, boolean group);
 
     public void invalidateMetadataCache();

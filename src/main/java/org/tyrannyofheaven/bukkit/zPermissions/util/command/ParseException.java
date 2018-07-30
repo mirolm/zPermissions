@@ -18,7 +18,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 /**
  * Thrown when something is wrong with the command arguments. Results in
  * an error message being shown to the user as well as the command usage.
- * 
+ *
  * @author zerothangel
  */
 public class ParseException extends CommandException {

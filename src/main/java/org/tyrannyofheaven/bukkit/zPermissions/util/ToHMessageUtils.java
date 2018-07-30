@@ -32,7 +32,7 @@ import org.bukkit.util.ChatPaginator;
 
 /**
  * Convenience methods mainly for displaying info via {@link CommandSender#sendMessage(String)}.
- * 
+ *
  * @author zerothangel
  */
 public class ToHMessageUtils {
@@ -50,10 +50,10 @@ public class ToHMessageUtils {
     /**
      * Convenience method for sending messages. Supports {@link String#format(String, Object...)}
      * formatting and multiple lines.
-     * 
+     *
      * @param sender the receiver of the message
      * @param format the message format string
-     * @param args format arguments
+     * @param args   format arguments
      */
     public static void sendMessage(CommandSender sender, String format, Object... args) {
         String message = String.format(format, args);
@@ -72,7 +72,7 @@ public class ToHMessageUtils {
      * code. Might be more convenient than string concatenation? Tokens
      * consist of the color name enclosed in curly-braces. Braces may be
      * escaped by doubling.
-     * 
+     *
      * @param text the text to colorize
      * @return the colorized result
      */
@@ -94,71 +94,57 @@ public class ToHMessageUtils {
             if (state == ColorizeState.TEXT) {
                 if (c == '{') {
                     state = ColorizeState.COLOR_OPEN;
-                }
-                else if (c == '}') {
+                } else if (c == '}') {
                     state = ColorizeState.COLOR_CLOSE;
-                }
-                else if (c == '`') {
+                } else if (c == '`') {
                     state = ColorizeState.COLOR_ESCAPE;
-                }
-                else {
+                } else {
                     out.append(c);
                 }
-            }
-            else if (state == ColorizeState.COLOR_OPEN) {
+            } else if (state == ColorizeState.COLOR_OPEN) {
                 if (c == '{') { // Escaped bracket
                     out.append('{');
                     state = ColorizeState.TEXT;
-                }
-                else if (Character.isUpperCase(c)) {
+                } else if (Character.isUpperCase(c)) {
                     // First character of color name
                     color = new StringBuilder();
                     color.append(c);
                     state = ColorizeState.COLOR_NAME;
-                }
-                else {
+                } else {
                     // Invalid
                     throw new IllegalArgumentException("Invalid color name");
                 }
-            }
-            else if (state == ColorizeState.COLOR_NAME) {
+            } else if (state == ColorizeState.COLOR_NAME) {
                 if (Character.isUpperCase(c) || c == '_') {
                     color.append(c);
-                }
-                else if (c == '}') {
+                } else if (c == '}') {
                     ChatColor chatColor = ChatColor.valueOf(color.toString());
                     out.append(chatColor);
                     state = ColorizeState.TEXT;
-                }
-                else {
+                } else {
                     // Invalid
                     throw new IllegalArgumentException("Invalid color name");
                 }
-            }
-            else if (state == ColorizeState.COLOR_CLOSE) {
+            } else if (state == ColorizeState.COLOR_CLOSE) {
                 // Optional, but for sanity's sake, to keep brackets matched
                 if (c == '}') {
                     out.append('}'); // Collapse to single bracket
-                }
-                else {
+                } else {
                     out.append('}');
                     out.append(c);
                 }
                 state = ColorizeState.TEXT;
-            }
-            else if (state == ColorizeState.COLOR_ESCAPE) {
+            } else if (state == ColorizeState.COLOR_ESCAPE) {
                 out.append(decodeColor(c));
                 state = ColorizeState.TEXT;
-            }
-            else
+            } else
                 throw new AssertionError("Unknown ColorizeState");
         }
-        
+
         // End of string
         if (state == ColorizeState.COLOR_CLOSE) {
             out.append('}');
-        }
-        else if (state != ColorizeState.TEXT) {
+        } else if (state != ColorizeState.TEXT) {
             // Was in the middle of color name
             throw new IllegalArgumentException("Invalid color name");
         }
@@ -172,55 +158,55 @@ public class ToHMessageUtils {
     // Decode a color escape code. Same mapping as sk89q's plugins.
     private static String decodeColor(char c) {
         switch (c) {
-        case '`':
-            return "`";
-        case '0':
-            return ChatColor.BLACK.toString();
-        case '1':
-            return ChatColor.GRAY.toString();
-        case '2':
-            return ChatColor.DARK_GRAY.toString();
-        case 'b':
-            return ChatColor.BLUE.toString();
-        case 'B':
-            return ChatColor.DARK_BLUE.toString();
-        case 'c':
-            return ChatColor.AQUA.toString();
-        case 'C':
-            return ChatColor.DARK_AQUA.toString();
-        case 'g':
-            return ChatColor.GREEN.toString();
-        case 'G':
-            return ChatColor.DARK_GREEN.toString();
-        case 'p':
-            return ChatColor.LIGHT_PURPLE.toString();
-        case 'P':
-            return ChatColor.DARK_PURPLE.toString();
-        case 'r':
-            return ChatColor.RED.toString();
-        case 'R':
-            return ChatColor.DARK_RED.toString();
-        case 'w':
-            return ChatColor.WHITE.toString();
-        case 'y':
-            return ChatColor.YELLOW.toString();
-        case 'Y':
-            return ChatColor.GOLD.toString();
-        default:
-            throw new IllegalArgumentException("Invalid color code");
+            case '`':
+                return "`";
+            case '0':
+                return ChatColor.BLACK.toString();
+            case '1':
+                return ChatColor.GRAY.toString();
+            case '2':
+                return ChatColor.DARK_GRAY.toString();
+            case 'b':
+                return ChatColor.BLUE.toString();
+            case 'B':
+                return ChatColor.DARK_BLUE.toString();
+            case 'c':
+                return ChatColor.AQUA.toString();
+            case 'C':
+                return ChatColor.DARK_AQUA.toString();
+            case 'g':
+                return ChatColor.GREEN.toString();
+            case 'G':
+                return ChatColor.DARK_GREEN.toString();
+            case 'p':
+                return ChatColor.LIGHT_PURPLE.toString();
+            case 'P':
+                return ChatColor.DARK_PURPLE.toString();
+            case 'r':
+                return ChatColor.RED.toString();
+            case 'R':
+                return ChatColor.DARK_RED.toString();
+            case 'w':
+                return ChatColor.WHITE.toString();
+            case 'y':
+                return ChatColor.YELLOW.toString();
+            case 'Y':
+                return ChatColor.GOLD.toString();
+            default:
+                throw new IllegalArgumentException("Invalid color code");
         }
     }
 
     /**
      * Broadcasts the message to every user with the given permission. Supports
      * {@link String#format(String, Object...)} formatting and multiple lines.
-     * 
-     * @param server the server
+     *
+     * @param server     the server
      * @param permission the permission required to receive the broadcast
-     * @param format the message format
-     * @param args format args
+     * @param format     the message format
+     * @param args       format args
      * @return number of users who received the message. In the case of a multi-line
-     *   message, this is the number of users who received the last line.
+     * message, this is the number of users who received the last line.
      */
     public static int broadcast(Plugin plugin, String permission, String format, Object... args) {
         String message = String.format(format, args);
@@ -234,12 +220,12 @@ public class ToHMessageUtils {
     /**
      * Broadcasts the message to all players. Supports {@link String#format(String, Object...)}
      * formatting and multiple lines.
-     * 
+     *
      * @param server the server
      * @param format the message format
-     * @param args format args
+     * @param args   format args
      * @return number of users who received the message. In the case of a multi-line
-     *   message, this is the number of users who received the last line.
+     * message, this is the number of users who received the last line.
      */
     public static int broadcastMessage(Plugin plugin, String format, Object... args) {
         return broadcast(plugin, Server.BROADCAST_CHANNEL_USERS, format, args);
@@ -248,12 +234,12 @@ public class ToHMessageUtils {
     /**
      * Broadcasts the message to all admins. Supports {@link String#format(String, Object...)}
      * formatting and multiple lines.
-     * 
+     *
      * @param server the server
      * @param format the message format
-     * @param args format args
+     * @param args   format args
      * @return number of users who received the message. In the case of a multi-line
-     *   message, this is the number of users who received the last line.
+     * message, this is the number of users who received the last line.
      */
     public static int broadcastAdmin(Plugin plugin, String format, Object... args) {
         return broadcast(plugin, Server.BROADCAST_CHANNEL_ADMINISTRATIVE, format, args);
@@ -263,10 +249,10 @@ public class ToHMessageUtils {
      * Display a bunch of lines, automatically paginating if necessary. Only bothers
      * paginating if sender is a Player and the number of lines is greater than
      * the size of a page.
-     * 
+     *
      * @param plugin the plugin
      * @param sender the CommandSender to display the lines to
-     * @param lines the lines to display
+     * @param lines  the lines to display
      */
     public static void displayLines(Plugin plugin, CommandSender sender, List<String> lines) {
         if (lines.isEmpty()) return;
@@ -283,14 +269,14 @@ public class ToHMessageUtils {
 
             if (lines.size() > LINES_PER_PAGE) {
                 Conversation convo = new ConversationFactory(plugin)
-                .withFirstPrompt(new PagerPrompt(lines, LINES_PER_PAGE))
-                .withLocalEcho(false)
-                .buildConversation((Conversable)sender);
+                        .withFirstPrompt(new PagerPrompt(lines, LINES_PER_PAGE))
+                        .withLocalEcho(false)
+                        .buildConversation((Conversable) sender);
 
                 convo.begin();
                 return;
             }
-            
+
             // Fall through...
         }
 

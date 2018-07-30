@@ -23,7 +23,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.command.ToHCommandExecutor;
 
 /**
  * Utility methods I miss from Spring StringUtils and/or Commons-Lang.
- * 
+ *
  * @author zerothangel
  */
 public class ToHStringUtils {
@@ -34,7 +34,7 @@ public class ToHStringUtils {
 
     /**
      * Returns true if text is non-null and contains non-whitespace characters.
-     * 
+     *
      * @param text the string to test
      * @return true if text is non-null and contains non-whitespace characters
      */
@@ -45,14 +45,14 @@ public class ToHStringUtils {
     /**
      * Returns a string representation of each object, with each object delimited
      * by the given delimiter. Similar to "string join" in other languages.
-     * 
+     *
      * @param delimiter the string delimiter
-     * @param coll a collection of objects
+     * @param coll      a collection of objects
      * @return the delimited string
      */
     public static String delimitedString(String delimiter, Collection<?> coll) {
         StringBuilder sb = new StringBuilder();
-        for (Iterator<?> i = coll.iterator(); i.hasNext();) {
+        for (Iterator<?> i = coll.iterator(); i.hasNext(); ) {
             sb.append(i.next());
             if (i.hasNext())
                 sb.append(delimiter);
@@ -63,9 +63,9 @@ public class ToHStringUtils {
     /**
      * Returns a string representation of each object, with each object delimited
      * by the given delimiter. Similar to "string join" in other languages.
-     * 
+     *
      * @param delimiter the string delimiter
-     * @param objs an array of objects
+     * @param objs      an array of objects
      * @return the delimited string
      */
     public static String delimitedString(String delimiter, Object... objs) {
@@ -74,7 +74,7 @@ public class ToHStringUtils {
 
     /**
      * Quote a string suitable for the "quote aware" parser of {@link ToHCommandExecutor}.
-     * 
+     *
      * @param input the input string
      * @return the possibly escaped and quoted string
      */

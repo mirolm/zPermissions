@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.transaction;
 
 /**
  * Convenience wrapper for callbacks that don't return a result.
- * 
+ *
  * @author zerothangel
  */
 public abstract class TransactionCallbackWithoutResult implements TransactionCallback<Object> {
@@ -33,7 +33,7 @@ public abstract class TransactionCallbackWithoutResult implements TransactionCal
 
     /**
      * Perform operations within a transaction.
-     * 
+     *
      * @throws Exception any thrown exception will result in a rollback
      */
     public abstract void doInTransactionWithoutResult() throws Exception;

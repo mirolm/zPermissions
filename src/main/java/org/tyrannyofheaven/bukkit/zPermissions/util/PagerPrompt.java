@@ -52,7 +52,7 @@ class PagerPrompt implements Prompt {
         protected Prompt getNextPrompt(ConversationContext context) {
             return Prompt.END_OF_CONVERSATION;
         }
-        
+
     };
 
     PagerPrompt(List<String> lines, int linesPerPage) {
@@ -60,7 +60,7 @@ class PagerPrompt implements Prompt {
             throw new IllegalArgumentException("lines cannot be empty");
         this.lines.addAll(lines);
         this.linesPerPage = linesPerPage - 1; // Room for prompt
-        
+
         totalPages = (this.lines.size() + this.linesPerPage - 1) / this.linesPerPage;
     }
 
@@ -72,8 +72,7 @@ class PagerPrompt implements Prompt {
             currentLine++;
             shouldBlock = false;
             return prompt;
-        }
-        else {
+        } else {
             // Next page
             currentLine = 0;
             currentPage++;
@@ -99,8 +98,7 @@ class PagerPrompt implements Prompt {
 
         if ("n".equals(input)) {
             return ABORTED_PROMPT;
-        }
-        else {
+        } else {
             // Not blocking
             return !lines.isEmpty() ? this : Prompt.END_OF_CONVERSATION;
         }

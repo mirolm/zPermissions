@@ -112,7 +112,7 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 
 /**
  * zPermissions main class.
- * 
+ *
  * @author zerothangel
  */
 public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZPermissionsConfig, CommandExceptionHandler {
@@ -209,7 +209,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // Search batch size
     private static final int DEFAULT_SEARCH_BATCH_SIZE = 1;
-    
+
     // Search delay in ticks
     private static final int DEFAULT_SEARCH_DELAY = 5;
 
@@ -298,7 +298,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // Whether Vault playerInGroup() should use assigned groups only
     private boolean vaultGroupTestUsesAssignedOnly;
-    
+
     // Whether Vault getPlayerGroups() should use assigned groups only
     private boolean vaultGetGroupsUsesAssignedOnly;
 
@@ -343,7 +343,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // Search batch size
     private int searchBatchSize;
-    
+
     // Search delay
     private int searchDelay;
 
@@ -352,7 +352,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // TTL of UUID resolver cache
     private long uuidResolverCacheTtl;
-    
+
     // UUID resolver service
     private UuidResolver uuidResolver;
 
@@ -376,7 +376,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
      * might be safe to be retried. Most simple transactions are safe to retry.
      * The ones that perform calculations or other operations (most notably
      * the rank commands) will have to be dealt with another way...
-     * 
+     *
      * @return the retrying TransactionStrategy
      */
     private TransactionStrategy getRetryingTransactionStrategy() {
@@ -385,7 +385,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Retrieve this plugin's PermissionService.
-     * 
+     *
      * @return the PermissionService
      */
     PermissionService getPermissionService() {
@@ -406,7 +406,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     private ZPermissionsCore getZPermissionsCore() {
         return this;
     }
-    
+
     // Retrieve ZPermissionsConfig instance
     private ZPermissionsConfig getZPermissionsConfig() {
         return this;
@@ -485,11 +485,10 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
             // Upgrade/create config
             ToHFileUtils.upgradeConfig(this, config);
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             unrecoverableError("config", t);
             if (t instanceof Error)
-                throw (Error)t;
+                throw (Error) t;
             return;
         }
 
@@ -504,14 +503,13 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             error(this, "(You may CTRL-C to stop the server)");
             try {
                 Thread.sleep(initializationRetryDelay);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 // Just get outta here
                 // Not sure if this is ever reached. But just to be safe...
                 Bukkit.getServer().shutdown();
                 return;
             }
-            
+
             // Increase retry delay
             initializationRetryDelay = Math.min(2 * initializationRetryDelay, MAX_INITIALIZATION_RETRY_DELAY);
         }
@@ -532,24 +530,22 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         try {
             // Set up TransactionStrategy and PermissionService
             storageStrategy = null;
-            
+
             if (hasText(storageStrategyClassName)) {
                 // Use a custom StorageStrategy implementation
                 log(this, "Using custom storage strategy: %s", storageStrategyClassName);
-                storageStrategy = (StorageStrategy)Class.forName(storageStrategyClassName).newInstance();
-            }
-            else if (databaseSupport) {
+                storageStrategy = (StorageStrategy) Class.forName(storageStrategyClassName).newInstance();
+            } else if (databaseSupport) {
                 // Use the default Avaje-based StorageStrategy
                 ebeanServer = ToHDatabaseUtils.createEbeanServer(this, getClassLoader(), namingConvention, config);
-   
-                SpiEbeanServer spiEbeanServer = (SpiEbeanServer)ebeanServer;
+
+                SpiEbeanServer spiEbeanServer = (SpiEbeanServer) ebeanServer;
                 if (spiEbeanServer.getDatabasePlatform().getName().contains("sqlite")) {
                     log(this, Level.WARNING, "This plugin is NOT compatible with SQLite.");
                     log(this, Level.WARNING, "Edit bukkit.yml to switch databases or disable database support in config.yml.");
                     log(this, Level.WARNING, "Falling back to file-based storage strategy.");
                     // Do nothing else (storageStrategy still null)
-                }
-                else {
+                } else {
                     ToHDatabaseUtils.upgradeDatabase(this, namingConvention, getClassLoader(), "sql");
 
                     if (uuidMigrate) {
@@ -561,12 +557,12 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                     storageStrategy = new AvajeStorageStrategy(this, txnMaxRetries, databaseReadOnly);
                 }
             }
-            
+
             // If still no storage strategy at this point, use flat-file one
             if (storageStrategy == null) {
                 log(this, "Using file-based storage strategy.");
                 File dataFile = new File(getDataFolder(), FILE_STORAGE_FILENAME);
-                
+
                 if (uuidMigrate) {
                     // Perform migration
                     new YamlBulkUuidConverter(this, uuidResolver, dataFile).migrate();
@@ -574,7 +570,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
                 storageStrategy = new FileStorageStrategy(this, dataFile);
             }
-            
+
             // Initialize storage strategy
             Map<String, Object> configMap = config.getValues(true);
             storageStrategy.init(configMap);
@@ -583,14 +579,13 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             // to also implement UuidResolver
             if (storageStrategy instanceof UuidResolver) {
                 log(this, "Using storage strategy as first-level UUID resolver.");
-                uuidResolver = new CascadingUuidResolver((UuidResolver)storageStrategy, uuidResolver);
+                uuidResolver = new CascadingUuidResolver((UuidResolver) storageStrategy, uuidResolver);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             error(this, "Failed to initialize (storage): ", e);
             return false;
         }
-        
+
         return true;
     }
 
@@ -605,13 +600,13 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
             // Install our commands
             (new ToHCommandExecutor<ZPermissionsPlugin>(this, new RootCommands(getZPermissionsCore(), storageStrategy, getResolver(), getModelDumper(), getZPermissionsConfig(), this, commandUuidResolver, uuidResolver)))
-                .registerTypeCompleter("group", new GroupTypeCompleter(getPermissionService()))
-                .registerTypeCompleter("track", new TrackTypeCompleter(getZPermissionsConfig()))
-                .registerTypeCompleter("dump-dir", new DirTypeCompleter(getZPermissionsConfig()))
-                .setQuoteAware(true)
-                .setExceptionHandler(this)
-                .setVerbosePermissionErrorPermission("zpermissions.error.detail")
-                .registerCommands();
+                    .registerTypeCompleter("group", new GroupTypeCompleter(getPermissionService()))
+                    .registerTypeCompleter("track", new TrackTypeCompleter(getZPermissionsConfig()))
+                    .registerTypeCompleter("dump-dir", new DirTypeCompleter(getZPermissionsConfig()))
+                    .setQuoteAware(true)
+                    .setExceptionHandler(this)
+                    .setVerbosePermissionErrorPermission("zpermissions.error.detail")
+                    .registerCommands();
 
             // Detect a region manager
             initializeRegionStrategy();
@@ -652,13 +647,12 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
             // Initialize expiration handler
             refreshExpirations();
-            
+
             log(this, "%s enabled.", versionInfo.getVersionString());
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             unrecoverableError("everything else", t);
             if (t instanceof Error)
-                throw (Error)t;
+                throw (Error) t;
         }
     }
 
@@ -735,7 +729,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             }
         }
     }
-    
+
     // Update state about a player, resolving effective permissions and
     // creating/updating their attachment
     @Override
@@ -743,14 +737,12 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         boolean changed = false;
         try {
             changed = setBukkitPermissionsInternal(player, location, force);
-        }
-        catch (Error e) {
+        } catch (Error e) {
             throw e; // Never catch errors
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             error(this, "Exception while updating permissions for %s", player.getName(), t);
             broadcastAdmin(this, colorize("{RED}SEVERE error while determining permissions; see server.log!"));
-            
+
             // Kick the player, if configured to do so
             if (kickOnError && (kickOpsOnError || !player.isOp())) {
                 // Probably safer to do this synchronously
@@ -763,14 +755,13 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                             player.kickPlayer("Error determining your permissions");
                     }
                 });
-            }
-            else {
+            } else {
                 // Ensure player has no permissions
                 removeBukkitPermissions(player, true);
                 sendMessage(player, colorize("{RED}Error determining your permissions; all permissions removed!"));
             }
         }
-        
+
         // Fire off event if requested and changed
         if (eventCause != null && changed) {
             final UUID playerUuid = player.getUniqueId();
@@ -778,17 +769,17 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             // Kinda dumb, but I don't want internal code to depend on the event class.
             final ZPermissionsPlayerUpdateEvent.Cause cause;
             switch (eventCause) {
-            case COMMAND:
-                cause = ZPermissionsPlayerUpdateEvent.Cause.COMMAND;
-                break;
-            case GROUP_CHANGE:
-                cause = ZPermissionsPlayerUpdateEvent.Cause.GROUP_CHANGE;
-                break;
-            case MOVEMENT:
-                cause = ZPermissionsPlayerUpdateEvent.Cause.MOVEMENT;
-                break;
-            default:
-                throw new AssertionError("Unhandled RefreshCause: " + eventCause);
+                case COMMAND:
+                    cause = ZPermissionsPlayerUpdateEvent.Cause.COMMAND;
+                    break;
+                case GROUP_CHANGE:
+                    cause = ZPermissionsPlayerUpdateEvent.Cause.GROUP_CHANGE;
+                    break;
+                case MOVEMENT:
+                    cause = ZPermissionsPlayerUpdateEvent.Cause.MOVEMENT;
+                    break;
+                default:
+                    throw new AssertionError("Unhandled RefreshCause: " + eventCause);
             }
             // Fire it off on the following tick
             Bukkit.getScheduler().runTask(this, new Runnable() {
@@ -826,7 +817,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
         // Check if the player is missing any state or changed worlds/regions
         if (!force) {
-            force = perm == null || 
+            force = perm == null ||
                     playerState == null ||
                     !hasPermissionAttachment ||
                     !regions.equals(playerState.getRegions()) ||
@@ -858,8 +849,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             // added yet, permissibles will not pick up its children.
             perm = new Permission(permName, PermissionDefault.FALSE, resolverResult.getPermissions());
             Bukkit.getPluginManager().addPermission(perm);
-        }
-        else {
+        } else {
             perm.getChildren().clear();
             perm.getChildren().putAll(resolverResult.getPermissions());
         }
@@ -873,13 +863,12 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             playerState.setRegions(regions);
             playerState.setWorld(location.getWorld().getName());
             playerState.setGroups(resolverResult.getGroups());
-        }
-        else {
+        } else {
             // Create brand new PlayerState
             playerState = new PlayerState(regions, location.getWorld().getName(), resolverResult.getGroups());
             player.setMetadata(PLAYER_METADATA_KEY, new FixedMetadataValue(this, playerState));
         }
-        
+
         // Finally, create attachment if missing
         if (!hasPermissionAttachment) {
             player.addAttachment(this, perm.getName(), true);
@@ -890,9 +879,9 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Returns names of regions that contain the location
-     * 
+     *
      * @param location the location
-     * @param player the player in question (for supplemental info)
+     * @param player   the player in question (for supplemental info)
      * @return set of region names containing location
      */
     public Set<String> getRegions(Location location, Player player) {
@@ -905,8 +894,8 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     /**
      * Refresh a particular player's attachment (and therefore, effective
      * permissions). Only does something if the player is actually online.
-     * 
-     * @param uuid the UUID of the player
+     *
+     * @param uuid  the UUID of the player
      * @param cause the cause of this refresh
      */
     @Override
@@ -933,7 +922,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Refresh the attachments of a specific set of players.
-     * 
+     *
      * @param playerUuids collection of players to refresh
      */
     @Override
@@ -951,7 +940,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Refresh expiration task if the given player is online.
-     * 
+     *
      * @param uuid the UUID of the player
      */
     @Override
@@ -962,7 +951,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Refresh all players who are members of the given group.
-     * 
+     *
      * @param groupName the affected group
      */
     @Override
@@ -975,20 +964,20 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                 toRefresh.add(player.getUniqueId());
             }
         }
-        
+
         if (toRefresh.isEmpty())
             return false; // Nothing to do
 
         if (getLogger().isLoggable(Level.CONFIG))
             debug(this, "Refreshing players: %s", ToHStringUtils.delimitedString(", ", toRefresh));
         refreshTask.start(toRefresh);
-        
+
         return true;
     }
 
     /**
      * Retrieve the configured default track.
-     * 
+     *
      * @return the default track
      */
     @Override
@@ -998,7 +987,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Retrieve the list of groups for the given track.
-     * 
+     *
      * @param trackName the name of the track
      * @return a list of groups (in ascending order) associated with the track
      */
@@ -1009,7 +998,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Retrieve names of all tracks.
-     * 
+     *
      * @return names of all tracks
      */
     @Override
@@ -1019,7 +1008,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Returns the configured dump directory.
-     * 
+     *
      * @return the dump directory
      */
     @Override
@@ -1029,7 +1018,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Returns the configured default temporary permission timeout.
-     * 
+     *
      * @return the temp permission timeout in seconds
      */
     @Override
@@ -1039,7 +1028,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Returns the configured value for rank-admin-broadcast.
-     * 
+     *
      * @return whether to broadcast rank changes to admins
      */
     @Override
@@ -1049,7 +1038,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     /**
      * Returns the default track used to determine the primary group.
-     * 
+     *
      * @return the default primary group track
      */
     @Override
@@ -1101,28 +1090,25 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         tracks.clear();
         trackNames.clear();
         defaultPrimaryGroupTrack = DEFAULT_PRIMARY_GROUP_TRACK;
-        
+
         String value;
-        
+
         // Read values, set accordingly
         Object strOrList = config.get("group-permission");
         if (strOrList != null) {
             if (strOrList instanceof String) {
-                if (hasText((String)strOrList))
-                    getResolver().setGroupPermissionFormats(Collections.singleton((String)strOrList));
-            }
-            else if (strOrList instanceof List<?>) {
+                if (hasText((String) strOrList))
+                    getResolver().setGroupPermissionFormats(Collections.singleton((String) strOrList));
+            } else if (strOrList instanceof List<?>) {
                 Set<String> groupPerms = new HashSet<>();
-                for (Object obj : (List<?>)strOrList) {
+                for (Object obj : (List<?>) strOrList) {
                     if (obj instanceof String) {
-                        groupPerms.add((String)obj);
-                    }
-                    else
+                        groupPerms.add((String) obj);
+                    } else
                         warn(this, "group-permission list contains non-string value");
                 }
                 getResolver().setGroupPermissionFormats(groupPerms);
-            }
-            else
+            } else
                 warn(this, "group-permission must be a string or list of strings");
         }
 
@@ -1130,21 +1116,18 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         strOrList = config.get("assigned-group-permission");
         if (strOrList != null) {
             if (strOrList instanceof String) {
-                if (hasText((String)strOrList))
-                    getResolver().setAssignedGroupPermissionFormats(Collections.singleton((String)strOrList));
-            }
-            else if (strOrList instanceof List<?>) {
+                if (hasText((String) strOrList))
+                    getResolver().setAssignedGroupPermissionFormats(Collections.singleton((String) strOrList));
+            } else if (strOrList instanceof List<?>) {
                 Set<String> groupPerms = new HashSet<>();
-                for (Object obj : (List<?>)strOrList) {
+                for (Object obj : (List<?>) strOrList) {
                     if (obj instanceof String) {
-                        groupPerms.add((String)obj);
-                    }
-                    else
+                        groupPerms.add((String) obj);
+                    } else
                         warn(this, "assigned-group-permission list contains non-string value");
                 }
                 getResolver().setAssignedGroupPermissionFormats(groupPerms);
-            }
-            else
+            } else
                 warn(this, "assigned-group-permission must be a string or list of strings");
         }
 
@@ -1156,7 +1139,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         if (hasText(value))
             getResolver().setDefaultGroup(value);
         explicitDefaultGroupMembership = config.getBoolean("explicit-default-group-membership", DEFAULT_EXPLICIT_DEFAULT_GROUP_MEMBERSHIP);
-        
+
         value = config.getString("default-track");
         if (hasText(value))
             defaultTrack = value;
@@ -1234,27 +1217,23 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         strOrList = config.get("region-managers");
         if (strOrList != null) {
             if (strOrList instanceof String) {
-                regionManagers.add((String)strOrList);
-            }
-            else if (strOrList instanceof List<?>) {
-                for (Object obj : (List<?>)strOrList) {
+                regionManagers.add((String) strOrList);
+            } else if (strOrList instanceof List<?>) {
+                for (Object obj : (List<?>) strOrList) {
                     if (obj instanceof String) {
-                        regionManagers.add((String)obj);
-                    }
-                    else
+                        regionManagers.add((String) obj);
+                    } else
                         warn(this, "region-managers list contains non-string value");
                 }
-            }
-            else
+            } else
                 warn(this, "region-managers must be a string or list of strings");
-        }
-        else {
+        } else {
             // Set up default region manager(s)
             regionManagers.add("WorldGuard");
         }
 
         configureWorldMirrors();
-        
+
         storageStrategyClassName = config.getString("custom-storage-strategy");
     }
 
@@ -1269,15 +1248,15 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                     warn(this, "Mirror %s must be a list", target);
                     continue;
                 }
-                
+
                 for (Object o : list) {
                     getResolver().addWorldAlias(o.toString(), target);
-                    
+
                     if (!header) {
                         debug(this, "World mirrors:");
                         header = true;
                     }
-                    
+
                     debug(this, "  %s -> %s", o.toString(), target);
                 }
             }
@@ -1343,7 +1322,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     private PlayerState getPlayerState(Player player) {
         for (MetadataValue mv : player.getMetadata(PLAYER_METADATA_KEY)) {
             if (mv.getOwningPlugin() == this) {
-                return (PlayerState)mv.value();
+                return (PlayerState) mv.value();
             }
         }
         return null;
@@ -1351,7 +1330,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // Encapsulates state about a player
     private static class PlayerState {
-        
+
         private Set<String> regions;
 
         private String world;
@@ -1421,8 +1400,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     public void logExternalChange(String message, Object... args) {
         if (logVaultChanges) {
             log(this, message, args);
-        }
-        else {
+        } else {
             debug(this, message, args);
         }
     }
@@ -1474,7 +1452,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     @Override
     public void handleExplicitDefaultGroupMembership(final UUID uuid, final String displayName) {
         if (!explicitDefaultGroupMembership) return; // Keep things implicit
-        
+
         final Plugin realThis = this;
         getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -1486,11 +1464,10 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                     try {
                         debug(realThis, "Explicitly adding %s to default group %s", displayName, getResolver().getDefaultGroup());
                         getPermissionService().addMember(getResolver().getDefaultGroup(), uuid, displayName, null);
-                    }
-                    catch (MissingGroupException e) {
+                    } catch (MissingGroupException e) {
                         warn(realThis, "explicit-default-group-membership is true but the group (%s) does not exist; nothing done", getResolver().getDefaultGroup());
                     }
-                    
+
                     // No need to refresh or invalidate caches since they were
                     // already a member of this group.
                 }

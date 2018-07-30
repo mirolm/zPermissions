@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 
 /**
  * Thrown when an unknown flag is parsed.
- * 
+ *
  * @author zerothangel
  */
 public class UnknownFlagException extends ParseException {
@@ -28,7 +28,7 @@ public class UnknownFlagException extends ParseException {
 
     UnknownFlagException(String flag) {
         super("Unknown flag: " + flag);
-        
+
         this.flag = flag;
     }
 

@@ -35,7 +35,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 /**
  * Periodically calls {@link ZPermissionsCore#refreshPlayer(UUID, RefreshCause)} on the
  * given queue of players.
- * 
+ *
  * @author zerothangel
  */
 public class RefreshTask implements Runnable {
@@ -83,7 +83,7 @@ public class RefreshTask implements Runnable {
     }
 
     private void scheduleTask() {
-        if ((taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this, (long)delay)) < 0) {
+        if ((taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this, (long) delay)) < 0) {
             error(plugin, "Failed to schedule RefreshTask! Remaining players: %s", delimitedString(", ", playersToRefresh));
         }
     }
@@ -107,12 +107,11 @@ public class RefreshTask implements Runnable {
             core.invalidateMetadataCache("ignored", playerToRefresh, false);
             core.refreshPlayer(playerToRefresh, RefreshCause.GROUP_CHANGE); // NB Assumes all who call start() are doing so for group- or server-wide changes
         }
-        
+
         // Schedule next player
         if (!playersToRefresh.isEmpty()) {
             scheduleTask();
-        }
-        else
+        } else
             debug(plugin, "Done doing background refresh!");
     }
 

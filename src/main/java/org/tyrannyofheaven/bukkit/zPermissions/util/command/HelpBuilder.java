@@ -25,10 +25,9 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Automatically generates a help page for a sub-command.
- * 
- * @author zerothangel
  *
  * @param <T>
+ * @author zerothangel
  */
 public class HelpBuilder {
 
@@ -53,7 +52,7 @@ public class HelpBuilder {
             throw new IllegalArgumentException("rootInvocationChain cannot be null");
         if (usageOptions == null)
             throw new IllegalArgumentException("usageOptions cannot be null");
-        
+
         this.handlerExecutor = handlerExecutor;
         this.rootInvocationChain = rootInvocationChain;
         this.usageOptions = usageOptions;
@@ -63,14 +62,14 @@ public class HelpBuilder {
     /**
      * Change UsageOptions. By default, the ones in {@link ToHCommandExecutor}
      * are used.
-     * 
+     *
      * @param usageOptions UsageOptions to use
      * @return this HelpBuilder
      */
     public HelpBuilder withUsageOptions(UsageOptions usageOptions) {
         if (usageOptions == null)
             throw new IllegalArgumentException("usageOptions cannot be null");
-        
+
         this.usageOptions = usageOptions;
         return this;
     }
@@ -84,7 +83,7 @@ public class HelpBuilder {
 
     /**
      * Set the CommandSender. This can only be called once.
-     * 
+     *
      * @param sender the CommandSender
      * @return this HelpBuilder
      */
@@ -100,14 +99,14 @@ public class HelpBuilder {
 
     /**
      * Set the current handler object.
-     * 
+     *
      * @param handler the handler object
      * @return this HelpBuilder
      */
     public HelpBuilder withHandler(Object handler) {
         if (handler == null)
             throw new IllegalArgumentException("handler cannot be null");
-        
+
         this.handler = handler;
         return this;
     }
@@ -121,16 +120,16 @@ public class HelpBuilder {
 
     /**
      * Generate a usage message for a particular sibling command.
-     * 
-     * @param command the sibling command
+     *
+     * @param command        the sibling command
      * @param usePermissions true if permissions should be checked. If the current
-     *   sender fails the check, no usage is generated.
+     *                       sender fails the check, no usage is generated.
      * @return this HelpBuilder
      */
     public HelpBuilder forSiblingCommand(String command, boolean usePermissions) {
         if (!hasText(command))
             throw new IllegalArgumentException("command must have a value");
-        
+
         if (possibleCommands != null) return this; // can't tab-complete siblings anyway
 
         // Remove last invocation (from a copy)
@@ -146,10 +145,10 @@ public class HelpBuilder {
 
     /**
      * Generate a usage message for a particular sibling command. Permissions are used.
-     * 
-     * @param command the sibling command
+     *
+     * @param command        the sibling command
      * @param usePermissions true if permissions should be checked. If the current
-     *   sender fails the check, no usage is generated.
+     *                       sender fails the check, no usage is generated.
      * @return this HelpBuilder
      */
     public HelpBuilder forSiblingCommand(String command) {
@@ -158,11 +157,11 @@ public class HelpBuilder {
 
     /**
      * Generate a usage message for a particular sub-command.
-     * 
-     * @param handler the handler in which the command resides
-     * @param command the command
+     *
+     * @param handler        the handler in which the command resides
+     * @param command        the command
      * @param usePermissions true if permissions should be checked. If the current
-     *   sender fails the check, no usage is generated.
+     *                       sender fails the check, no usage is generated.
      * @return this HelpBuilder
      */
     public HelpBuilder forHandlerAndCommand(Object handler, String command, boolean usePermissions) {
@@ -185,7 +184,7 @@ public class HelpBuilder {
 
     /**
      * Generate a usage message for a particular sub-command. Permissions are used.
-     * 
+     *
      * @param handler the handler in which the command resides
      * @param command the command
      * @return this HelpBuilder
@@ -197,10 +196,10 @@ public class HelpBuilder {
     /**
      * Generate a usage message for a particular sub-command. The current handler
      * object is referenced.
-     * 
-     * @param command the command
+     *
+     * @param command        the command
      * @param usePermissions true if permissions should be checked. If the current
-     *   sender fails the check, no usage is generated.
+     *                       sender fails the check, no usage is generated.
      * @return this HelpBuilder
      */
     public HelpBuilder forCommand(String command, boolean usePermissions) {
@@ -210,7 +209,7 @@ public class HelpBuilder {
     /**
      * Generate a usage message for a particular sub-command. The current handler
      * object is referenced. Permissions are used.
-     * 
+     *
      * @param command the command
      * @return this HelpBuilder
      */
@@ -231,7 +230,7 @@ public class HelpBuilder {
 
     /**
      * Retrieves the raw sub-command usage messages.
-     * 
+     *
      * @return the sub-command usage messages
      */
     public String[] getLines() {

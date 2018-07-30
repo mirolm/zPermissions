@@ -55,7 +55,7 @@ import org.yaml.snakeyaml.representer.Representer;
 
 /**
  * Flat-file based PermissionDao implementation.
- * 
+ *
  * @author zerothangel
  */
 public class FilePermissionDao implements PermissionDao {
@@ -178,7 +178,7 @@ public class FilePermissionDao implements PermissionDao {
 
     /**
      * Save state of entire system to filesyste.
-     * 
+     *
      * @param file the file to save to
      * @throws IOException
      */
@@ -202,8 +202,7 @@ public class FilePermissionDao implements PermissionDao {
                     "# Seriously, do not edit. Today it is YAML, tomorrow it may not be.\n" +
                     "# If you edit this file and you have problems, you are on your own!\n");
             yaml.dump(dump, out);
-        }
-        finally {
+        } finally {
             out.close();
         }
 
@@ -232,9 +231,9 @@ public class FilePermissionDao implements PermissionDao {
 
     /**
      * Load state of entire system from filesystem.
-     * 
+     *
      * @param file the file to load from
-     * @throws IOException 
+     * @throws IOException
      */
     @SuppressWarnings("unchecked")
     public void load(File file) throws IOException {
@@ -242,9 +241,8 @@ public class FilePermissionDao implements PermissionDao {
         Reader in = new FileReader(file);
         Map<String, Object> input = null;
         try {
-            input = (Map<String, Object>)yaml.load(in);
-        }
-        finally {
+            input = (Map<String, Object>) yaml.load(in);
+        } finally {
             in.close();
         }
         if (input != null) {
@@ -290,8 +288,7 @@ public class FilePermissionDao implements PermissionDao {
                 tempMemberMap.put("name", membership.getDisplayName());
                 if (membership.getExpiration() == null) {
                     members.add(tempMemberMap);
-                }
-                else {
+                } else {
                     tempMemberMap.put("uuid", membership.getMember());
                     tempMemberMap.put("name", membership.getDisplayName());
                     tempMemberMap.put("expiration", membership.getExpiration());
@@ -301,7 +298,7 @@ public class FilePermissionDao implements PermissionDao {
             }
             groupMap.put("members", members);
             groupMap.put("tempmembers", tempMembers);
-            
+
             groups.add(groupMap);
         }
 
@@ -316,29 +313,29 @@ public class FilePermissionDao implements PermissionDao {
     private void load(Map<String, Object> input) {
         MemoryState memoryState = new MemoryState();
 
-        for (Map<String, Object> playerMap : (List<Map<String, Object>>)input.get("players")) {
-            UUID uuid = uncanonicalizeUuid((String)playerMap.get("uuid"));
-            String name = (String)playerMap.get("name");
-            Map<String, Boolean> permissions = (Map<String, Boolean>)playerMap.get("permissions");
+        for (Map<String, Object> playerMap : (List<Map<String, Object>>) input.get("players")) {
+            UUID uuid = uncanonicalizeUuid((String) playerMap.get("uuid"));
+            String name = (String) playerMap.get("name");
+            Map<String, Boolean> permissions = (Map<String, Boolean>) playerMap.get("permissions");
             PermissionEntity player = getEntity(memoryState, name, uuid, false);
             loadPermissions(memoryState, permissions, player);
-            Map<String, Object> metadata = (Map<String, Object>)playerMap.get("metadata");
+            Map<String, Object> metadata = (Map<String, Object>) playerMap.get("metadata");
             if (metadata == null) // backwards compat
                 metadata = Collections.emptyMap();
             loadMetadata(metadata, player);
         }
-        
-        for (Map<String, Object> groupMap : (List<Map<String, Object>>)input.get("groups")) {
-            String name = (String)groupMap.get("name");
-            Map<String, Boolean> permissions = (Map<String, Boolean>)groupMap.get("permissions");
-            Number priority = (Number)groupMap.get("priority");
-            String parent = (String)groupMap.get("parent");
-            List<String> parents = (List<String>)groupMap.get("parents");
-            List<Map<String, Object>> members = (List<Map<String, Object>>)groupMap.get("members");
-            List<Map<String, Object>> tempMembers = (List<Map<String, Object>>)groupMap.get("tempmembers");
+
+        for (Map<String, Object> groupMap : (List<Map<String, Object>>) input.get("groups")) {
+            String name = (String) groupMap.get("name");
+            Map<String, Boolean> permissions = (Map<String, Boolean>) groupMap.get("permissions");
+            Number priority = (Number) groupMap.get("priority");
+            String parent = (String) groupMap.get("parent");
+            List<String> parents = (List<String>) groupMap.get("parents");
+            List<Map<String, Object>> members = (List<Map<String, Object>>) groupMap.get("members");
+            List<Map<String, Object>> tempMembers = (List<Map<String, Object>>) groupMap.get("tempmembers");
             if (tempMembers == null) // backwards compat
                 tempMembers = Collections.emptyList();
-            Map<String, Object> metadata = (Map<String, Object>)groupMap.get("metadata");
+            Map<String, Object> metadata = (Map<String, Object>) groupMap.get("metadata");
             if (metadata == null) // backwards compat
                 metadata = Collections.emptyMap();
 
@@ -358,18 +355,17 @@ public class FilePermissionDao implements PermissionDao {
                 // Add to maps
                 group.getInheritancesAsChild().add(i);
                 parentEntity.getInheritancesAsParent().add(i);
-            }
-            else if (parents != null) {
+            } else if (parents != null) {
                 int order = 0;
                 for (String p : parents) {
                     PermissionEntity parentEntity = getEntity(memoryState, p, null, true);
-                    
+
                     Inheritance i = new Inheritance();
                     i.setChild(group);
                     i.setParent(parentEntity);
                     i.setOrdering(order);
                     order += 100;
-                    
+
                     // Add to maps
                     group.getInheritancesAsChild().add(i);
                     parentEntity.getInheritancesAsParent().add(i);
@@ -377,25 +373,25 @@ public class FilePermissionDao implements PermissionDao {
             }
             for (Map<String, Object> memberMap : members) {
                 Membership membership = new Membership();
-                membership.setMember(((String)memberMap.get("uuid")).toLowerCase());
-                membership.setDisplayName(((String)memberMap.get("name")));
+                membership.setMember(((String) memberMap.get("uuid")).toLowerCase());
+                membership.setDisplayName(((String) memberMap.get("name")));
                 membership.setGroup(group);
                 group.getMemberships().add(membership);
-                
+
                 rememberMembership(memoryState, membership);
             }
             for (Map<String, Object> tempMemberMap : tempMembers) {
                 Membership membership = new Membership();
-                membership.setMember(((String)tempMemberMap.get("uuid")).toLowerCase());
-                membership.setDisplayName(((String)tempMemberMap.get("name")));
+                membership.setMember(((String) tempMemberMap.get("uuid")).toLowerCase());
+                membership.setDisplayName(((String) tempMemberMap.get("name")));
                 membership.setGroup(group);
-                membership.setExpiration((Date)tempMemberMap.get("expiration"));
+                membership.setExpiration((Date) tempMemberMap.get("expiration"));
                 group.getMemberships().add(membership);
-                
+
                 rememberMembership(memoryState, membership);
             }
         }
-        
+
         permissionService.setMemoryState(memoryState);
     }
 
@@ -442,12 +438,11 @@ public class FilePermissionDao implements PermissionDao {
                 em.setValue(me.getValue());
                 em.setEntity(entity);
                 entity.getMetadata().add(em);
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 // Ignore invalid value
             }
         }
-        
+
         entity.updateMetadataMap();
     }
 

@@ -24,7 +24,7 @@ import org.bukkit.permissions.Permissible;
 
 /**
  * Utilities for checking permissions and displaying error messages.
- * 
+ *
  * @author zerothangel
  */
 public class PermissionUtils {
@@ -35,9 +35,9 @@ public class PermissionUtils {
 
     /**
      * Test if a permissible has multiple permissions.
-     * 
+     *
      * @param permissible the permissible
-     * @param all true if all permissions are required
+     * @param all         true if all permissions are required
      * @param permissions the permissions
      * @return true if conditions are met
      */
@@ -47,17 +47,17 @@ public class PermissionUtils {
 
     /**
      * Test if a permissible has multiple permissions.
-     * 
-     * @param permissible the permissible
-     * @param all true if all permissions are required
+     *
+     * @param permissible    the permissible
+     * @param all            true if all permissions are required
      * @param checkNegations true if any explicitly false permission should mean
-     *     the check fails. Only valid when all is false.
-     * @param permissions the permissions
+     *                       the check fails. Only valid when all is false.
+     * @param permissions    the permissions
      * @return true if conditions are met
      */
     public static boolean hasPermissions(Permissible permissible, boolean all, boolean checkNegations, String... permissions) {
         if (permissions == null || permissions.length == 0) return true;
-        
+
         if (all) {
             for (String permission : permissions) {
                 if (!hasText(permission))
@@ -67,8 +67,7 @@ public class PermissionUtils {
                     return false;
             }
             return true;
-        }
-        else {
+        } else {
             if (!checkNegations) {
                 for (String permission : permissions) {
                     if (!hasText(permission))
@@ -79,8 +78,7 @@ public class PermissionUtils {
                     }
                 }
                 return false;
-            }
-            else {
+            } else {
                 boolean found = false;
                 for (String permission : permissions) {
                     if (!hasText(permission))
@@ -88,8 +86,7 @@ public class PermissionUtils {
 
                     if (permissible.hasPermission(permission)) {
                         found = true; // no short-circuit; check all (for negations)
-                    }
-                    else if (permissible.isPermissionSet(permission)) {
+                    } else if (permissible.isPermissionSet(permission)) {
                         return false; // short-circuit negation
                     }
                 }
@@ -100,7 +97,7 @@ public class PermissionUtils {
 
     /**
      * Test if a permissible has at least one permission.
-     * 
+     *
      * @param permissible the permissible
      * @param permissions the permissions
      * @return true if permissible has at least one permission
@@ -111,20 +108,20 @@ public class PermissionUtils {
 
     /**
      * Test if a permissible has at least one permission.
-     * 
-     * @param permissible the permissible
+     *
+     * @param permissible    the permissible
      * @param checkNegations true if any explicitly false permission should mean
-     *     the check fails
-     * @param permissions the permissions
+     *                       the check fails
+     * @param permissions    the permissions
      * @return true if permissible has at least one permission
      */
     public static boolean hasOnePermission(Permissible permissible, boolean checkNegations, String... permissions) {
         return hasPermissions(permissible, false, checkNegations, permissions);
     }
-    
+
     /**
      * Test if a permissible has all permissions.
-     * 
+     *
      * @param permissible the permissible
      * @param permissions the permissions
      * @return true if permissible has all permissions
@@ -135,9 +132,9 @@ public class PermissionUtils {
 
     /**
      * Require a single permission.
-     * 
+     *
      * @param permissible the permissible to check
-     * @param permission the name of the permission
+     * @param permission  the name of the permission
      */
     public static void requirePermission(Permissible permissible, String permission) {
         if (!hasText(permission))
@@ -150,7 +147,7 @@ public class PermissionUtils {
 
     /**
      * Require multiple permissions, all required.
-     * 
+     *
      * @param permissible the permissible to check
      * @param permissions the names of the permissions
      */
@@ -161,7 +158,7 @@ public class PermissionUtils {
 
     /**
      * Require one of multiple permissions.
-     * 
+     *
      * @param permissible the permissible to check
      * @param permissions the names of the permissions
      */
@@ -171,11 +168,11 @@ public class PermissionUtils {
 
     /**
      * Require one of multiple permissions.
-     * 
-     * @param permissible the permissible to check
+     *
+     * @param permissible    the permissible to check
      * @param checkNegations true if any explicitly false permission should mean
-     *     the check fails
-     * @param permissions the names of the permissions
+     *                       the check fails
+     * @param permissions    the names of the permissions
      */
     public static void requireOnePermission(Permissible permissible, boolean checkNegations, String... permissions) {
         if (!hasOnePermission(permissible, checkNegations, permissions))
@@ -184,8 +181,8 @@ public class PermissionUtils {
 
     /**
      * Display a helpful error message when a permission check fails.
-     * 
-     * @param sender the command sender
+     *
+     * @param sender              the command sender
      * @param permissionException the associated PermissionException
      */
     public static void displayPermissionException(CommandSender sender, PermissionException permissionException) {
@@ -197,8 +194,7 @@ public class PermissionUtils {
         if (permissionException.getPermissions().size() == 1) {
             sendMessage(sender, ChatColor.RED + "You need the following permission to do this:");
             sendMessage(sender, ChatColor.DARK_GREEN + "- " + permissionException.getPermissions().get(0));
-        }
-        else {
+        } else {
             sendMessage(sender, ChatColor.RED + "You need %s of the following permissions to do this:",
                     permissionException.isAll() ? "all" : "one");
             if (!permissionException.isAll() && permissionException.isCheckNegations())

@@ -48,19 +48,19 @@ public class SearchTask implements Runnable {
     private final String permission;
 
     private final List<UUID> players;
-    
+
     private final List<String> groups;
-    
+
     private final boolean effective;
-    
+
     private final String world;
-    
+
     private final Set<String> regions;
 
     private final boolean showUuid;
 
     private int batchSize = 1;
-    
+
     private int delay = 5;
 
     public SearchTask(Plugin plugin, StorageStrategy storageStrategy, PermissionsResolver resolver, String permission, List<UUID> players, List<String> groups, boolean effective, String world, Set<String> regions, boolean showUuid) {
@@ -100,37 +100,36 @@ public class SearchTask implements Runnable {
     @Override
     public void run() {
         int size = 0;
-        
+
         while (size < getBatchSize() && !players.isEmpty()) {
             UUID uuid = players.remove(0);
-            
+
             PermissionEntity entity = storageStrategy.getPermissionService().getEntity("ignored", uuid, false);
             if (entity != null && !entity.getPermissions().isEmpty()) {
                 if (checkPermissions(entity) || (effective && checkEffectivePermissions(entity))) {
                     log(plugin, "Search result (#%d): player %s", getSearchId(), formatPlayerName(entity, showUuid));
                 }
             }
-            
+
             size++;
         }
 
         while (size < getBatchSize() && !groups.isEmpty()) {
             String groupName = groups.remove(0);
-            
+
             PermissionEntity entity = storageStrategy.getPermissionService().getEntity(groupName, null, true);
             if (entity != null && !entity.getPermissions().isEmpty()) {
                 if (checkPermissions(entity) || (effective && checkEffectivePermissions(entity))) {
                     log(plugin, "Search result (#%d): group %s", getSearchId(), entity.getDisplayName());
                 }
             }
-            
+
             size++;
         }
-        
+
         if (players.isEmpty() && groups.isEmpty()) {
             log(plugin, "Search result (#%d): All done!", getSearchId());
-        }
-        else {
+        } else {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this, getDelay());
         }
     }
@@ -149,8 +148,7 @@ public class SearchTask implements Runnable {
             public Map<String, Boolean> doInTransaction() throws Exception {
                 if (entity.isGroup()) {
                     return resolver.resolveGroup(entity.getDisplayName(), world, regions);
-                }
-                else {
+                } else {
                     return resolver.resolvePlayer(entity.getUuid(), world, regions).getPermissions();
                 }
             }

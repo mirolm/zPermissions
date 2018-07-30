@@ -43,7 +43,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils;
 
 /**
  * The main class that drives annotation-driven command parsing.
- * 
+ *
  * @author zerothangel
  */
 final class HandlerExecutor<T extends Plugin> {
@@ -51,7 +51,7 @@ final class HandlerExecutor<T extends Plugin> {
     private static final Map<Class<?>, Class<?>> primitiveWrappers;
 
     private static final Set<Class<?>> supportedParameterTypes;
-    
+
     private final T plugin;
 
     private final UsageOptions usageOptions;
@@ -83,13 +83,13 @@ final class HandlerExecutor<T extends Plugin> {
         }
         supportedParameterTypes = Collections.unmodifiableSet(types);
     }
-    
+
     /**
      * Create a HandlerExecutor instance.
-     * 
-     * @param plugin the associated plugin
+     *
+     * @param plugin       the associated plugin
      * @param usageOptions UsageOptions to use with the HelpBuilder
-     * @param handlers handler objects
+     * @param handlers     handler objects
      */
     HandlerExecutor(T plugin, UsageOptions usageOptions, Object... handlers) {
         if (plugin == null)
@@ -106,10 +106,10 @@ final class HandlerExecutor<T extends Plugin> {
 
     /**
      * Create a HandlerExecutor instance.
-     * 
-     * @param plugin the associated plugin
+     *
+     * @param plugin       the associated plugin
      * @param usageOptions UsageOptions to use with the HelpBuilder
-     * @param handlers handler objects
+     * @param handlers     handler objects
      */
     HandlerExecutor(T plugin, Object... handlers) {
         this(plugin, new DefaultUsageOptions(), handlers);
@@ -149,63 +149,53 @@ final class HandlerExecutor<T extends Plugin> {
                         Annotation[] anns = method.getParameterAnnotations()[i];
 
                         MethodParameter ma = null;
-                        
+
                         // Special parameter type?
                         if (paramType.isAssignableFrom(Server.class)) {
                             ma = new SpecialParameter(SpecialParameter.Type.SERVER);
-                        }
-                        else if (paramType.isAssignableFrom(plugin.getClass())) {
+                        } else if (paramType.isAssignableFrom(plugin.getClass())) {
                             ma = new SpecialParameter(SpecialParameter.Type.PLUGIN);
-                        }
-                        else if (paramType.isAssignableFrom(CommandSender.class)) {
+                        } else if (paramType.isAssignableFrom(CommandSender.class)) {
                             ma = new SpecialParameter(SpecialParameter.Type.COMMAND_SENDER);
-                        }
-                        else if (paramType.isAssignableFrom(HelpBuilder.class)) {
+                        } else if (paramType.isAssignableFrom(HelpBuilder.class)) {
                             ma = new SpecialParameter(SpecialParameter.Type.USAGE_BUILDER);
-                        }
-                        else if (paramType.isAssignableFrom(CommandSession.class)) {
+                        } else if (paramType.isAssignableFrom(CommandSession.class)) {
                             ma = new SpecialParameter(SpecialParameter.Type.SESSION);
-                        }
-                        else if (paramType.isArray() && paramType.getComponentType() == String.class) {
+                        } else if (paramType.isArray() && paramType.getComponentType() == String.class) {
                             if (hasRest) {
                                 throw new CommandException("Method already has a String[] parameter (%s#%s)", handler.getClass().getName(), method.getName());
                             }
 
                             ma = new SpecialParameter(SpecialParameter.Type.REST);
                             hasRest = true;
-                        }
-                        else {
+                        } else {
                             // Grab the @Option and @Session annotations
                             Option optAnn = null;
                             Session sessAnn = null;
                             for (Annotation ann : anns) {
                                 if (ann instanceof Option) {
-                                    optAnn = (Option)ann;
-                                }
-                                else if (ann instanceof Session) {
-                                    sessAnn = (Session)ann;
+                                    optAnn = (Option) ann;
+                                } else if (ann instanceof Session) {
+                                    sessAnn = (Session) ann;
                                 }
                             }
 
                             // Both must not be present
                             if (optAnn != null && sessAnn != null) {
                                 throw new CommandException("Parameter cannot have both @Option and @Session annotations (%s#%s)", handler.getClass().getName(), method.getName());
-                            }
-                            else if (sessAnn != null) {
+                            } else if (sessAnn != null) {
                                 // @Session
                                 ma = new SessionParameter(sessAnn.value(), paramType);
-                            }
-                            else if (optAnn != null) {
+                            } else if (optAnn != null) {
                                 // @Option
-                                
+
                                 // Supported parameter type?
                                 if (!supportedParameterTypes.contains(paramType)) {
                                     throw new CommandException("Unsupported parameter type: %s (%s#%s)", paramType, handler.getClass().getName(), method.getName());
                                 }
 
                                 ma = new OptionMetaData(optAnn.value(), optAnn.valueName(), paramType, optAnn.optional(), optAnn.nullable(), optAnn.completer());
-                            }
-                            else {
+                            } else {
                                 // Not annotated at all
 
                                 // Is it a String parameter?
@@ -213,15 +203,14 @@ final class HandlerExecutor<T extends Plugin> {
                                     if (hasLabel) {
                                         throw new CommandException("Method already has an unannotated String parameter (%s#%s)", handler.getClass().getName(), method.getName());
                                     }
-                                    
+
                                     ma = new SpecialParameter(SpecialParameter.Type.LABEL);
                                     hasLabel = true;
-                                }
-                                else
+                                } else
                                     throw new CommandException("Non-special parameters must be annotated with @Option (%s#%s)", handler.getClass().getName(), method.getName());
                             }
                         }
-                        
+
                         options.add(ma);
                     }
 
@@ -235,19 +224,17 @@ final class HandlerExecutor<T extends Plugin> {
                     boolean nonNullable = false; // true if non-nullable arguments have started
                     for (MethodParameter ma : reversed) {
                         if (!(ma instanceof OptionMetaData)) continue;
-                        OptionMetaData omd = (OptionMetaData)ma;
+                        OptionMetaData omd = (OptionMetaData) ma;
                         if (omd.isArgument()) {
                             if (!omd.isOptional()) {
                                 positional = true;
-                            }
-                            else if (positional) {
+                            } else if (positional) {
                                 throw new CommandException("Optional parameters must follow all non-optional ones (%s#%s)", handler.getClass().getName(), method.getName());
                             }
-                            
+
                             if (!omd.isNullable()) {
                                 nonNullable = true;
-                            }
-                            else if (nonNullable) {
+                            } else if (nonNullable) {
                                 throw new CommandException("Nullable parameters must follow all non-nullable ones (%s#%s)", handler.getClass().getName(), method.getName());
                             }
                         }
@@ -259,7 +246,7 @@ final class HandlerExecutor<T extends Plugin> {
                             throw new CommandException("Duplicate command: %s (%s#%s)", commandName, handler.getClass().getName(), method.getName());
                         }
                     }
-                    
+
                     // Track unaliased name for easy registration
                     // Dupes would have been handled above
                     commandList.add(command.value()[0]);
@@ -285,34 +272,26 @@ final class HandlerExecutor<T extends Plugin> {
         List<Object> result = new ArrayList<>(cmd.getParameters().size());
         for (MethodParameter mp : cmd.getParameters()) {
             if (mp instanceof SpecialParameter) {
-                SpecialParameter sp = (SpecialParameter)mp;
+                SpecialParameter sp = (SpecialParameter) mp;
                 if (sp.getType() == SpecialParameter.Type.SERVER) {
                     result.add(plugin.getServer());
-                }
-                else if (sp.getType() == SpecialParameter.Type.PLUGIN) {
+                } else if (sp.getType() == SpecialParameter.Type.PLUGIN) {
                     result.add(plugin);
-                }
-                else if (sp.getType() == SpecialParameter.Type.COMMAND_SENDER) {
+                } else if (sp.getType() == SpecialParameter.Type.COMMAND_SENDER) {
                     result.add(sender);
-                }
-                else if (sp.getType() == SpecialParameter.Type.LABEL) {
+                } else if (sp.getType() == SpecialParameter.Type.LABEL) {
                     result.add(label);
-                }
-                else if (sp.getType() == SpecialParameter.Type.USAGE_BUILDER) {
+                } else if (sp.getType() == SpecialParameter.Type.USAGE_BUILDER) {
                     result.add(getHelpBuilder(invChain, possibleCommands));
-                }
-                else if (sp.getType() == SpecialParameter.Type.SESSION) {
+                } else if (sp.getType() == SpecialParameter.Type.SESSION) {
                     result.add(session);
-                }
-                else if (sp.getType() == SpecialParameter.Type.REST) {
+                } else if (sp.getType() == SpecialParameter.Type.REST) {
                     result.add(pa.getRest());
-                }
-                else {
+                } else {
                     throw new AssertionError("Unknown SpecialParameter type");
                 }
-            }
-            else if (mp instanceof OptionMetaData) {
-                OptionMetaData omd = (OptionMetaData)mp;
+            } else if (mp instanceof OptionMetaData) {
+                OptionMetaData omd = (OptionMetaData) mp;
                 String text = pa.getOption(omd.getName());
 
                 // If Boolean or boolean, treat specially
@@ -321,42 +300,34 @@ final class HandlerExecutor<T extends Plugin> {
                         if (text != null) {
                             try {
                                 result.add(toBoolean(text));
-                            }
-                            catch (IllegalArgumentException e) {
+                            } catch (IllegalArgumentException e) {
                                 throw new ParseException("Invalid boolean: %s", omd.getName());
                             }
-                        }
-                        else if (!omd.isOptional()) {
+                        } else if (!omd.isOptional()) {
                             if (omd.isNullable()) {
                                 result.add(null);
-                            }
-                            else {
+                            } else {
                                 // Missing positional argument
                                 throw new ParseException("Missing argument: %s", omd.getName());
                             }
-                        }
-                        else {
+                        } else {
                             // Flag not specified
                             // Set to false if primitive, null if wrapper
                             if (omd.getType() == Boolean.TYPE) {
                                 result.add(Boolean.FALSE);
-                            }
-                            else {
+                            } else {
                                 result.add(null);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         // Flag
                         result.add(Boolean.valueOf(text != null));
                     }
-                }
-                else if (text != null) {
+                } else if (text != null) {
                     if (omd.getType() == String.class) {
                         // Nothing to convert
                         result.add(text);
-                    }
-                    else {
+                    } else {
                         // Use .valueOf(String) to convert
                         Class<?> paramType = omd.getType();
                         // Primitives don't have .valueOf(String)
@@ -367,36 +338,31 @@ final class HandlerExecutor<T extends Plugin> {
                             Method valueOf = paramType.getMethod("valueOf", String.class);
                             Object value = valueOf.invoke(null, text);
                             result.add(value);
-                        }
-                        catch (InvocationTargetException e) {
+                        } catch (InvocationTargetException e) {
                             // Unwrap, see if it's a NumberFormatException
                             if (e.getCause() instanceof NumberFormatException) {
                                 // Complain
                                 throw new ParseException("Invalid number: %s", omd.getName());
-                            }
-                            else {
+                            } else {
                                 // Re-throw
                                 throw e.getCause();
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     if (omd.isArgument() && !omd.isOptional()) {
                         if (!omd.isNullable()) {
                             // Missing positional argument
                             throw new ParseException("Missing argument: %s", omd.getName());
                         }
                     }
-                    
+
                     result.add(null);
                 }
-            }
-            else if (mp instanceof SessionParameter) {
-                SessionParameter sp = (SessionParameter)mp;
+            } else if (mp instanceof SessionParameter) {
+                SessionParameter sp = (SessionParameter) mp;
                 result.add(session.getValue(sp.getName(), sp.getType()));
-            }
-            else {
+            } else {
                 throw new AssertionError("Unknown MethodParameter type");
             }
         }
@@ -405,10 +371,10 @@ final class HandlerExecutor<T extends Plugin> {
 
     /**
      * Executes the named command.
-     * 
+     *
      * @param sender the command sender
-     * @param name the name of the command to execute
-     * @param args command arguments
+     * @param name   the name of the command to execute
+     * @param args   command arguments
      */
     void execute(CommandSender sender, String name, String label, String[] args) throws Throwable {
         execute(sender, name, label, args, null, null);
@@ -416,12 +382,12 @@ final class HandlerExecutor<T extends Plugin> {
 
     /**
      * Executes the named command.
-     * 
-     * @param sender the command sender
-     * @param name the name of the command to execute
-     * @param args command arguments
+     *
+     * @param sender   the command sender
+     * @param name     the name of the command to execute
+     * @param args     command arguments
      * @param invChain an InvocationChain or null
-     * @param session a CommandSession or null
+     * @param session  a CommandSession or null
      */
     void execute(CommandSender sender, String name, String label, String[] args, InvocationChain invChain, CommandSession session) throws Throwable {
         if (invChain == null)
@@ -436,8 +402,7 @@ final class HandlerExecutor<T extends Plugin> {
         // Check permissions
         if (cmd.isRequireAll()) {
             requireAllPermissions(sender, cmd.getPermissions());
-        }
-        else {
+        } else {
             requireOnePermission(sender, cmd.isCheckNegations(), cmd.getPermissions());
         }
 
@@ -452,8 +417,7 @@ final class HandlerExecutor<T extends Plugin> {
         Object nextHandler = null;
         try {
             nextHandler = cmd.getMethod().invoke(cmd.getHandler(), methodArgs);
-        }
-        catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             // Unwrap exception, re-throw
             throw e.getCause();
         }
@@ -503,7 +467,7 @@ final class HandlerExecutor<T extends Plugin> {
     // Register top-level commands
     void registerCommands(TabExecutor executor) {
         for (String name : commandList) {
-            PluginCommand command = ((JavaPlugin)plugin).getCommand(name);
+            PluginCommand command = ((JavaPlugin) plugin).getCommand(name);
             if (command == null) {
                 ToHLoggingUtils.warn(plugin, "Command '%s' not found in plugin.yml -- ignoring", name);
                 continue;
@@ -515,12 +479,12 @@ final class HandlerExecutor<T extends Plugin> {
 
     /**
      * Determine possible completions for the last argument.
-     * 
-     * @param sender the command sender
-     * @param name the name of the command to execute
-     * @param args command arguments
-     * @param invChain an InvocationChain or null
-     * @param session a CommandSession or null
+     *
+     * @param sender                the command sender
+     * @param name                  the name of the command to execute
+     * @param args                  command arguments
+     * @param invChain              an InvocationChain or null
+     * @param session               a CommandSession or null
      * @param typeCompleterRegistry the (global) TypeCompleter registry
      * @return list of possible completions
      */
@@ -537,8 +501,7 @@ final class HandlerExecutor<T extends Plugin> {
             // Have at least one
             query = args[args.length - 1];
             argsNoQuery = Arrays.copyOfRange(args, 0, args.length - 1);
-        }
-        else {
+        } else {
             query = "";
             argsNoQuery = args;
         }
@@ -550,8 +513,7 @@ final class HandlerExecutor<T extends Plugin> {
         // Check permissions
         if (cmd.isRequireAll()) {
             requireAllPermissions(sender, cmd.getPermissions());
-        }
-        else {
+        } else {
             requireOnePermission(sender, cmd.isCheckNegations(), cmd.getPermissions());
         }
 
@@ -566,12 +528,10 @@ final class HandlerExecutor<T extends Plugin> {
             pa.parse(cmd, argsNoQuery);
             missingValue = pa.getUnparsedArgument(); // possible because of nullable
             consumedAll = pa.getRest().length == 0;
-        }
-        catch (UnknownFlagException e) {
+        } catch (UnknownFlagException e) {
             // Tab-completion ain't gonna help
             return Collections.emptyList();
-        }
-        catch (MissingValueException e) {
+        } catch (MissingValueException e) {
             missingValue = e.getOptionMetaData();
             consumedAll = true;
         }
@@ -615,11 +575,10 @@ final class HandlerExecutor<T extends Plugin> {
             Object nextHandler;
             try {
                 nextHandler = cmd.getMethod().invoke(cmd.getHandler(), methodArgs);
-            }
-            catch (InvocationTargetException e) {
+            } catch (InvocationTargetException e) {
                 throw e.getCause();
             }
-            
+
             if (nextHandler != null) {
                 args = pa.getRest();
 
@@ -633,7 +592,7 @@ final class HandlerExecutor<T extends Plugin> {
                     return he.getTabCompletions(sender, subName, subName, args, invChain, session, typeCompleterRegistry);
                 }
             }
-            
+
             // Relying on HelpBuilder to have filled out the blanks
             List<String> result = new ArrayList<>();
             StringUtil.copyPartialMatches(query, possibleCommands, result);
@@ -655,9 +614,9 @@ final class HandlerExecutor<T extends Plugin> {
                 completerName = parts[0];
                 arg = parts[1];
             }
-            
+
             typeCompleter = typeCompleterRegistry.get(completerName);
-            
+
             if (typeCompleter != null) {
                 result.addAll(typeCompleter.complete(String.class, arg, sender, query));
             }
@@ -681,14 +640,13 @@ final class HandlerExecutor<T extends Plugin> {
                 completerName = parts[0];
                 arg = parts[1];
             }
-        
+
             typeCompleter = typeCompleterRegistry.get(completerName);
         }
-        
+
         if (typeCompleter != null) {
             destination.addAll(typeCompleter.complete(omd.getType(), arg, sender, partial));
-        }
-        else {
+        } else {
             // Use values based on type.
             if (omd.getType() == Boolean.class || omd.getType() == Boolean.TYPE) {
                 // Easy one
@@ -696,8 +654,7 @@ final class HandlerExecutor<T extends Plugin> {
                 source.add("true");
                 source.add("false");
                 StringUtil.copyPartialMatches(partial, source, destination);
-            }
-            else if (partial == null || partial.length() == 0){
+            } else if (partial == null || partial.length() == 0) {
                 // Drop a hint
                 destination.add(String.format("<%s>", omd.isArgument() ? omd.getName() : omd.getValueName()));
             }

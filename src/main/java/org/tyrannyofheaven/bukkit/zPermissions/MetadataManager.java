@@ -32,13 +32,13 @@ import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver.MetadataResul
 
 /**
  * Manager for resolved metadata.
- * 
+ *
  * @author zerothangel
  */
 public class MetadataManager {
 
     private static final int PLAYER_CACHE_SIZE = 1000;
-    
+
     private static final int GROUP_CACHE_SIZE = 1000;
 
     private final PermissionsResolver resolver;
@@ -55,7 +55,7 @@ public class MetadataManager {
             return size() > PLAYER_CACHE_SIZE;
         }
     };
-    
+
     private final Map<String, CacheEntry> groupCache = new LinkedHashMap<String, CacheEntry>() {
         private static final long serialVersionUID = 535803145911477635L;
 
@@ -73,7 +73,7 @@ public class MetadataManager {
     public MetadataManager(PermissionsResolver resolver, TransactionStrategy transactionStrategy) {
         this.resolver = resolver;
         this.transactionStrategy = transactionStrategy;
-        
+
     }
 
     private PermissionsResolver getResolver() {
@@ -119,23 +119,20 @@ public class MetadataManager {
                         if (group) {
                             // Stuff in cache
                             groupCache.put(lname, pe);
-                        }
-                        else {
+                        } else {
                             // Stuff in cache
                             playerCache.put(uuid, pe);
                         }
                         metadata = metadataResult.getMetadata();
                     }
-                }
-                finally {
+                } finally {
                     cacheLock.readLock().lock(); // Downgrade lock
                     cacheLock.writeLock().unlock();
                 }
             }
 
             return metadata.get(metadataName.toLowerCase());
-        }
-        finally {
+        } finally {
             cacheLock.readLock().unlock();
         }
     }
@@ -145,8 +142,7 @@ public class MetadataManager {
         CacheEntry pe;
         if (group) {
             pe = groupCache.get(lname);
-        }
-        else {
+        } else {
             pe = playerCache.get(uuid);
         }
         return pe != null ? pe.getMetadata() : null;
@@ -163,44 +159,41 @@ public class MetadataManager {
             if (group) {
                 groupCache.remove(name);
                 // Also invalidate related players
-                for (Iterator<Map.Entry<UUID, CacheEntry>> i = playerCache.entrySet().iterator(); i.hasNext();) {
+                for (Iterator<Map.Entry<UUID, CacheEntry>> i = playerCache.entrySet().iterator(); i.hasNext(); ) {
                     Map.Entry<UUID, CacheEntry> me = i.next();
                     if (me.getValue().getGroups().contains(name)) {
                         i.remove();
                     }
                 }
                 // And related groups
-                for (Iterator<Map.Entry<String, CacheEntry>> i = groupCache.entrySet().iterator(); i.hasNext();) {
+                for (Iterator<Map.Entry<String, CacheEntry>> i = groupCache.entrySet().iterator(); i.hasNext(); ) {
                     Map.Entry<String, CacheEntry> me = i.next();
                     if (me.getValue().getGroups().contains(name)) {
                         i.remove();
                     }
                 }
-            }
-            else {
+            } else {
                 playerCache.remove(uuid);
             }
-        }
-        finally {
+        } finally {
             cacheLock.writeLock().unlock();
         }
     }
-    
+
     public void invalidateAllMetadata() {
         cacheLock.writeLock().lock();
         try {
             playerCache.clear();
             groupCache.clear();
-        }
-        finally {
+        } finally {
             cacheLock.writeLock().unlock();
         }
     }
 
     private static class CacheEntry {
-        
+
         private final Map<String, Object> metadata;
-        
+
         private final Set<String> groups;
 
         public CacheEntry(Map<String, Object> metadata, Set<String> groups) {
@@ -221,7 +214,7 @@ public class MetadataManager {
         public Set<String> getGroups() {
             return groups;
         }
-        
+
     }
 
 }

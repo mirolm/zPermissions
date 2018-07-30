@@ -43,7 +43,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
 
 /**
  * Base implementation of a fully in-memory PermissionService.
- * 
+ *
  * @author zerothangel
  */
 public class InMemoryPermissionService implements PermissionService {
@@ -92,8 +92,7 @@ public class InMemoryPermissionService implements PermissionService {
                     permissionRegion.setName(region);
                     getRegions().put(region, permissionRegion);
                     createRegion(permissionRegion);
-                }
-                else {
+                } else {
                     throw new IllegalArgumentException("No such region");
                 }
             }
@@ -121,8 +120,7 @@ public class InMemoryPermissionService implements PermissionService {
                     permissionWorld.setName(world);
                     getWorlds().put(world, permissionWorld);
                     createWorld(permissionWorld);
-                }
-                else {
+                } else {
                     throw new IllegalArgumentException("No such world");
                 }
             }
@@ -176,27 +174,25 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity entity = getEntity(name, uuid, group, false);
         if (entity == null)
             return null;
-    
+
         PermissionRegion permissionRegion;
         try {
             permissionRegion = getRegion(region, false);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return null;
         }
-    
+
         PermissionWorld permissionWorld;
         try {
             permissionWorld = getWorld(world, false);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return null;
         }
-    
+
         for (Entry entry : entity.getPermissions()) {
             if (entry.getPermission().equalsIgnoreCase(permission) &&
-                (permissionRegion == null ? entry.getRegion() == null : permissionRegion.equals(entry.getRegion())) &&
-                (permissionWorld == null ? entry.getWorld() == null : permissionWorld.equals(entry.getWorld()))) {
+                    (permissionRegion == null ? entry.getRegion() == null : permissionRegion.equals(entry.getRegion())) &&
+                    (permissionWorld == null ? entry.getWorld() == null : permissionWorld.equals(entry.getWorld()))) {
                 return entry.isValue();
             }
         }
@@ -208,17 +204,16 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity owner;
         if (group) {
             owner = getGroup(name);
-        }
-        else {
+        } else {
             owner = getEntity(name, uuid, group, true);
         }
-    
+
         PermissionRegion permissionRegion = getRegion(region, true);
-    
+
         PermissionWorld permissionWorld = getWorld(world, true);
-    
+
         permission = permission.toLowerCase();
-    
+
         Entry found = null;
         for (Entry entry : owner.getPermissions()) {
             if (permission.equals(entry.getPermission()) &&
@@ -228,17 +223,17 @@ public class InMemoryPermissionService implements PermissionService {
                 break;
             }
         }
-    
+
         if (found == null) {
             found = new Entry();
             found.setEntity(owner);
             found.setRegion(permissionRegion);
             found.setWorld(permissionWorld);
             found.setPermission(permission);
-            
+
             owner.getPermissions().add(found);
         }
-    
+
         found.setValue(value);
         createOrUpdateEntry(found);
     }
@@ -252,26 +247,24 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity entity = getEntity(name, uuid, group, false);
         if (entity == null)
             return false;
-    
+
         PermissionRegion permissionRegion;
         try {
             permissionRegion = getRegion(region, false);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
-    
+
         PermissionWorld permissionWorld;
         try {
             permissionWorld = getWorld(world, false);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
 
         permission = permission.toLowerCase();
 
-        for (Iterator<Entry> i = entity.getPermissions().iterator(); i.hasNext();) {
+        for (Iterator<Entry> i = entity.getPermissions().iterator(); i.hasNext(); ) {
             Entry entry = i.next();
             if (entry.getPermission().equals(permission) &&
                     (permissionRegion == null ? entry.getRegion() == null : permissionRegion.equals(entry.getRegion())) &&
@@ -296,13 +289,13 @@ public class InMemoryPermissionService implements PermissionService {
             expiration = new Date(expiration.getTime());
 
         PermissionEntity group = getGroup(groupName);
-    
+
         Membership found = null;
         for (Membership membership : group.getMemberships()) {
             if (membership.getMember().equals(memberName))
                 found = membership;
         }
-    
+
         if (found == null) {
             found = new Membership();
             found.setMember(memberName);
@@ -325,8 +318,8 @@ public class InMemoryPermissionService implements PermissionService {
     public synchronized final boolean removeMember(String groupName, UUID memberUuid) {
         String memberName = canonicalizeUuid(memberUuid);
         PermissionEntity group = getGroup(groupName);
-        
-        for (Iterator<Membership> i = group.getMemberships().iterator(); i.hasNext();) {
+
+        for (Iterator<Membership> i = group.getMemberships().iterator(); i.hasNext(); ) {
             Membership membership = i.next();
             if (membership.getMember().equals(memberName)) {
                 i.remove();
@@ -355,7 +348,7 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity groupEntity = getEntity(group, null, true, false);
         if (groupEntity == null)
             return new ArrayList<>(); // compat with AvajePermissionDao
-    
+
         List<Membership> result = new ArrayList<>(groupEntity.getMemberships());
         Collections.sort(result, MEMBERSHIP_MEMBER_COMPARATOR);
         return result;
@@ -383,7 +376,7 @@ public class InMemoryPermissionService implements PermissionService {
         if (expiration != null)
             expiration = new Date(expiration.getTime());
         PermissionEntity group = getGroup(groupName);
-    
+
         Membership found = null;
         Set<Membership> memberships = getReverseMembershipMap().get(playerName);
         if (memberships != null) {
@@ -391,13 +384,12 @@ public class InMemoryPermissionService implements PermissionService {
                 if (!membership.getGroup().equals(group)) {
                     membership.getGroup().getMemberships().remove(membership);
                     deleteMembership(membership);
-                }
-                else {
+                } else {
                     found = membership;
                 }
             }
         }
-    
+
         if (found == null) {
             found = new Membership();
             found.setMember(playerName);
@@ -409,7 +401,7 @@ public class InMemoryPermissionService implements PermissionService {
         found.setExpiration(expiration);
 
         createOrUpdateMembership(found);
-        
+
         getReverseMembershipMap().remove(playerName);
         rememberMembership(found);
     }
@@ -425,7 +417,7 @@ public class InMemoryPermissionService implements PermissionService {
     @Override
     public synchronized final void setParents(String groupName, List<String> parentNames) {
         PermissionEntity group = getGroup(groupName);
-        
+
         Set<Inheritance> dest = new LinkedHashSet<>(parentNames.size());
         int order = 0;
         for (String parentName : parentNames) {
@@ -450,10 +442,10 @@ public class InMemoryPermissionService implements PermissionService {
                 if (group.equals(check)) {
                     throw new PermissionServiceException("This would result in an inheritance cycle!");
                 }
-                
+
                 toCheck.addAll(check.getParents());
             }
-            
+
             dest.add(i);
         }
 
@@ -508,9 +500,9 @@ public class InMemoryPermissionService implements PermissionService {
     @Override
     public synchronized final void setPriority(String groupName, int priority) {
         PermissionEntity group = getGroup(groupName);
-    
+
         group.setPriority(priority);
-        
+
         setEntityPriority(group, priority);
     }
 
@@ -522,11 +514,11 @@ public class InMemoryPermissionService implements PermissionService {
         // Easier to just see what is used
         Set<PermissionRegion> usedRegions = new HashSet<>();
         Set<PermissionWorld> usedWorlds = new HashSet<>();
-        
+
         List<PermissionEntity> entities = new ArrayList<>();
         entities.addAll(getGroups().values());
         entities.addAll(getPlayers().values());
-        
+
         for (PermissionEntity entity : entities) {
             for (Entry entry : entity.getPermissions()) {
                 if (entry.getRegion() != null)
@@ -535,13 +527,13 @@ public class InMemoryPermissionService implements PermissionService {
                     usedWorlds.add(entry.getWorld());
             }
         }
-        
+
         // Determine what needs to be deleted
         Set<PermissionRegion> regionsToDelete = new HashSet<>(getRegions().values());
         regionsToDelete.removeAll(usedRegions);
         Set<PermissionWorld> worldsToDelete = new HashSet<>(getWorlds().values());
         worldsToDelete.removeAll(usedWorlds);
-        
+
         // Re-build lists
         getRegions().clear();
         for (PermissionRegion region : usedRegions) {
@@ -551,7 +543,7 @@ public class InMemoryPermissionService implements PermissionService {
         for (PermissionWorld world : usedWorlds) {
             getWorlds().put(world.getName(), world);
         }
-        
+
         // Tell underlying DAO about deleted regions/worlds
         if (!regionsToDelete.isEmpty())
             deleteRegions(regionsToDelete);
@@ -562,7 +554,7 @@ public class InMemoryPermissionService implements PermissionService {
     private void deleteRegions(Collection<PermissionRegion> regions) {
         getPermissionDao().deleteRegions(regions);
     }
-    
+
     private void deleteWorlds(Collection<PermissionWorld> worlds) {
         getPermissionDao().deleteWorlds(worlds);
     }
@@ -570,7 +562,7 @@ public class InMemoryPermissionService implements PermissionService {
     @Override
     public synchronized final boolean deleteEntity(String name, UUID uuid, boolean group) {
         PermissionEntity entity = getEntity(name, uuid, group, false);
-        
+
         if (group) {
             // Deleting a group
             if (entity != null) {
@@ -584,7 +576,7 @@ public class InMemoryPermissionService implements PermissionService {
                 }
                 entity.getInheritancesAsParent().clear(); // meh, don't really have to
                 // NB database relationships will be deleted by deleteEntity
-    
+
                 // Delete group's entity
                 getGroups().remove(entity.getName());
                 deleteEntity(entity);
@@ -592,13 +584,12 @@ public class InMemoryPermissionService implements PermissionService {
                 forgetMembershipGroup(entity);
                 return true;
             }
-        }
-        else {
+        } else {
             // Deleting a player
             name = canonicalizeUuid(uuid);
-    
+
             boolean found = false;
-    
+
             // Delete memberships
             Set<Membership> memberships = getReverseMembershipMap().get(name);
             if (memberships != null) {
@@ -606,7 +597,7 @@ public class InMemoryPermissionService implements PermissionService {
                     membership.getGroup().getMemberships().remove(membership);
                     deleteMembership(membership);
                 }
-    
+
                 getReverseMembershipMap().remove(name);
 
                 found = true;
@@ -618,17 +609,17 @@ public class InMemoryPermissionService implements PermissionService {
                 deleteEntity(entity);
                 cleanWorldsAndRegions();
             }
-            
+
             return found || entity != null;
         }
-        
+
         return false; // nothing to delete
     }
 
     private void deleteEntity(PermissionEntity entity) {
         getPermissionDao().deleteEntity(entity);
     }
-    
+
     private void deleteMembership(Membership membership) {
         getPermissionDao().deleteMembership(membership);
     }
@@ -638,7 +629,7 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity group = getEntity(groupName, null, true, false);
         if (group == null) // NB only time this will be null is if the default group doesn't exist
             return new ArrayList<>();
-    
+
         // Build list of group ancestors
         Set<String> ancestry = new LinkedHashSet<>();
         ancestry.add(group.getDisplayName());
@@ -646,14 +637,14 @@ public class InMemoryPermissionService implements PermissionService {
         while (!toAdd.isEmpty()) {
             group = toAdd.removeFirst();
             ancestry.add(group.getDisplayName());
-            
+
             toAdd.addAll(group.getParents());
         }
-        
+
         // Reverse list (will be applying farthest ancestors first)
         List<String> ancestryList = new ArrayList<>(ancestry);
         Collections.reverse(ancestryList);
-    
+
         return ancestryList;
     }
 
@@ -662,7 +653,7 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity entity = getEntity(name, uuid, group, false);
         if (entity == null) // NB special consideration for non-existent default group
             return Collections.emptyList();
-    
+
         return new ArrayList<>(entity.getPermissions());
     }
 
@@ -672,8 +663,7 @@ public class InMemoryPermissionService implements PermissionService {
         if (group == null) {
             group = getEntity(name, null, true, true);
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -709,7 +699,7 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity entity = getEntity(name, uuid, group, false);
         if (entity == null)
             return Collections.emptyList();
-        
+
         return new ArrayList<>(entity.getMetadata());
     }
 
@@ -718,24 +708,23 @@ public class InMemoryPermissionService implements PermissionService {
         PermissionEntity owner;
         if (group) {
             owner = getGroup(name);
-        }
-        else {
+        } else {
             owner = getEntity(name, uuid, group, true);
         }
 
         metadataName = metadataName.toLowerCase();
-        
+
         EntityMetadata found = owner.getMetadataMap().get(metadataName);
 
         if (found == null) {
             found = new EntityMetadata();
             found.setEntity(owner);
             found.setName(metadataName);
-            
+
             owner.getMetadata().add(found);
             owner.getMetadataMap().put(metadataName, found);
         }
-        
+
         found.setValue(value);
         createOrUpdateMetadata(found);
     }
@@ -752,7 +741,7 @@ public class InMemoryPermissionService implements PermissionService {
 
         metadataName = metadataName.toLowerCase();
 
-        for (Iterator<EntityMetadata> i = entity.getMetadata().iterator(); i.hasNext();) {
+        for (Iterator<EntityMetadata> i = entity.getMetadata().iterator(); i.hasNext(); ) {
             EntityMetadata em = i.next();
             if (em.getName().equals(metadataName)) {
                 i.remove();
@@ -775,7 +764,7 @@ public class InMemoryPermissionService implements PermissionService {
             entity.setDisplayName(displayName);
             updateDisplayName(entity);
         }
-        
+
         Set<Membership> memberships = getReverseMembershipMap().get(canonicalizeUuid(uuid));
         if (memberships != null) {
             for (Membership membership : memberships) {
@@ -812,7 +801,7 @@ public class InMemoryPermissionService implements PermissionService {
 
     private void forgetMembershipGroup(PermissionEntity group) {
         for (Set<Membership> memberships : getReverseMembershipMap().values()) {
-            for (Iterator<Membership> i = memberships.iterator(); i.hasNext();) {
+            for (Iterator<Membership> i = memberships.iterator(); i.hasNext(); ) {
                 Membership membership = i.next();
                 if (group.equals(membership.getGroup())) {
                     i.remove();
@@ -825,11 +814,9 @@ public class InMemoryPermissionService implements PermissionService {
     private static String checkNameUuid(String name, UUID uuid, boolean group) {
         if (group) {
             return name;
-        }
-        else if (uuid == null) {
+        } else if (uuid == null) {
             throw new IllegalArgumentException("uuid cannot be null");
-        }
-        else {
+        } else {
             return canonicalizeUuid(uuid);
         }
     }
@@ -913,7 +900,7 @@ public class InMemoryPermissionService implements PermissionService {
     }
 
     public static class MemoryState {
-        
+
         private final Map<String, PermissionRegion> regions = new HashMap<>();
 
         private final Map<String, PermissionWorld> worlds = new HashMap<>();

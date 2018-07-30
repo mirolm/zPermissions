@@ -25,12 +25,12 @@ import javax.persistence.UniqueConstraint;
 
 /**
  * A permission entry.
- * 
+ *
  * @author zerothangel
  */
 @Entity
-@Table(name="entries")
-@UniqueConstraint(columnNames={"entity_id", "region_id", "world_id", "permission"})
+@Table(name = "entries")
+@UniqueConstraint(columnNames = {"entity_id", "region_id", "world_id", "permission"})
 public class Entry {
 
     private Long id;
@@ -42,7 +42,7 @@ public class Entry {
     private PermissionWorld world;
 
     private String permission;
-    
+
     private boolean value;
 
     @Id
@@ -54,8 +54,8 @@ public class Entry {
         this.id = id;
     }
 
-    @JoinColumn(name="entity_id")
-    @ManyToOne(optional=false)
+    @JoinColumn(name = "entity_id")
+    @ManyToOne(optional = false)
     public PermissionEntity getEntity() {
         return entity;
     }
@@ -64,8 +64,8 @@ public class Entry {
         this.entity = owner;
     }
 
-    @JoinColumn(name="region_id")
-    @ManyToOne(optional=true)
+    @JoinColumn(name = "region_id")
+    @ManyToOne(optional = true)
     public PermissionRegion getRegion() {
         return region;
     }
@@ -74,8 +74,8 @@ public class Entry {
         this.region = region;
     }
 
-    @JoinColumn(name="world_id")
-    @ManyToOne(optional=true)
+    @JoinColumn(name = "world_id")
+    @ManyToOne(optional = true)
     public PermissionWorld getWorld() {
         return world;
     }
@@ -84,7 +84,7 @@ public class Entry {
         this.world = world;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public String getPermission() {
         return permission;
     }
@@ -93,7 +93,7 @@ public class Entry {
         this.permission = permission;
     }
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     public boolean isValue() {
         return value;
     }
@@ -106,11 +106,11 @@ public class Entry {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof Entry)) return false;
-        Entry o = (Entry)obj;
+        Entry o = (Entry) obj;
         return getEntity().equals(o.getEntity()) &&
-            (getRegion() == null ? o.getRegion() == null : getRegion().equals(o.getRegion())) &&
-            (getWorld() == null ? o.getWorld() == null : getWorld().equals(o.getWorld())) &&
-            getPermission().equals(o.getPermission());
+                (getRegion() == null ? o.getRegion() == null : getRegion().equals(o.getRegion())) &&
+                (getWorld() == null ? o.getWorld() == null : getWorld().equals(o.getWorld())) &&
+                getPermission().equals(o.getPermission());
     }
 
     @Override

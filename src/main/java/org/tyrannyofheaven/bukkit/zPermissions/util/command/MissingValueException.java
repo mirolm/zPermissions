@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 
 /**
  * Mainly used for tab completion support. Contains state of partial parse.
- * 
+ *
  * @author zerothangel
  */
 public class MissingValueException extends ParseException {

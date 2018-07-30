@@ -52,7 +52,7 @@ import com.avaje.ebean.EbeanServer;
 
 /**
  * StorageStrategy for AvajePermissionService.
- * 
+ *
  * @author zerothangel
  */
 public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreCommitHook, UuidResolver {
@@ -93,7 +93,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     @Override
     public void init(Map<String, Object> configMap) {
         // Take care of storage-specific configuration first
-        Number uuidCacheTimeout = (Number)configMap.get("uuid-database-cache-ttl");
+        Number uuidCacheTimeout = (Number) configMap.get("uuid-database-cache-ttl");
         if (uuidCacheTimeout != null) {
             this.uuidCacheTimeout = uuidCacheTimeout.longValue() * 60L * 1000L;
             debug(plugin, "AvajeStorageStrategy uuidCacheTimeout = %d", this.uuidCacheTimeout);
@@ -114,12 +114,10 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
             log(plugin, "Waiting up to %d seconds for pending write operations...", timeout);
             if (!executorService.awaitTermination(timeout, TimeUnit.SECONDS)) {
                 log(plugin, Level.WARNING, "Timed out before all write operations could finish; expect inconsistencies :(");
-            }
-            else {
+            } else {
                 log(plugin, "All write operations done.");
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             // Do nothing
         }
     }
@@ -146,7 +144,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
                     lastLoadedVersion.set(currentVersion.getVersion());
                     return true;
                 }
-                
+
                 return false;
             }
         }, true);
@@ -183,14 +181,14 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
             dv.setVersion(0L);
             dv.setTimestamp(new Date());
         }
-        
+
         return dv;
     }
 
     @Override
     public void preCommit(boolean readOnly) throws Exception {
         if (readOnly) return; // Do nothing for read-only transactions
-        
+
         DataVersion dv = getCurrentDataVersion();
 
         // Only update our internal data version if it matches the current version
@@ -208,7 +206,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     @Override
     public void preBegin(boolean readOnly) throws Exception {
         if (readOnly) return;
-        
+
         if (readOnlyMode)
             throw new ReadOnlyException();
     }
@@ -286,7 +284,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     public void invalidate(final String username) {
         if (readOnlyMode)
             throw new ReadOnlyException();
-        
+
         executorService.execute(new Runnable() {
             @Override
             public void run() {

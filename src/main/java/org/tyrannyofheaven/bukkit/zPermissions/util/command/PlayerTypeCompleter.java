@@ -26,7 +26,7 @@ import org.bukkit.util.StringUtil;
 
 /**
  * TypeCompleter for parameters that represent (online) players.
- * 
+ *
  * @author zerothangel
  */
 class PlayerTypeCompleter implements TypeCompleter {

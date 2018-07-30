@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 /**
  * Annotates a command method, specifying any required permissions to execute
  * (or maybe even see) the command.
- * 
+ *
  * @author zerothangel
  */
 @Documented

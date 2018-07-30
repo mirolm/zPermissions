@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.transaction;
 
 /**
  * Optional hook to be called before transaction start.
- * 
+ *
  * @author zerothangel
  */
 public interface PreBeginHook {
@@ -25,7 +25,7 @@ public interface PreBeginHook {
     /**
      * Callback called immediately before transaction begins. If you want to
      * abort, throw an exception
-     * 
+     *
      * @param readOnly the read-only flag for this transaction
      * @throws Exception an exception signifying that a rollback should be performed
      */

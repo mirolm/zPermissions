@@ -24,11 +24,11 @@ import org.bukkit.event.player.PlayerEvent;
  * online player's permissions. This includes world changes, commands that affect
  * the groups or permissions of a player, as well as certain movement-based
  * events (when region-support is enabled).
- * 
+ *
  * <p>Note that unconditional permissions changes that occur during
  * standard Bukkit events (namely: PlayerLoginEvent, PlayerJoinEvent,
  * PlayerQuitEvent) do not fire off this event.
- * 
+ *
  * <p>Also note that this event may be called even if the player's permissions
  * did not actually change. However, for its PlayerMoveEvent handler (when
  * region-support is enabled), zPermissions guarantees that this event will be
@@ -40,8 +40,8 @@ public class ZPermissionsPlayerUpdateEvent extends PlayerEvent {
 
     /**
      * Creates a player permissions change event.
-     * 
-     * @param who the affected player
+     *
+     * @param who   the affected player
      * @param cause the cause of this permissions change
      */
     public ZPermissionsPlayerUpdateEvent(Player who, Cause cause) {
@@ -53,7 +53,7 @@ public class ZPermissionsPlayerUpdateEvent extends PlayerEvent {
 
     /**
      * Returns the cause of this permissions change.
-     * 
+     *
      * @return the cause of this permissions change
      */
     public Cause getCause() {
@@ -77,7 +77,7 @@ public class ZPermissionsPlayerUpdateEvent extends PlayerEvent {
          * there's no visibility as to when the permission goes away.
          */
         COMMAND,
-        
+
         /**
          * An associated group was changed. Includes command line, changes
          * through the API, group membership expirations, and server-wide changes

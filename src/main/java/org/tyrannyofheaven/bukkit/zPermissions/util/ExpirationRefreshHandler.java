@@ -66,7 +66,7 @@ public class ExpirationRefreshHandler implements Runnable {
         this.core = core;
         this.storageStrategy = storageStrategy;
         this.plugin = plugin;
-        
+
         executorService = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -153,8 +153,7 @@ public class ExpirationRefreshHandler implements Runnable {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, realThis);
                 }
             }, delay + FUDGE, TimeUnit.MILLISECONDS);
-        }
-        else
+        } else
             debug(plugin, "No future expirations");
     }
 

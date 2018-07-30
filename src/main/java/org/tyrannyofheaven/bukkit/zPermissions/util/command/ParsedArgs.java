@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * Convenience class to parse a command's arguments and store the results.
- * 
+ *
  * @author zerothangel
  */
 final class ParsedArgs {
@@ -54,10 +54,10 @@ final class ParsedArgs {
 
     /**
      * Parse command arguments according to the given CommandMetaData.
-     * 
+     *
      * @param cmd
      * @param args
-     * @return 
+     * @return
      */
     public void parse(CommandMetaData cmd, String[] args) {
         if (cmd == null)
@@ -71,7 +71,7 @@ final class ParsedArgs {
         parsed = true;
 
         int pos = 0;
-        
+
         // Parse flags
         while (pos < args.length) {
             String arg = args[pos];
@@ -80,12 +80,10 @@ final class ParsedArgs {
                 pos++;
                 parsedPositional = true; // no going back
                 break;
-            }
-            else if (OptionMetaData.isArgument(arg) || cmd.getFlagOptions().isEmpty()) {
+            } else if (OptionMetaData.isArgument(arg) || cmd.getFlagOptions().isEmpty()) {
                 // positional argument
                 break;
-            }
-            else {
+            } else {
                 List<String> flags = new LinkedList<>();
 
                 String flagArg = arg.substring(1);
@@ -94,8 +92,7 @@ final class ParsedArgs {
                     for (char c : flagArg.toCharArray()) {
                         flags.add("-" + Character.toString(c));
                     }
-                }
-                else {
+                } else {
                     // Use long flag as-is
                     flags.add(arg);
                 }
@@ -109,8 +106,7 @@ final class ParsedArgs {
                     // Special handling of Boolean and boolean
                     if (omd.getType() == Boolean.class || omd.getType() == Boolean.TYPE) {
                         options.put(omd.getName(), ""); // value doesn't matter, only existence
-                    }
-                    else {
+                    } else {
                         // Get value
                         pos++;
                         if (pos >= args.length) {
@@ -124,7 +120,7 @@ final class ParsedArgs {
                 pos++;
             }
         }
-        
+
         // Parse positional args
         for (OptionMetaData omd : cmd.getPositionalArguments()) {
             if (!omd.isOptional()) {
@@ -134,24 +130,20 @@ final class ParsedArgs {
                         // will be unset. Use with care.
                         unparsedArgument = omd;
                         break;
-                    }
-                    else {
+                    } else {
                         // Ran out of args
                         throw new MissingValueException(omd);
                     }
-                }
-                else {
+                } else {
                     options.put(omd.getName(), args[pos++]);
                     parsedPositional = true;
                 }
-            }
-            else {
+            } else {
                 if (pos >= args.length) {
                     // No more args, this and the rest should be optional
                     unparsedArgument = omd;
                     break;
-                }
-                else {
+                } else {
                     options.put(omd.getName(), args[pos++]);
                     parsedPositional = true;
                 }
@@ -163,7 +155,7 @@ final class ParsedArgs {
 
     /**
      * Retrieve associated value for an option.
-     * 
+     *
      * @param name the option name
      * @return the associated String value
      */
@@ -176,7 +168,7 @@ final class ParsedArgs {
 
     /**
      * Retrieve option map.
-     * 
+     *
      * @return the option map
      */
     public Map<String, String> getOptions() {
@@ -185,7 +177,7 @@ final class ParsedArgs {
 
     /**
      * Retrieve unparsed positional parameters.
-     * 
+     *
      * @return unparsed positional parameters
      */
     public String[] getRest() {
@@ -194,7 +186,7 @@ final class ParsedArgs {
 
     /**
      * Retrieve OptionMetaData of first unparsed optional positional parameter.
-     * 
+     *
      * @return OptionMetaData of first unparsed optional positional parameter, or null
      */
     public OptionMetaData getUnparsedArgument() {
@@ -203,7 +195,7 @@ final class ParsedArgs {
 
     /**
      * Returns whether or not any positional arguments have been parsed yet.
-     * 
+     *
      * @return true if positional arguments have been parsed
      */
     public boolean isParsedPositional() {

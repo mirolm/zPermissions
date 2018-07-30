@@ -3,9 +3,9 @@ package org.tyrannyofheaven.bukkit.zPermissions.util;
 /**
  * Holder for specific fields in the manifest. Specifically:
  * <ul>
- *   <li>artifactId (Implementation-Title)</li>
- *   <li>version (Implementation-Version)</li>
- *   <li>build (Implementation-Build)</li>
+ * <li>artifactId (Implementation-Title)</li>
+ * <li>version (Implementation-Version)</li>
+ * <li>build (Implementation-Build)</li>
  * </ul>
  *
  * @author zerothangel
