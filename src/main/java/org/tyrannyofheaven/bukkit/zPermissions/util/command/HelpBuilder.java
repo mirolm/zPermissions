@@ -26,7 +26,6 @@ import org.bukkit.command.CommandSender;
 /**
  * Automatically generates a help page for a sub-command.
  *
- * @param <T>
  * @author zerothangel
  */
 public class HelpBuilder {
