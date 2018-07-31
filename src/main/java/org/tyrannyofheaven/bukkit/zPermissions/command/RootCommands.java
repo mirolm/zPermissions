@@ -83,12 +83,12 @@ public class RootCommands {
     // Handler for /permissions sub-commands
     private final SubCommands sc;
 
-    private static enum BroadcastScope {
+    private enum BroadcastScope {
         DEFAULT(true), QUIET(false), LOUD(true), QUIET_LOUD(false);
 
         private final boolean shouldEcho;
 
-        private BroadcastScope(boolean shouldEcho) {
+        BroadcastScope(boolean shouldEcho) {
             this.shouldEcho = shouldEcho;
         }
 

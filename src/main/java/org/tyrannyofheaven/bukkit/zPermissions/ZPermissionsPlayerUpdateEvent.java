@@ -70,7 +70,7 @@ public class ZPermissionsPlayerUpdateEvent extends PlayerEvent {
         return handlers;
     }
 
-    public static enum Cause {
+    public enum Cause {
         /**
          * Permissions change to the player caused by a command. Includes changes
          * through the API. Note that the settemp command cannot be covered since

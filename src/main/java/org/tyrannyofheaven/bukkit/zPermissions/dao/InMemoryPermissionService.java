@@ -842,7 +842,7 @@ public class InMemoryPermissionService implements PermissionService {
 
     // Utilities for DAOs (mainly concerned with loading)
 
-    public static final PermissionEntity getEntity(MemoryState memoryState, String name0, UUID uuid, boolean group) {
+    public static PermissionEntity getEntity(MemoryState memoryState, String name0, UUID uuid, boolean group) {
         String lname = checkNameUuid(name0, uuid, group).toLowerCase();
         PermissionEntity entity;
         if (group)
@@ -862,7 +862,7 @@ public class InMemoryPermissionService implements PermissionService {
         return entity;
     }
 
-    public static final PermissionRegion getRegion(MemoryState memoryState, String name) {
+    public static PermissionRegion getRegion(MemoryState memoryState, String name) {
         name = name.toLowerCase();
         PermissionRegion region = memoryState.getRegions().get(name);
         if (region == null) {
@@ -873,7 +873,7 @@ public class InMemoryPermissionService implements PermissionService {
         return region;
     }
 
-    public static final PermissionWorld getWorld(MemoryState memoryState, String name) {
+    public static PermissionWorld getWorld(MemoryState memoryState, String name) {
         name = name.toLowerCase();
         PermissionWorld world = memoryState.getWorlds().get(name);
         if (world == null) {
@@ -884,7 +884,7 @@ public class InMemoryPermissionService implements PermissionService {
         return world;
     }
 
-    public static final void rememberMembership(MemoryState memoryState, Membership membership) {
+    public static void rememberMembership(MemoryState memoryState, Membership membership) {
         Set<Membership> memberships = memoryState.getReverseMembershipMap().get(membership.getMember());
         if (memberships == null) {
             memberships = new HashSet<>();

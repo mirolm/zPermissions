@@ -282,7 +282,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
         return result.toArray(new String[result.size()]);
     }
 
-    private static enum SplitState {
+    private enum SplitState {
         NORMAL, ESCAPED, QUOTED, QUOTED_ESCAPED
     }
 
