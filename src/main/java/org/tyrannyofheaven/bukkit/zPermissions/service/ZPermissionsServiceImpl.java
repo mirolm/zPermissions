@@ -231,14 +231,12 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             regions.add(regionName.toLowerCase());
         }
 
-        Map<String, Boolean> permissions = getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
+        return getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
             @Override
             public Map<String, Boolean> doInTransaction() throws Exception {
                 return getResolver().resolveGroup(groupName.toLowerCase(), lworldName, regions);
             }
         }, true);
-
-        return permissions;
     }
 
     /* (non-Javadoc)
@@ -272,14 +270,12 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             regions.add(regionName.toLowerCase());
         }
 
-        Map<String, Boolean> permissions = getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
+        return getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
             @Override
             public Map<String, Boolean> doInTransaction() throws Exception {
                 return getResolver().resolvePlayer(uuid, lworldName, regions).getPermissions();
             }
         }, true);
-
-        return permissions;
     }
 
     /* (non-Javadoc)
