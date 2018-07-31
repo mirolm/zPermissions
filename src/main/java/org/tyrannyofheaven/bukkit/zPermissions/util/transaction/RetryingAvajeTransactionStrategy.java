@@ -114,7 +114,6 @@ public class RetryingAvajeTransactionStrategy implements TransactionStrategy {
                 }
             } catch (PersistenceException e) {
                 savedPE = e;
-                continue;
             } catch (Error | RuntimeException e) {
                 // No need to wrap these, just re-throw
                 throw e;

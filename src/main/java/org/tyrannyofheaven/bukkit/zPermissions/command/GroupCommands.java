@@ -221,10 +221,8 @@ public class GroupCommands extends CommonCommands {
         if (entity == null) {
             sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), groupName);
             abortBatchProcessing();
-            return;
         } else if (entity.getPermissions().isEmpty()) {
             sendMessage(sender, colorize("{RED}Group has no declared permissions."));
-            return;
         }
     }
 
