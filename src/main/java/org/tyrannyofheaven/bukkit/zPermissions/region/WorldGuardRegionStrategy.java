@@ -32,6 +32,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 
 import com.google.common.collect.Iterables;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -91,7 +92,7 @@ public class WorldGuardRegionStrategy implements RegionStrategy, Listener {
         if (isEnabled()) {
             RegionManager rm = worldGuardPlugin.getRegionManager(location.getWorld());
             if (rm != null) {
-                ApplicableRegionSet ars = rm.getApplicableRegions(location);
+                ApplicableRegionSet ars = rm.getApplicableRegions(new Vector(location.getX(), location.getY(), location.getZ()));
                 // Note, sorted from high to low priority, i.e. reverse application order
                 List<ProtectedRegion> sorted = new ArrayList<>();
                 Iterables.addAll(sorted, ars);
