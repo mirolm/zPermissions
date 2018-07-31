@@ -60,7 +60,7 @@ import org.yaml.snakeyaml.representer.Representer;
  */
 public class FilePermissionDao implements PermissionDao {
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final InMemoryPermissionService permissionService;
 

@@ -35,7 +35,7 @@ public class ToHProfileUtils {
 
     private static final Logger logger = Logger.getLogger(ToHProfileUtils.class.getName());
 
-    private static ConcurrentMap<String, ProfileData> profileData = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, ProfileData> profileData = new ConcurrentHashMap<>();
 
     private static ProfileData getProfileData(String name) {
         // Avoid cost of initial creation

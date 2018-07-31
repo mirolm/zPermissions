@@ -232,7 +232,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     private VersionInfo versionInfo;
 
     // Permission resolver
-    private PermissionsResolver resolver = new PermissionsResolver(this);
+    private final PermissionsResolver resolver = new PermissionsResolver(this);
 
     // Model dumper
     private ModelDumper modelDumper;
