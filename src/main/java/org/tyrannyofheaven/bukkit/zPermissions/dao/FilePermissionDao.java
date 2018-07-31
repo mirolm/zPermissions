@@ -237,7 +237,7 @@ public class FilePermissionDao implements PermissionDao {
         Yaml yaml = new Yaml(new SafeConstructor());
         Map<String, Object> input;
         try (Reader in = new FileReader(file)) {
-            input = (Map<String, Object>) yaml.load(in);
+            input = yaml.load(in);
         }
         if (input != null) {
             load(input);

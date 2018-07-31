@@ -411,7 +411,7 @@ public class InMemoryPermissionService implements PermissionService {
         if (parentName != null)
             setParents(groupName, Collections.singletonList(parentName));
         else
-            setParents(groupName, Collections.<String>emptyList());
+            setParents(groupName, Collections.emptyList());
     }
 
     @Override

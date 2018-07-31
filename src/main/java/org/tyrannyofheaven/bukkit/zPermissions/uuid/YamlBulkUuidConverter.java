@@ -70,7 +70,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         Yaml yaml = new Yaml(new SafeConstructor());
         Map<String, Object> data;
         try (Reader in = new FileReader(dataFile)) {
-            data = (Map<String, Object>) yaml.load(in);
+            data = yaml.load(in);
         }
 
         // Gather usernames
