@@ -148,7 +148,7 @@ final class HandlerExecutor<T extends Plugin> {
                         Class<?> paramType = method.getParameterTypes()[i];
                         Annotation[] anns = method.getParameterAnnotations()[i];
 
-                        MethodParameter ma = null;
+                        MethodParameter ma;
 
                         // Special parameter type?
                         if (paramType.isAssignableFrom(Server.class)) {
@@ -414,7 +414,7 @@ final class HandlerExecutor<T extends Plugin> {
         if (!cmd.hasRest() && pa.getRest().length > 0)
             throw new ParseException("Too many arguments");
         Object[] methodArgs = buildMethodArgs(cmd, sender, pa, label, invChain, session, null);
-        Object nextHandler = null;
+        Object nextHandler;
         try {
             nextHandler = cmd.getMethod().invoke(cmd.getHandler(), methodArgs);
         } catch (InvocationTargetException e) {
@@ -604,7 +604,7 @@ final class HandlerExecutor<T extends Plugin> {
             List<String> result = new ArrayList<>();
 
             // Determine suitable TypeCompleter
-            TypeCompleter typeCompleter = null;
+            TypeCompleter typeCompleter;
             String arg = null;
 
             String completerName = cmd.getCompleter();

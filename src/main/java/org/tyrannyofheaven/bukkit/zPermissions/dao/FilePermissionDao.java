@@ -235,7 +235,7 @@ public class FilePermissionDao implements PermissionDao {
     @SuppressWarnings("unchecked")
     public void load(File file) throws IOException {
         Yaml yaml = new Yaml(new SafeConstructor());
-        Map<String, Object> input = null;
+        Map<String, Object> input;
         try (Reader in = new FileReader(file)) {
             input = (Map<String, Object>) yaml.load(in);
         }
