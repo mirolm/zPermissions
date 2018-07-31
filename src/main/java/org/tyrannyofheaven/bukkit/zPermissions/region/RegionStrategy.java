@@ -57,7 +57,7 @@ public interface RegionStrategy {
     /**
      * Returns whether this RegionStrategy is ready.
      *
-     * @return true if ready to receive calls to {@link #getRegions(Location)}.
+     * @return true if ready to receive calls to {@link #getRegions(Location, Player)}.
      */
     boolean isEnabled();
 

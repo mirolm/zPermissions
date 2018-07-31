@@ -40,7 +40,7 @@ public class ToHNamingConvention extends UnderscoreNamingConvention {
 
     /**
      * Construct a new instance and configure it so it only accepts table name
-     * mappings of the classes specified by {@link JavaPlugin#getDatabaseClasses()}.
+     * mappings of the classes specified by {@link DBPlugin#getDatabaseClasses()}.
      *
      * @param plugin the JavaPlugin subclass
      */

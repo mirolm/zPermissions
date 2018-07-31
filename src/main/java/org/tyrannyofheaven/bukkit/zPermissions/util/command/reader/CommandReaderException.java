@@ -1,7 +1,7 @@
 package org.tyrannyofheaven.bukkit.zPermissions.util.command.reader;
 
 /**
- * Thrown when {@link CommandReader#read(org.bukkit.Server, org.bukkit.command.CommandSender, java.io.InputStream, boolean)}
+ * Thrown when {@link CommandReader#read(org.bukkit.Server, org.bukkit.command.CommandSender, java.io.InputStream, boolean, org.bukkit.plugin.Plugin...)}
  * and friends encounter an error.
  *
  * @author zerothangel

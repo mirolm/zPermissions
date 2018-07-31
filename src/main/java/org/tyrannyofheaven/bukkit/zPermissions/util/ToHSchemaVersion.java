@@ -24,7 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * Avaje entity class for use with {@link ToHDatabaseUtils#upgradeDatabase(org.bukkit.plugin.java.JavaPlugin, com.avaje.ebean.config.NamingConvention, ClassLoader, String)}.
+ * Avaje entity class for use with {@link ToHDatabaseUtils#upgradeDatabase(DBPlugin, com.avaje.ebean.config.NamingConvention, ClassLoader, String)}.
  * Requires that the plugin also use {@link ToHNamingConvention} when creating the EbeanServer.
  * This ensures this entity has a plugin-specific name.
  *
