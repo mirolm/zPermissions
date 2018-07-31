@@ -18,9 +18,6 @@ package org.tyrannyofheaven.bukkit.zPermissions.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
-
 import com.avaje.ebean.config.NamingConvention;
 import com.avaje.ebean.config.TableName;
 import com.avaje.ebean.config.UnderscoreNamingConvention;
