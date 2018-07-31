@@ -107,9 +107,8 @@ final class HandlerExecutor<T extends Plugin> {
     /**
      * Create a HandlerExecutor instance.
      *
-     * @param plugin       the associated plugin
-     * @param usageOptions UsageOptions to use with the HelpBuilder
-     * @param handlers     handler objects
+     * @param plugin   the associated plugin
+     * @param handlers handler objects
      */
     HandlerExecutor(T plugin, Object... handlers) {
         this(plugin, new DefaultUsageOptions(), handlers);

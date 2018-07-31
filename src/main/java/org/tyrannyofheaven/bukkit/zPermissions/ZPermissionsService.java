@@ -59,7 +59,7 @@ public interface ZPermissionsService {
      *
      * @param worldName   the name of the target world. May be <code>null</code>.
      * @param regionNames set of region names. May be <code>null</code>.
-     * @param uuid        the player's UUID
+     * @param playerName  the player's name
      * @return effective permissions for this player
      */
     @Deprecated
@@ -80,7 +80,7 @@ public interface ZPermissionsService {
      *
      * @param worldName   the name of the target world. May be <code>null</code>.
      * @param regionNames set of region names. May be <code>null</code>.
-     * @param playerName  the player's name
+     * @param uuid        the player's UUID
      * @return effective permissions for this player
      */
     Map<String, Boolean> getPlayerPermissions(String worldName, Set<String> regionNames, UUID uuid);
@@ -196,7 +196,7 @@ public interface ZPermissionsService {
     /**
      * Retrieve the named metadata value from a group.
      *
-     * @param playerName   the group's name
+     * @param groupName    the group's name
      * @param metadataName the name of the metadata value
      * @param type         the metadata type (String, Integer, Long, Float, Double, Boolean, Object)
      *                     Integers and Floats may be truncated due to the source value having more precision.

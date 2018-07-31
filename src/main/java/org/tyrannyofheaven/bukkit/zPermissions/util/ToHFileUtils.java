@@ -258,9 +258,8 @@ public class ToHFileUtils {
     /**
      * Upgrade the standard configuration file, if necessary.
      *
-     * @param plugin         the plugin
-     * @param config         the FileConfiguration
-     * @param currentVersion the expected version, should be > 0
+     * @param plugin the plugin
+     * @param config the FileConfiguration
      */
     public static void upgradeConfig(Plugin plugin, FileConfiguration config) {
         Configuration defaults = config.getDefaults();

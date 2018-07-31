@@ -202,7 +202,7 @@ public class ToHMessageUtils {
      * Broadcasts the message to every user with the given permission. Supports
      * {@link String#format(String, Object...)} formatting and multiple lines.
      *
-     * @param server     the server
+     * @param plugin     the plugin
      * @param permission the permission required to receive the broadcast
      * @param format     the message format
      * @param args       format args
@@ -222,7 +222,7 @@ public class ToHMessageUtils {
      * Broadcasts the message to all players. Supports {@link String#format(String, Object...)}
      * formatting and multiple lines.
      *
-     * @param server the server
+     * @param plugin the plugin
      * @param format the message format
      * @param args   format args
      * @return number of users who received the message. In the case of a multi-line
@@ -236,7 +236,7 @@ public class ToHMessageUtils {
      * Broadcasts the message to all admins. Supports {@link String#format(String, Object...)}
      * formatting and multiple lines.
      *
-     * @param server the server
+     * @param plugin the plugin
      * @param format the message format
      * @param args   format args
      * @return number of users who received the message. In the case of a multi-line

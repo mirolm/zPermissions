@@ -196,11 +196,10 @@ public class PermissionsResolver {
      * should override group permissions.
      * NB: world and regions should all be in lowercase!
      *
-     * @param uuid       TODO
-     * @param world      the desination world name in lowercase or null
-     * @param regions    the name of the regions containing the destination, all
-     *                   in lowercase
-     * @param playerName the player's name
+     * @param uuid    the UUID of the player
+     * @param world   the desination world name in lowercase or null
+     * @param regions the name of the regions containing the destination, all
+     *                in lowercase
      * @return effective permissions for this player
      */
     public ResolverResult resolvePlayer(UUID uuid, String world, Set<String> regions) {

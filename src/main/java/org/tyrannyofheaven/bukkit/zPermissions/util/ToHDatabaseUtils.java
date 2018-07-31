@@ -152,10 +152,9 @@ public class ToHDatabaseUtils {
      * Generates that or the entire schema as appropriate. Runs schema update
      * scripts from a certain path.
      *
-     * @param ebeanServer      the EbeanServer
+     * @param plugin           the associated plugin
      * @param namingConvention the associated NamingConvention
      * @param classLoader      the plugin's class loader
-     * @param pluginEntity     any entity class (aside from ToHSchemaVersion) used by the plugin
      * @param updatePath       path to the root of the update scripts
      */
     public static void upgradeDatabase(DBPlugin plugin, NamingConvention namingConvention, ClassLoader classLoader, String updatePath) throws IOException {

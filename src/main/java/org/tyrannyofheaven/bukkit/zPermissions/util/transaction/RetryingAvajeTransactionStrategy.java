@@ -42,9 +42,10 @@ public class RetryingAvajeTransactionStrategy implements TransactionStrategy {
     /**
      * Create an instance associated with the given EbeanServer.
      *
-     * @param ebeanServer the EbeanServer to use for transactions
-     * @param maxRetries  maximum number of retry attempts (total attempts = maxRetries + 1)
-     * @param the         pre-commit hook or null
+     * @param ebeanServer   the EbeanServer to use for transactions
+     * @param maxRetries    maximum number of retry attempts (total attempts = maxRetries + 1)
+     * @param preBeginHook  pre-begin hook or null
+     * @param preCommitHook pre-commit hook or null
      */
     public RetryingAvajeTransactionStrategy(EbeanServer ebeanServer, int maxRetries, PreBeginHook preBeginHook, PreCommitHook preCommitHook) {
         if (ebeanServer == null)

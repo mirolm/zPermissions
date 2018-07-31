@@ -146,9 +146,7 @@ public class HelpBuilder {
     /**
      * Generate a usage message for a particular sibling command. Permissions are used.
      *
-     * @param command        the sibling command
-     * @param usePermissions true if permissions should be checked. If the current
-     *                       sender fails the check, no usage is generated.
+     * @param command the sibling command
      * @return this HelpBuilder
      */
     public HelpBuilder forSiblingCommand(String command) {
