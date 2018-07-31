@@ -54,7 +54,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
     @Override
     public String[] getGroups() {
         Set<String> result = service.getAllGroups();
-        return result.toArray(new String[result.size()]);
+        return result.toArray(new String[0]);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
             result = service.getPlayerAssignedGroups(player.getUniqueId());
         else
             result = service.getPlayerGroups(player.getUniqueId());
-        return result.toArray(new String[result.size()]);
+        return result.toArray(new String[0]);
     }
 
     @Override

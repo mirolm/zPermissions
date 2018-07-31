@@ -234,7 +234,7 @@ public class HelpBuilder {
      * @return the sub-command usage messages
      */
     public String[] getLines() {
-        return outputLines.toArray(new String[outputLines.size()]);
+        return outputLines.toArray(new String[0]);
     }
 
 }

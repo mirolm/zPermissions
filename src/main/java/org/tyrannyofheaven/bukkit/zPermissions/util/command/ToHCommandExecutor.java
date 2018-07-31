@@ -279,7 +279,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
         if (current.length() > 0)
             result.add(current.toString());
 
-        return result.toArray(new String[result.size()]);
+        return result.toArray(new String[0]);
     }
 
     private enum SplitState {
