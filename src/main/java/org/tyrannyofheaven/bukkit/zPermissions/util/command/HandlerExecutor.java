@@ -321,7 +321,7 @@ final class HandlerExecutor<T extends Plugin> {
                         }
                     } else {
                         // Flag
-                        result.add(Boolean.valueOf(text != null));
+                        result.add(text != null);
                     }
                 } else if (text != null) {
                     if (omd.getType() == String.class) {
