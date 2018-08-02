@@ -33,6 +33,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 
 import com.google.common.collect.Iterables;
 import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -91,9 +92,9 @@ public class WorldGuardRegionStrategy implements RegionStrategy, Listener {
     @Override
     public Set<String> getRegions(Location location, Player player) {
         if (isEnabled()) {
-            RegionManager rm = WorldGuard.getInstance().getPlatform().getRegionContainer().get(WorldGuard.getInstance().getPlatform().getWorldByName(location.getWorld().getName()));
+            RegionManager rm = getRegionManager(location);
             if (rm != null) {
-                ApplicableRegionSet ars = rm.getApplicableRegions(new Vector(location.getX(), location.getY(), location.getZ()));
+                ApplicableRegionSet ars = rm.getApplicableRegions(getVector(location));
                 // Note, sorted from high to low priority, i.e. reverse application order
                 List<ProtectedRegion> sorted = new ArrayList<>();
                 Iterables.addAll(sorted, ars);
@@ -129,6 +130,16 @@ public class WorldGuardRegionStrategy implements RegionStrategy, Listener {
         } else {
             worldGuardPlugin = null;
         }
+    }
+
+    private RegionManager getRegionManager(Location location) {
+        WorldGuard worldGuard = WorldGuard.getInstance();
+
+        return worldGuard.getPlatform().getRegionContainer().get(worldGuard.getPlatform().getWorldByName(location.getWorld().getName()));
+    }
+
+    private Vector getVector(Location location) {
+        return new Vector(location.getX(), location.getY(), location.getZ());
     }
 
 }
