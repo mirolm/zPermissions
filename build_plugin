@@ -15,11 +15,4 @@ rm -rf target
 
 git clone https://github.com/mirolm/zPermissions.git
 
-# if sk89q repo gets fixed remove this...
-if [ ! -f bukkit-1.6.2-R0.1-20130804.014923-14.jar ]; then
-  wget http://maven.sk89q.com/repo/org/bukkit/bukkit/1.6.2-R0.1-SNAPSHOT/bukkit-1.6.2-R0.1-20130804.014923-14.jar -O bukkit-1.6.2-R0.1-20130804.014923-14.jar
-fi
-
-mvn install:install-file -Dfile=bukkit-1.6.2-R0.1-20130804.014923-14.jar -DgroupId=org.bukkit -DartifactId=bukkit -Dversion=1.6.2-R0.1-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
-
 mvn clean install
