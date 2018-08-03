@@ -60,7 +60,7 @@ public class ToHFileUtils {
      *
      * @param input   the InputStream
      * @param outFile the output File
-     * @throws IOException
+     * @throws IOException if something went wrong
      */
     public static void copyFile(InputStream input, File outFile) throws IOException {
         try (OutputStream os = new FileOutputStream(outFile)) {
@@ -78,7 +78,7 @@ public class ToHFileUtils {
      * @param clazz        the class
      * @param resourceName resource name relative to the class
      * @param outFile      the output File
-     * @throws IOException
+     * @throws IOException if something went wrong
      */
     public static void copyResourceToFile(Class<?> clazz, String resourceName, File outFile) throws IOException {
         try (InputStream is = clazz.getResourceAsStream(resourceName)) {

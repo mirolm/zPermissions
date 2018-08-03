@@ -55,9 +55,8 @@ final class ParsedArgs {
     /**
      * Parse command arguments according to the given CommandMetaData.
      *
-     * @param cmd
-     * @param args
-     * @return
+     * @param cmd  command
+     * @param args arguments to parse
      */
     public void parse(CommandMetaData cmd, String[] args) {
         if (cmd == null)

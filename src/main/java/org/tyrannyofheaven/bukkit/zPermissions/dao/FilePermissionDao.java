@@ -180,7 +180,7 @@ public class FilePermissionDao implements PermissionDao {
      * Save state of entire system to filesyste.
      *
      * @param file the file to save to
-     * @throws IOException
+     * @throws IOException if something went wrong
      */
     public void save(File file) throws IOException {
         if (!isDirty()) return;
@@ -230,7 +230,7 @@ public class FilePermissionDao implements PermissionDao {
      * Load state of entire system from filesystem.
      *
      * @param file the file to load from
-     * @throws IOException
+     * @throws IOException if something went wrong
      */
     @SuppressWarnings("unchecked")
     public void load(File file) throws IOException {

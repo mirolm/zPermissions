@@ -71,7 +71,7 @@ public class QualifiedPermission {
     /**
      * Return the region if this is a region-specific permission
      *
-     * @return
+     * @return the name of the region
      */
     public String getRegion() {
         return region;
