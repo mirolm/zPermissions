@@ -33,7 +33,7 @@ public interface TypeCompleter {
      * @param arg     the argument. May be null.
      * @param sender  TODO
      * @param partial start of string to match for completion. May be empty, never null.
-     * @return        a list for completion
+     * @return a list for completion
      */
     List<String> complete(Class<?> clazz, String arg, CommandSender sender, String partial);
 
