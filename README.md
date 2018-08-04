@@ -1,14 +1,14 @@
 # zPermissions &mdash; A Superperms plugin for Bukkit #
 
-zPermissions is primarily an SQL database-backed Superperms (aka Bukkit permissions) implementation. It also supports flat-file storage. Notable features are: multi-world support, ranks with multiple tracks/ladders, group inheritance of arbitrary depth (within reason), and optional region-specific permissions using [WorldGuard](http://dev.bukkit.org/server-mods/worldguard/) regions, [Residence](http://dev.bukkit.org/server-mods/residence/) residences, [Factions](http://dev.bukkit.org/bukkit-plugins/factions/) territories, or [Factoid](http://dev.bukkit.org/bukkit-plugins/factoid/) lands.
+zPermissions is primarily an SQL database-backed Superperms (aka Bukkit permissions) implementation. It also supports flat-file storage. Notable features are: multi-world support, ranks with multiple tracks/ladders, group inheritance of arbitrary depth (within reason), and optional region-specific permissions using [WorldGuard](http://dev.bukkit.org/projects/worldguard/) regions, [Residence](http://dev.bukkit.org/projects/residence/) residences, [Factions](http://dev.bukkit.org/projects/factions/) territories, or [Factoid](http://dev.bukkit.org/projects/factoid/) lands.
 
 There is no built-in build protection (I rely on other plugins for that). zPermissions focuses on permissions and only permissions.
 
 I aim to keep zPermissions a simple, yet feature-rich, Superperms provider.
 
-Please post bugs and/or feature requests as [dev.bukkit.org tickets](http://dev.bukkit.org/server-mods/zpermissions/tickets/). **But before doing so, please check the [known issues](http://dev.bukkit.org/bukkit-plugins/zpermissions/pages/known-issues/) as well as the [FAQ](http://dev.bukkit.org/server-mods/zpermissions/pages/frequently-asked-questions/).**
+Please post bugs and/or feature requests as [dev.bukkit.org tickets](http://dev.bukkit.org/projects/zpermissions/tickets/). **But before doing so, please check the [known issues](http://dev.bukkit.org/projects/zpermissions/pages/known-issues/) as well as the [FAQ](mirolm/zPermissions/blob/master/doc/faq.md).**
 
-[ [Quick start documentation](http://dev.bukkit.org/server-mods/zpermissions/pages/quick-start/) | [For Server Admins](http://dev.bukkit.org/server-mods/zpermissions/pages/for-server-admins/) | [FAQ](http://dev.bukkit.org/server-mods/zpermissions/pages/frequently-asked-questions/) | More documentation below! ]
+[ [Quick start documentation](mirolm/zPermissions/blob/master/doc/quickstart.md) | [For Server Admins](mirolm/zPermissions/blob/master/doc/admins.md) | [FAQ](mirolm/zPermissions/blob/master/doc/faq.md) | More documentation below! ]
 
 ## Features ##
 
@@ -28,9 +28,9 @@ Please post bugs and/or feature requests as [dev.bukkit.org tickets](http://dev.
 
 *   **Temporary group assignments.** Assign a group to a player and have their membership expire after 1 day... a few months... or a year! Whatever duration you want.
 
-*   **Players and groups can be assigned chat prefixes and suffixes.** A Vault-compatible chat-formatting plugin is still required, like [Herochat](http://dev.bukkit.org/server-mods/herochat/), [zChat](http://dev.bukkit.org/server-mods/zchat/), etc.
+*   **Players and groups can be assigned chat prefixes and suffixes.** A Vault-compatible chat-formatting plugin is still required, like [Herochat](http://dev.bukkit.org/projects/herochat/), [zChat](http://dev.bukkit.org/projects/zchat/), etc.
 
-*   **API.** zPermissions offers a comprehensive *read-only* API that other plugins can use. (Though I would recommend coding against [Vault](http://dev.bukkit.org/server-mods/vault/) instead.)
+*   **API.** zPermissions offers a comprehensive *read-only* API that other plugins can use. (Though I would recommend coding against [Vault](http://dev.bukkit.org/projects/vault/) instead.)
 
 *   **Metadata support.** Players and groups may have arbitrary metadata associated with them. Metadata values may be strings, integers, reals (floating point), and booleans. Metadata may be queried via the native API or Vault Chat API.
 
@@ -75,13 +75,13 @@ The rank commands are `/promote`, `/demote`, `/setrank`, and `/unsetrank` and wi
 
 ## More Documentation ##
 
-*   [Permissions](http://dev.bukkit.org/server-mods/zpermissions/pages/permissions)
-*   [Detailed Command Usage](http://dev.bukkit.org/server-mods/zpermissions/pages/commands)
-*   [Temporary Permissions & Groups](http://dev.bukkit.org/bukkit-plugins/zpermissions/pages/temporary-permissions-groups/)
-*   [Customizing Table Names](http://dev.bukkit.org/server-mods/zpermissions/pages/customizing-table-names/)
-*   [Vault Support](http://dev.bukkit.org/server-mods/zpermissions/pages/vault-support)
-*   [For Plugin Developers](http://dev.bukkit.org/server-mods/zpermissions/pages/for-plugin-developers/)
-*   [Schema Updates](http://dev.bukkit.org/server-mods/zpermissions/pages/schema-updates/)
+*   [Permissions](mirolm/zPermissions/blob/master/doc/permissions.md)
+*   [Detailed Command Usage](mirolm/zPermissions/blob/master/doc/commands.md)
+*   [Temporary Permissions & Groups](mirolm/zPermissions/blob/master/doc/temporary.md)
+*   [Customizing Table Names](mirolm/zPermissions/blob/master/doc/tables.md)
+*   [Vault Support](mirolm/zPermissions/blob/master/doc/vault.md)
+*   [For Plugin Developers](mirolm/zPermissions/blob/master/doc/developers.md)
+*   [Schema Updates](mirolm/zPermissions/blob/master/doc/schemaupdate.md)
 
 ## License & Source ##
 

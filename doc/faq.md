@@ -32,12 +32,12 @@
     
     1. None of the current plugins *at the time* met my needs. PermissionsBukkit had buggy multi-world support and the developer did not seem very responsive. bPermissions did not have group inheritance and changed its file format at least twice while I used it (without providing an auto-upgrade path). Lastly, I did not want to touch anything that still clung to the old "Permissions 2" system.
     2. I wanted region-specific permissions.
-    3. The first plugin I developed ([Excursion](http://dev.bukkit.org/server-mods/excursion/)) was relatively simple. I wanted a bit more practice with the Bukkit API, so I coded zPermissions from scratch.
+    3. The first plugin I developed ([Excursion](http://dev.bukkit.org/projects/excursion/)) was relatively simple. I wanted a bit more practice with the Bukkit API, so I coded zPermissions from scratch.
     4. It was the primary testbed and driver for development for my [personal plugin library](https://github.com/ZerothAngel/ToHPluginUtils).
     
 *   **Can zPermissions support region plugin X?**
 
-    It should be easier to do now, so feel free to [create a ticket](http://dev.bukkit.org/server-mods/zpermissions/tickets/). If you provide links to API docs and/or provide configuration examples, you will greatly improve the chance that I will accept it and work on it sooner rather than later. ;)
+    It should be easier to do now, so feel free to [create a ticket](http://dev.bukkit.org/projects/zpermissions/tickets/). If you provide links to API docs and/or provide configuration examples, you will greatly improve the chance that I will accept it and work on it sooner rather than later. ;)
     
     There's only one hard requirement on the region plugin: it must be able to return the name(s) of regions that enclose any given location.
     

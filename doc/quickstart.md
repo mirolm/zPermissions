@@ -10,7 +10,7 @@ The first thing to do is to decide how you want to set up zPermissions's permiss
 
 The most common free and open source database servers are [MySQL](http://dev.mysql.com/) and [PostgreSQL](http://www.postgresql.org/). Note that if you don't already have a basic understanding of setting up and administering these database servers, look and read their respective documentation. Alternatively, you might want to consider using the zPermissions flat-file approach.
 
-Detailed instructions on configuring zPermissions with SQL database servers may be found at the [For Server Admins page](http://dev.bukkit.org/server-mods/zpermissions/pages/for-server-admins/).
+Detailed instructions on configuring zPermissions with SQL database servers may be found at the [For Server Admins page](mirolm/zPermissions/blob/master/doc/admins.md).
 
 ### Flat-File Storage ###
 
@@ -20,7 +20,7 @@ To use flat-file storage, you must start your server with zPermissions at least 
 
 ### Embedded Database ###
 
-To use an embedded database (similar to SQLite), see the [H2](http://www.h2database.com/) instructions at the [For Server Admins page](http://dev.bukkit.org/server-mods/zpermissions/pages/for-server-admins/).
+To use an embedded database (similar to SQLite), see the [H2](http://www.h2database.com/) instructions at the [For Server Admins page](mirolm/zPermissions/blob/master/doc/admins.md).
 
 ## ebean.properties SEVERE message ##
 

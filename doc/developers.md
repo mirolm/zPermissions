@@ -2,7 +2,7 @@
 
 ## If you really must have an API... ##
 
-Since 0.9.8, zPermissions has provided an API for common, read-only operations. It was originally developed with [Vault](http://dev.bukkit.org/server-mods/vault/) in mind, but of course, anyone can use it.
+Since 0.9.8, zPermissions has provided an API for common, read-only operations. It was originally developed with [Vault](http://dev.bukkit.org/projects/vault) in mind, but of course, anyone can use it.
 
 The API methods are exposed via the [ZPermissionsService](https://github.com/ZerothAngel/zPermissions/blob/master/src/main/java/org/tyrannyofheaven/bukkit/zPermissions/ZPermissionsService.java) interface.
 

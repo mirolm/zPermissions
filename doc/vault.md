@@ -1,6 +1,6 @@
 ## Vault Support ##
 
-zPermissions more or less implements 100% of the [Vault](http://dev.bukkit.org/server-mods/vault/) APIs for both permissions and chat. Currently, zPermissions support is built-in to Vault.
+zPermissions more or less implements 100% of the [Vault](http://dev.bukkit.org/projects/vault) APIs for both permissions and chat. Currently, zPermissions support is built-in to Vault.
 
 ### Vault Permissions API Notes ###
 
