@@ -4,3 +4,7 @@
 
 # Maven
 target/
+
+# Junit
+NewAvaje*-create.sql
+NewAvaje*-drop.sql
