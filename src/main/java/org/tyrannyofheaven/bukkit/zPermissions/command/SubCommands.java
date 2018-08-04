@@ -225,6 +225,15 @@ public class SubCommands {
     @Command(value = "check", description = "Check against effective permissions")
     @Require("zpermissions.check")
     public void check(CommandSender sender, @Option("permission") String permission, @Option(value = "player", optional = true, completer = "player") String playerName) {
+        commandUuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
+            @Override
+            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
+                check(sender, permission, uuid, name);
+            }
+        });
+    }
+
+    private void check(CommandSender sender, String permission, UUID uuid, String playerName) {
         Player player;
         if (playerName == null) {
             // No player specified
@@ -239,7 +248,7 @@ public class SubCommands {
             // Checking perms for another player
             requirePermission(sender, "zpermissions.check.other");
 
-            player = Bukkit.getPlayer(playerName);
+            player = Bukkit.getPlayer(uuid);
             if (player == null) {
                 sendMessage(sender, colorize("{RED}Player is not online."));
                 abortBatchProcessing();
@@ -260,6 +269,15 @@ public class SubCommands {
     @Command(value = "inspect", description = "Inspect effective permissions")
     @Require("zpermissions.inspect")
     public void inspect(CommandSender sender, @Option(value = {"-f", "--filter"}, valueName = "filter") String filter, @Option({"-v", "--verbose"}) boolean verbose, @Option(value = "player", optional = true, completer = "player") String playerName) {
+        commandUuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
+            @Override
+            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
+                inspect(sender, filter, verbose, uuid, name);
+            }
+        });
+    }
+
+    private void inspect(CommandSender sender, String filter, boolean verbose, UUID uuid, String playerName) {
         Player player;
         if (playerName == null) {
             // No player specified
@@ -274,7 +292,7 @@ public class SubCommands {
             // Checking perms for another player
             requirePermission(sender, "zpermissions.inspect.other");
 
-            player = Bukkit.getPlayer(playerName);
+            player = Bukkit.getPlayer(uuid);
             if (player == null) {
                 sendMessage(sender, colorize("{RED}Player is not online."));
                 abortBatchProcessing();
