@@ -6,9 +6,9 @@ There is no built-in build protection (I rely on other plugins for that). zPermi
 
 I aim to keep zPermissions a simple, yet feature-rich, Superperms provider.
 
-Please post bugs and/or feature requests as [dev.bukkit.org tickets](http://dev.bukkit.org/projects/zpermissions/tickets/). **But before doing so, please check the [known issues](http://dev.bukkit.org/projects/zpermissions/pages/known-issues/) as well as the [FAQ](mirolm/zPermissions/blob/master/doc/faq.md).**
+Please post bugs and/or feature requests as [dev.bukkit.org tickets](http://dev.bukkit.org/projects/zpermissions/tickets/). **But before doing so, please check the [known issues](http://dev.bukkit.org/projects/zpermissions/pages/known-issues/) as well as the [FAQ](/doc/faq.md).**
 
-[ [Quick start documentation](mirolm/zPermissions/blob/master/doc/quickstart.md) | [For Server Admins](mirolm/zPermissions/blob/master/doc/admins.md) | [FAQ](mirolm/zPermissions/blob/master/doc/faq.md) | More documentation below! ]
+[ [Quick start documentation](/doc/quickstart.md) | [For Server Admins](/doc/admins.md) | [FAQ](/doc/faq.md) | More documentation below! ]
 
 ## Features ##
 
@@ -76,12 +76,12 @@ The rank commands are `/promote`, `/demote`, `/setrank`, and `/unsetrank` and wi
 ## More Documentation ##
 
 *   [Permissions](/doc/permissions.md)
-*   [Detailed Command Usage](mirolm/zPermissions/blob/master/doc/commands.md)
-*   [Temporary Permissions & Groups](mirolm/zPermissions/blob/master/doc/temporary.md)
-*   [Customizing Table Names](mirolm/zPermissions/blob/master/doc/tables.md)
-*   [Vault Support](mirolm/zPermissions/blob/master/doc/vault.md)
-*   [For Plugin Developers](mirolm/zPermissions/blob/master/doc/developers.md)
-*   [Schema Updates](mirolm/zPermissions/blob/master/doc/schemaupdate.md)
+*   [Detailed Command Usage](/doc/commands.md)
+*   [Temporary Permissions & Groups](/doc/temporary.md)
+*   [Customizing Table Names](/doc/tables.md)
+*   [Vault Support](/doc/vault.md)
+*   [For Plugin Developers](/doc/developers.md)
+*   [Schema Updates](/doc/schemaupdate.md)
 
 ## License & Source ##
 

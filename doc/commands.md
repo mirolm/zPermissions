@@ -64,7 +64,7 @@ Commands you probably shouldn't run often.
 
 ### Aliases ###
 
-Convenient aliases for setting Vault-related metadata properties. See [Vault Support](mirolm/zPermissions/blob/master/doc/vault.md) for more details.
+Convenient aliases for setting Vault-related metadata properties. See [Vault Support](/doc/vault.md) for more details.
 
 *   `/permissions player <player> prefix [<prefix>]` &mdash; Set a player's chat prefix. Omit the prefix to unset.
 *   `/permissions player <player> suffix [<suffix>]` &mdash; Set a player's chat suffix. Omit the suffix to unset.
