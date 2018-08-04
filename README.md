@@ -75,7 +75,7 @@ The rank commands are `/promote`, `/demote`, `/setrank`, and `/unsetrank` and wi
 
 ## More Documentation ##
 
-*   [Permissions](mirolm/zPermissions/blob/master/doc/permissions.md)
+*   [Permissions](/doc/permissions.md)
 *   [Detailed Command Usage](mirolm/zPermissions/blob/master/doc/commands.md)
 *   [Temporary Permissions & Groups](mirolm/zPermissions/blob/master/doc/temporary.md)
 *   [Customizing Table Names](mirolm/zPermissions/blob/master/doc/tables.md)
