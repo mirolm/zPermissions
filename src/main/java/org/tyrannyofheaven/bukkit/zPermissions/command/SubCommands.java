@@ -142,6 +142,7 @@ public class SubCommands {
                     .forCommand("has")
                     .forCommand("metadata")
                     .forCommand("prefix")
+                    .forCommand("refresh")
                     .forCommand("suffix")
                     .forCommand("settrack")
                     .show();
