@@ -599,7 +599,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             CommandUuidResolver commandUuidResolver = new CommandUuidResolver(this, uuidResolver, commandUuidResolverExecutor, false /* TODO true after 1.3 */);
 
             // Install our commands
-            (new ToHCommandExecutor<ZPermissionsPlugin>(this, new RootCommands(getZPermissionsCore(), storageStrategy, getResolver(), getModelDumper(), getZPermissionsConfig(), this, commandUuidResolver, uuidResolver)))
+            (new ToHCommandExecutor<>(this, new RootCommands(getZPermissionsCore(), storageStrategy, getResolver(), getModelDumper(), getZPermissionsConfig(), this, commandUuidResolver, uuidResolver)))
                     .registerTypeCompleter("group", new GroupTypeCompleter(getPermissionService()))
                     .registerTypeCompleter("track", new TrackTypeCompleter(getZPermissionsConfig()))
                     .registerTypeCompleter("dump-dir", new DirTypeCompleter(getZPermissionsConfig()))

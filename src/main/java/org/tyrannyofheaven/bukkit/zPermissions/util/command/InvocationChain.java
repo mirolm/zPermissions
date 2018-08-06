@@ -37,7 +37,7 @@ final class InvocationChain {
     }
 
     InvocationChain() {
-        this(new LinkedList<CommandInvocation>());
+        this(new LinkedList<>());
     }
 
     // Adds a new invocation to the chain
