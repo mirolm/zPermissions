@@ -7,9 +7,5 @@ script: mvn test -B
 jdk:
 - oraclejdk8
 
-cache:
-  directories:
-  - $HOME/.m2
-
 notifications:
   email: false
