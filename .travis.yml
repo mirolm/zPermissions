@@ -2,7 +2,7 @@ sudo: false
 
 language: java
 
-script: mvn test -B
+script: mvn -e -fae -B -Dfailsafe.useFile=false -T2 clean test verify
 
 jdk:
 - oraclejdk8
