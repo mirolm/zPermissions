@@ -229,7 +229,7 @@ public class PlayerCommands extends CommonCommands {
 
     @Command(value = {"settemp", "temp", "tmp"}, description = "Set a temporary permission")
     @Require("zpermissions.player.manage")
-    public void settemp(CommandSender sender, @Session("entityName") String playerName, @Option("permission") String permission, @Option(value = "value", optional = true) Boolean value, @Option(value = {"-t", "--timeout"}, valueName = "timeout") Integer timeout) {
+    public void settemp(CommandSender sender, @Session("entityName") String playerName, final @Option("permission") String permission, final @Option(value = "value", optional = true) Boolean value, final @Option(value = {"-t", "--timeout"}, valueName = "timeout") Integer timeout) {
         uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
             @Override
             public void process(CommandSender sender, String name, UUID uuid, boolean group) {
@@ -263,7 +263,7 @@ public class PlayerCommands extends CommonCommands {
 
     @Command(value = "has", description = "Bukkit hasPermission() check")
     @Require("zpermissions.player.view")
-    public void has(CommandSender sender, @Session("entityName") String playerName, @Option("permission") String permission) {
+    public void has(CommandSender sender, @Session("entityName") String playerName, final @Option("permission") String permission) {
         uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
             @Override
             public void process(CommandSender sender, String name, UUID uuid, boolean group) {
