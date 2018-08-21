@@ -72,10 +72,6 @@
                     <groupId>com.sk89q.worldedit</groupId>
                     <artifactId>worldedit-bukkit</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>com.sk89q</groupId>
-                    <artifactId>commandbook</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
