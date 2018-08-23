@@ -145,7 +145,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     private static final int DEFAULT_TXN_MAX_RETRIES = 1;
 
     // Default database support
-    private static final boolean DEFAULT_DATABASE_SUPPORT = true;
+    private static final boolean DEFAULT_DATABASE_SUPPORT = false;
 
     // Default number of ticks to wait between permissions refreshes of all players
     private static final int DEFAULT_BULK_REFRESH_DELAY = 5;
