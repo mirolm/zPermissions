@@ -542,7 +542,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                 SpiEbeanServer spiEbeanServer = (SpiEbeanServer) ebeanServer;
                 if (spiEbeanServer.getDatabasePlatform().getName().contains("sqlite")) {
                     log(this, Level.WARNING, "This plugin is NOT compatible with SQLite.");
-                    log(this, Level.WARNING, "Edit bukkit.yml to switch databases or disable database support in config.yml.");
+                    log(this, Level.WARNING, "Edit config.yml to switch databases or disable database support.");
                     log(this, Level.WARNING, "Falling back to file-based storage strategy.");
                     // Do nothing else (storageStrategy still null)
                 } else {

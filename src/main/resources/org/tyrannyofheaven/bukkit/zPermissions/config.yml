@@ -1,13 +1,13 @@
 config-version: 19
 
-database-support: true
+database-support: false
 
 database:
   username: us3r
   isolation: SERIALIZABLE
-  driver: org.sqlite.JDBC
+  driver: com.mysql.jdbc.Driver
   password: passw0rd
-  url: jdbc:sqlite:plugins/zPermissions/zPermissions.db
+  url: jdbc:mysql://localhost:3306/database
 
 database-read-only: false
 
