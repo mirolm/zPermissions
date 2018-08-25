@@ -4,7 +4,7 @@ database-support: false
 
 database:
   username: us3r
-  isolation: SERIALIZABLE
+  isolation: REPEATABLE_READ
   driver: com.mysql.jdbc.Driver
   password: passw0rd
   url: jdbc:mysql://localhost:3306/database
