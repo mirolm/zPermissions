@@ -7,5 +7,9 @@ script: mvn -e -fae -B -Dfailsafe.useFile=false clean test verify
 jdk:
 - oraclejdk8
 
+cache:
+  directories:
+  - $HOME/.m2
+
 notifications:
   email: false
