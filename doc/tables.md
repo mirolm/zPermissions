@@ -2,9 +2,10 @@
 
 If, for whatever reason, you cannot set up bukkit.yml to assign one database per plugin, you can choose to customize the names of zPermissions' tables instead. Doing so will help avoid table name collisions.
 
-zPermissions has 9 tables. The tables and their default names are:
+zPermissions has 10 tables. The tables and their default names are:
 
 *   `ToHSchemaVersion` &mdash; zperms\_schema_version
+*   `UuidDisplayNameCache` &mdash; uuidcache
 *   `Entry` &mdash; entries
 *   `Membership` &mdash; memberships
 *   `PermissionEntity` &mdash; entities
@@ -18,6 +19,7 @@ To customize the names, simply add something like the following to your config.y
 
     tables:
       ToHSchemaVersion: zp_schema_version
+      UuidDisplayNameCache: zp_uuid_cache
       Entry: zp_entries
       Membership: zp_memberships
       PermissionEntity: zp_entities
@@ -45,6 +47,7 @@ For example,
 
     tables:
       ToHSchemaVersion: myserver.zperms_schema_version
+      UuidDisplayNameCache: myserver.uuidcache
       Entry: myserver.entries
       Membership: myserver.memberships
       PermissionEntity: myserver.entities
