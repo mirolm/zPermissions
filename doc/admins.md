@@ -12,7 +12,7 @@ MySQL is probably the easiest database to use, especially since CraftBukkit alre
 
 	database:
 		username: bukkit
-		isolation: SERIALIZABLE
+		isolation: REPEATABLE_READ
 		driver: com.mysql.jdbc.Driver
 		password: walrus
 		url: jdbc:mysql://127.0.0.1:3306/{NAME}
@@ -33,7 +33,7 @@ Setting up CraftBukkit to use H2 is bit involved. One way to do it is:
 
         database:
          	username: bukkit
-    		isolation: SERIALIZABLE
+    		isolation: READ_COMMITTED
         	driver: org.h2.Driver
     		password: walrus
         	url: jdbc:h2:{DIR}{NAME}
@@ -52,7 +52,7 @@ Setting up for PostgreSQL is similar to H2.
 
         database:
     		username: bukkit
-        	isolation: SERIALIZABLE
+        	isolation: READ_COMMITTED
     		driver: org.postgresql.Driver
         	password: walrus
     		url: jdbc:postgresql://127.0.0.1/{NAME}
