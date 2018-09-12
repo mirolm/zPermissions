@@ -792,6 +792,9 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                     }
                 }
             });
+
+            // Refresh player available commands
+            player.updateCommands();
         }
     }
 
