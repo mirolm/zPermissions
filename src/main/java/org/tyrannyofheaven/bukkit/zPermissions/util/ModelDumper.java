@@ -21,12 +21,10 @@ import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.quoteA
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.bukkit.plugin.Plugin;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
@@ -96,12 +94,11 @@ public class ModelDumper {
                                         quoteArgForCommand(entity.getDisplayName()),
                                         quoteArgForCommand(membership.getMember() + "/" + membership.getDisplayName())));
                             } else {
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTime(membership.getExpiration());
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
                                 out.println(String.format("permissions group %s add %s %s",
                                         quoteArgForCommand(entity.getDisplayName()),
                                         quoteArgForCommand(membership.getMember() + "/" + membership.getDisplayName()),
-                                        quoteArgForCommand(DatatypeConverter.printDateTime(cal))));
+                                        quoteArgForCommand(sdf.format(membership.getExpiration()))));
                             }
                         }
                     }

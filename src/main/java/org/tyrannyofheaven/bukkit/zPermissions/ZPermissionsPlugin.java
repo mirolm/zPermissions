@@ -534,7 +534,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             if (hasText(storageStrategyClassName)) {
                 // Use a custom StorageStrategy implementation
                 log(this, "Using custom storage strategy: %s", storageStrategyClassName);
-                storageStrategy = (StorageStrategy) Class.forName(storageStrategyClassName).newInstance();
+                storageStrategy = (StorageStrategy) Class.forName(storageStrategyClassName).getDeclaredConstructor().newInstance();
             } else if (databaseSupport) {
                 // Use the default Avaje-based StorageStrategy
                 ebeanServer = ToHDatabaseUtils.createEbeanServer(this, getClassLoader(), namingConvention, config);

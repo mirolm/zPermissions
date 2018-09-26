@@ -18,6 +18,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util;
 import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.colorize;
 import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHUtils.assertFalse;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -36,15 +37,11 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.ParseException;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
@@ -345,19 +342,10 @@ public class Utils {
             // Try ISO 8601 date
             duration = duration.toUpperCase(); // Make sure that 'T' is capitalized
             try {
-                Calendar cal = DatatypeConverter.parseDateTime(duration);
-                cal.set(Calendar.MILLISECOND, 0);
-                return cal.getTime();
-            } catch (IllegalArgumentException e2) {
-                // One last try. Append :00
-                // WHY U SO STRICT DatatypeConverter?!
-                try {
-                    Calendar cal = DatatypeConverter.parseDateTime(duration + ":00");
-                    cal.set(Calendar.MILLISECOND, 0);
-                    return cal.getTime();
-                } catch (IllegalArgumentException e3) {
-                    throw new ParseException("Invalid value: duration/timestamp"); // NB Should match option name
-                }
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+                return sdf.parse(duration);
+            } catch (Exception e) {
+                throw new ParseException("Invalid value: duration/timestamp"); // NB Should match option name
             }
         }
     }
@@ -367,15 +355,8 @@ public class Utils {
         if (date == null)
             throw new IllegalArgumentException("date cannot be null");
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        String result = DatatypeConverter.printDateTime(cal);
-
-        if (result.length() < 16)
-            return result;
-        else
-            return result.substring(0, 16);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        return sdf.format(date);
     }
 
     /**
