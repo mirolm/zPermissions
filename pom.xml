@@ -55,16 +55,24 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
+                    <groupId>com.sk89q</groupId>
+                    <artifactId>dummypermscompat</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sk89q.lib</groupId>
+                    <artifactId>jlibnoise</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.papermc</groupId>
+                    <artifactId>paperlib</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.bstats.bStats-Metrics</groupId>
                     <artifactId>bstats-bukkit</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>io.papermc</groupId>
-                    <artifactId>paperlib</artifactId>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
