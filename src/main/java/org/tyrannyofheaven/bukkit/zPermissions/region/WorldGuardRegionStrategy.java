@@ -32,7 +32,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 
 import com.google.common.collect.Iterables;
-import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -137,8 +137,8 @@ public class WorldGuardRegionStrategy implements RegionStrategy, Listener {
         return worldGuard.getPlatform().getRegionContainer().get(worldGuard.getPlatform().getWorldByName(location.getWorld().getName()));
     }
 
-    private Vector getVector(Location location) {
-        return new Vector(location.getX(), location.getY(), location.getZ());
+    private BlockVector3 getVector(Location location) {
+        return BlockVector3.at(location.getX(), location.getY(), location.getZ());
     }
 
 }
