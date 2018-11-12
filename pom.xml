@@ -63,14 +63,6 @@
                     <artifactId>jlibnoise</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>io.papermc</groupId>
-                    <artifactId>paperlib</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bstats</groupId>
-                    <artifactId>bstats-bukkit</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
                 </exclusion>
