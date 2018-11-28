@@ -93,7 +93,7 @@ public class WorldGuardRegionStrategy implements RegionStrategy, Listener {
         if (isEnabled()) {
             RegionManager rm = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(location.getWorld()));
             if (rm != null) {
-                ApplicableRegionSet ars = rm.getApplicableRegions(BukkitAdapter.asVector(location));
+                ApplicableRegionSet ars = rm.getApplicableRegions(BukkitAdapter.asBlockVector(location));
                 // Note, sorted from high to low priority, i.e. reverse application order
                 List<ProtectedRegion> sorted = new ArrayList<>();
                 Iterables.addAll(sorted, ars);
