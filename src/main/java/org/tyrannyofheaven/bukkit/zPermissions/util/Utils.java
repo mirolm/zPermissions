@@ -320,18 +320,36 @@ public class Utils {
             if (units != null) {
                 units = units.toLowerCase();
 
-                if ("minutes".equals(units) || "minute".equals(units) || "mins".equals(units) || "min".equals(units))
-                    unitsInt = Calendar.MINUTE;
-                else if ("hours".equals(units) || "hour".equals(units) || "h".equals(units))
-                    unitsInt = Calendar.HOUR;
-                else if ("days".equals(units) || "day".equals(units) || "d".equals(units))
-                    unitsInt = Calendar.DAY_OF_MONTH;
-                else if ("months".equals(units) || "month".equals(units) || "m".equals(units))
-                    unitsInt = Calendar.MONTH;
-                else if ("years".equals(units) || "year".equals(units) || "y".equals(units))
-                    unitsInt = Calendar.YEAR;
-                else
-                    throw new ParseException("units must be minutes, hours, days, months, years");
+                switch (units) {
+                    case "minutes":
+                    case "minute":
+                    case "mins":
+                    case "min":
+                        unitsInt = Calendar.MINUTE;
+                        break;
+                    case "hours":
+                    case "hour":
+                    case "h":
+                        unitsInt = Calendar.HOUR;
+                        break;
+                    case "days":
+                    case "day":
+                    case "d":
+                        unitsInt = Calendar.DAY_OF_MONTH;
+                        break;
+                    case "months":
+                    case "month":
+                    case "m":
+                        unitsInt = Calendar.MONTH;
+                        break;
+                    case "years":
+                    case "year":
+                    case "y":
+                        unitsInt = Calendar.YEAR;
+                        break;
+                    default:
+                        throw new ParseException("units must be minutes, hours, days, months, years");
+                }
             }
 
             Calendar cal = Calendar.getInstance();
