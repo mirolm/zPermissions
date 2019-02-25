@@ -661,7 +661,7 @@ public class InMemoryPermissionService implements PermissionService {
     public synchronized final boolean createGroup(String name) {
         PermissionEntity group = getEntity(name, null, true, false); // so we know it was created
         if (group == null) {
-            group = getEntity(name, null, true, true);
+            getEntity(name, null, true, true);
             return true;
         } else
             return false;
