@@ -55,14 +55,6 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>com.sk89q</groupId>
-                    <artifactId>dummypermscompat</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sk89q.lib</groupId>
-                    <artifactId>jlibnoise</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
                 </exclusion>
