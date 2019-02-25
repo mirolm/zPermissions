@@ -60,7 +60,6 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         return uuidResolver;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void migrate() throws Exception {
         // Does it exist?

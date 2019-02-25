@@ -232,7 +232,6 @@ public class FilePermissionDao implements PermissionDao {
      * @param file the file to load from
      * @throws IOException if something went wrong
      */
-    @SuppressWarnings("unchecked")
     public void load(File file) throws IOException {
         Yaml yaml = new Yaml(new SafeConstructor());
         Map<String, Object> input;
