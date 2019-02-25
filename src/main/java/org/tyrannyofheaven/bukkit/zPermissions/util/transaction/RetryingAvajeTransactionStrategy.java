@@ -19,6 +19,8 @@ import javax.persistence.PersistenceException;
 
 import com.avaje.ebean.EbeanServer;
 
+import java.util.Objects;
+
 /**
  * TransactionStrategy that executes the action inside an Avaje Ebean
  * transaction. The transaction is committed upon return of the callback.
@@ -124,7 +126,7 @@ public class RetryingAvajeTransactionStrategy implements TransactionStrategy {
         }
 
         // At this point, we've run out of attempts
-        throw savedPE;
+        throw Objects.requireNonNull(savedPE);
     }
 
 }
