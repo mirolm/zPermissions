@@ -256,6 +256,7 @@ public class ToHDatabaseUtils {
                         log(plugin, "Executing schema update script %s", updateScriptName);
 
                         //   If exists, run it, schema++, insert schema version into schema version table
+                        @SuppressWarnings("UnstableApiUsage")
                         String updateContent = CharStreams.toString(new InputStreamReader(is));
                         updateContent = subsituteTableNames(namingConvention, plugin.getDatabaseClasses(), updateContent);
                         ddlGenerator.runScript(false, updateContent);
