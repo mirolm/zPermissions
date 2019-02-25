@@ -31,9 +31,9 @@ default-temp-permission-timeout: 60
 
 tracks:
   default:
-  - default
-  - somegroup
-  - someothergroup
+    - default
+    - somegroup
+    - someothergroup
 
 default-primary-group-track: ''
 
@@ -52,7 +52,7 @@ interleaved-player-permissions: true
 rank-admin-broadcast: false
 
 region-managers:
-- WorldGuard
+  - WorldGuard
 
 inherited-metadata: false
 

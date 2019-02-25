@@ -5,12 +5,12 @@ language: java
 script: mvn -e -fae -B -Dfailsafe.useFile=false clean test verify
 
 jdk:
-- oraclejdk8
-- oraclejdk11
+  - oraclejdk8
+  - oraclejdk11
 
 cache:
   directories:
-  - $HOME/.m2
+    - $HOME/.m2
 
 notifications:
   email: false
