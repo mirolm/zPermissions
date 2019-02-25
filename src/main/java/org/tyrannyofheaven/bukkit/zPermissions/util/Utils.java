@@ -299,11 +299,9 @@ public class Utils {
         if (!ToHStringUtils.hasText(duration))
             return null;
 
-        if (duration != null) {
-            // Append args, if present
-            if (args.length > 0)
-                duration = duration + " " + ToHStringUtils.delimitedString(" ", (Object[]) args);
-        }
+        // Append args, if present
+        if (args.length > 0)
+            duration = duration + " " + ToHStringUtils.delimitedString(" ", (Object[]) args);
 
         duration = duration.trim();
 
