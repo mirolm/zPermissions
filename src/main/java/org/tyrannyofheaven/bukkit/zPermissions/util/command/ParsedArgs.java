@@ -89,7 +89,7 @@ final class ParsedArgs {
                 if (!flagArg.startsWith("-")) {
                     // Not a long flag, break it up
                     for (char c : flagArg.toCharArray()) {
-                        flags.add("-" + Character.toString(c));
+                        flags.add("-" + c);
                     }
                 } else {
                     // Use long flag as-is
