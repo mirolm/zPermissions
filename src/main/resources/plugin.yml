@@ -1,8 +1,8 @@
-name: ${project.name}
+name: zPermissions
 version: ${project.version}
-main: ${bukkitplugin.main}
+main: org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsPlugin
 description: ${project.description}
-author: ${bukkitplugin.author}
+author: ZerothAngel
 database: false
 load: STARTUP
 api-version: ${bukkitplugin.api}
