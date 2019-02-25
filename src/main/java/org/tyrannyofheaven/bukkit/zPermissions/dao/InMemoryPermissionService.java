@@ -338,7 +338,7 @@ public class InMemoryPermissionService implements PermissionService {
         Set<Membership> memberships = getReverseMembershipMap().get(memberName);
         if (memberships != null) {
             result.addAll(memberships);
-            Collections.sort(result, MEMBERSHIP_GROUP_PRIORITY_COMPARATOR);
+            result.sort(MEMBERSHIP_GROUP_PRIORITY_COMPARATOR);
         }
         return result;
     }
@@ -350,7 +350,7 @@ public class InMemoryPermissionService implements PermissionService {
             return new ArrayList<>(); // compat with AvajePermissionDao
 
         List<Membership> result = new ArrayList<>(groupEntity.getMemberships());
-        Collections.sort(result, MEMBERSHIP_MEMBER_COMPARATOR);
+        result.sort(MEMBERSHIP_MEMBER_COMPARATOR);
         return result;
     }
 

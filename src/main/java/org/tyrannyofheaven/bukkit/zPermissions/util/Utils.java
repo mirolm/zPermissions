@@ -115,7 +115,7 @@ public class Utils {
     public static List<PermissionEntity> sortPlayers(Collection<PermissionEntity> players) {
         List<PermissionEntity> result = new ArrayList<>(players);
         // Just sort alphabetically
-        Collections.sort(result, PERMISSION_ENTITY_ALPHA_COMPARATOR);
+        result.sort(PERMISSION_ENTITY_ALPHA_COMPARATOR);
         return result;
     }
 
@@ -127,7 +127,7 @@ public class Utils {
             if (group.getParents().isEmpty())
                 scanList.add(group);
         }
-        Collections.sort(scanList, PERMISSION_ENTITY_ALPHA_COMPARATOR);
+        scanList.sort(PERMISSION_ENTITY_ALPHA_COMPARATOR);
 
         Set<PermissionEntity> result = new LinkedHashSet<>(groups.size());
 
@@ -142,7 +142,7 @@ public class Utils {
             List<PermissionEntity> children = new ArrayList<>(group.getChildrenNew());
 
             // Sort children alphabetically
-            Collections.sort(children, PERMISSION_ENTITY_ALPHA_COMPARATOR);
+            children.sort(PERMISSION_ENTITY_ALPHA_COMPARATOR);
 
             scanList.addAll(children);
         }
@@ -152,19 +152,19 @@ public class Utils {
 
     public static List<Entry> sortPermissions(Collection<Entry> entries) {
         List<Entry> result = new ArrayList<>(entries);
-        Collections.sort(result, ENTRY_COMPARATOR);
+        result.sort(ENTRY_COMPARATOR);
         return result;
     }
 
     public static List<EntityMetadata> sortMetadata(Collection<EntityMetadata> metadata) {
         List<EntityMetadata> result = new ArrayList<>(metadata);
-        Collections.sort(result, METADATA_COMPARATOR);
+        result.sort(METADATA_COMPARATOR);
         return result;
     }
 
     public static List<Membership> sortMemberships(Collection<Membership> memberships) {
         List<Membership> result = new ArrayList<>(memberships);
-        Collections.sort(result, MEMBERSHIP_COMPARATOR);
+        result.sort(MEMBERSHIP_COMPARATOR);
         return result;
     }
 
@@ -190,7 +190,7 @@ public class Utils {
 
         // Sort for display
         permissions = new ArrayList<>(permissions); // make copy
-        Collections.sort(permissions, PERMISSION_INFO_COMPARATOR);
+        permissions.sort(PERMISSION_INFO_COMPARATOR);
 
         // Convert to lines and filter
         boolean display = false;

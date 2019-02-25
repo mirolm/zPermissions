@@ -203,7 +203,7 @@ public class SubCommands {
         }
 
         List<PermissionEntity> entities = storageStrategy.getPermissionService().getEntities(group);
-        Collections.sort(entities, new Comparator<PermissionEntity>() {
+        entities.sort(new Comparator<PermissionEntity>() {
             @Override
             public int compare(PermissionEntity a, PermissionEntity b) {
                 return a.getDisplayName().toLowerCase().compareTo(b.getDisplayName().toLowerCase());
