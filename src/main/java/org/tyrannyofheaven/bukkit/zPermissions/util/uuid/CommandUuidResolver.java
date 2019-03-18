@@ -63,7 +63,7 @@ public class CommandUuidResolver {
             if (udn != null) {
                 String displayName;
                 OfflinePlayer player = Bukkit.getOfflinePlayer(udn.getUuid());
-                if (player != null && player.getName() != null) {
+                if (player.getName() != null) {
                     // Use last known name
                     displayName = player.getName();
                 } else {

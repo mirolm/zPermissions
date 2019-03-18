@@ -143,7 +143,6 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             throw new IllegalArgumentException("playerName must have a value");
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-        if (player == null) return Collections.emptyList();
         UUID uuid = player.getUniqueId();
 
         return getPlayerAssignedGroups(uuid);
@@ -177,7 +176,6 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             throw new IllegalArgumentException("playerName must have a value");
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-        if (player == null) return Collections.emptySet();
         UUID uuid = player.getUniqueId();
 
         return getPlayerGroups(uuid);
@@ -249,7 +247,6 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             throw new IllegalArgumentException("playerName must have a value");
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-        if (player == null) return Collections.emptyMap();
         UUID uuid = player.getUniqueId();
 
         return getPlayerPermissions(worldName, regionNames, uuid);
@@ -337,7 +334,6 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             throw new IllegalArgumentException("playerName must have a value");
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-        if (player == null) return null;
         UUID uuid = player.getUniqueId();
 
         return getPlayerMetadata(uuid, metadataName, type);
@@ -451,7 +447,6 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             throw new IllegalArgumentException("playerName must have a value");
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-        if (player == null) return null;
         UUID uuid = player.getUniqueId();
 
         return getPlayerPrimaryGroup(uuid);
