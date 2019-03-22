@@ -19,7 +19,6 @@ import org.bukkit.plugin.ServicePriority;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.QualifiedPermission;
 import org.tyrannyofheaven.bukkit.zPermissions.RefreshCause;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;
@@ -34,19 +33,18 @@ import com.google.common.base.Joiner;
 // Current as of Permission.java f01cc6b89106bdb850a4e3d0be1425541b665712
 public class VaultPermissionBridge extends PermissionCompatibility implements Listener {
 
-    private final StorageStrategy storageStrategy;
-
     private final ZPermissionsCore core;
+
+    private final StorageStrategy storageStrategy;
 
     private final ZPermissionsService service;
 
     private final ZPermissionsConfig config;
 
-    public VaultPermissionBridge(Plugin plugin, PermissionsResolver resolver, StorageStrategy storageStrategy, ZPermissionsCore core, ZPermissionsService service, ZPermissionsConfig config) {
-        super(resolver);
+    public VaultPermissionBridge(Plugin plugin, ZPermissionsCore core, StorageStrategy storageStrategy, ZPermissionsService service, ZPermissionsConfig config) {
         this.plugin = plugin;
-        this.storageStrategy = storageStrategy;
         this.core = core;
+        this.storageStrategy = storageStrategy;
         this.service = service;
         this.config = config;
     }

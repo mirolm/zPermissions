@@ -630,7 +630,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
             if (nativeVaultBridges && Bukkit.getPluginManager().getPlugin("Vault") != null) {
                 // Set up Vault bridges
-                new VaultPermissionBridge(this, getResolver(), storageStrategy, getZPermissionsCore(), service, getZPermissionsConfig()).register();
+                new VaultPermissionBridge(this, getZPermissionsCore(), storageStrategy, service, getZPermissionsConfig()).register();
                 log(this, "Installed native Vault Permissions bridge");
                 new VaultChatBridge(this, getZPermissionsCore(), storageStrategy, service, getZPermissionsConfig()).register();
                 log(this, "Installed native Vault Chat bridge");

@@ -4,15 +4,11 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 
 // Implementation of all non-OfflinePlayer-based player methods
 public abstract class PermissionCompatibility extends Permission {
 
-    private final PermissionsResolver resolver;
-
-    public PermissionCompatibility(PermissionsResolver resolver) {
-        this.resolver = resolver;
+    public PermissionCompatibility() {
     }
 
     @Deprecated
