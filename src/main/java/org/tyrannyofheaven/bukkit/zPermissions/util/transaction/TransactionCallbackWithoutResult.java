@@ -26,16 +26,14 @@ public abstract class TransactionCallbackWithoutResult implements TransactionCal
      * @see org.tyrannyofheaven.bukkit.util.transaction.TransactionCallback#doInTransaction()
      */
     @Override
-    public final Object doInTransaction() throws Exception {
+    public final Object doInTransaction() {
         doInTransactionWithoutResult();
         return null;
     }
 
     /**
      * Perform operations within a transaction.
-     *
-     * @throws Exception any thrown exception will result in a rollback
      */
-    public abstract void doInTransactionWithoutResult() throws Exception;
+    public abstract void doInTransactionWithoutResult();
 
 }

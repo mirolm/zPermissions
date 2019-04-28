@@ -72,7 +72,7 @@ public class MetadataCommands {
     private void get(CommandSender sender, final String name, final UUID uuid, final String metadataName) {
         Object result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Object>() {
             @Override
-            public Object doInTransaction() throws Exception {
+            public Object doInTransaction() {
                 return storageStrategy.getPermissionService().getMetadata(name, uuid, group, metadataName);
             }
         }, true);
@@ -109,7 +109,7 @@ public class MetadataCommands {
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     storageStrategy.getPermissionService().setMetadata(name, uuid, group, metadataName, value);
                 }
             });
@@ -154,7 +154,7 @@ public class MetadataCommands {
     private void unset(CommandSender sender, final String name, final UUID uuid, final String metadataName) {
         Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return storageStrategy.getPermissionService().unsetMetadata(name, uuid, group, metadataName);
             }
         });

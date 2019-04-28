@@ -145,7 +145,7 @@ public class SearchTask implements Runnable {
     private boolean checkEffectivePermissions(final PermissionEntity entity) {
         Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
             @Override
-            public Map<String, Boolean> doInTransaction() throws Exception {
+            public Map<String, Boolean> doInTransaction() {
                 if (entity.isGroup()) {
                     return resolver.resolveGroup(entity.getDisplayName(), world, regions);
                 } else {

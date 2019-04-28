@@ -27,8 +27,7 @@ public interface PreCommitHook {
      * abort, throw an exception.
      *
      * @param readOnly the read-only flag for this transaction
-     * @throws Exception an exception signifying that a rollback should be performed
      */
-    void preCommit(boolean readOnly) throws Exception;
+    void preCommit(boolean readOnly);
 
 }

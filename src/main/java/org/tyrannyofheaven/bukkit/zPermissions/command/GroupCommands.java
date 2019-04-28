@@ -94,7 +94,7 @@ public class GroupCommands extends CommonCommands {
             try {
                 result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
                     @Override
-                    public Boolean doInTransaction() throws Exception {
+                    public Boolean doInTransaction() {
                         List<Membership> memberships = storageStrategy.getPermissionService().getMembers(name);
 
                         for (Membership membership : memberships) {
@@ -158,7 +158,7 @@ public class GroupCommands extends CommonCommands {
     public void create(CommandSender sender, final @Session("entityName") String groupName) {
         boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return storageStrategy.getPermissionService().createGroup(groupName);
             }
         });
@@ -235,7 +235,7 @@ public class GroupCommands extends CommonCommands {
             // Set parent. Creates group and/or parent if missing.
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     storageStrategy.getPermissionService().setParents(groupName, parentNames);
                 }
             });
@@ -266,7 +266,7 @@ public class GroupCommands extends CommonCommands {
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     storageStrategy.getPermissionService().setPriority(groupName, priority);
                 }
             });

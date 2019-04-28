@@ -136,7 +136,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     private boolean refreshInternal(final boolean force) {
         return internalTransactionStrategy.execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 DataVersion currentVersion = getCurrentDataVersion();
 
                 if (force || lastLoadedVersion.get() != currentVersion.getVersion()) {
@@ -186,7 +186,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     }
 
     @Override
-    public void preCommit(boolean readOnly) throws Exception {
+    public void preCommit(boolean readOnly) {
         if (readOnly) return; // Do nothing for read-only transactions
 
         DataVersion dv = getCurrentDataVersion();
@@ -204,7 +204,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     }
 
     @Override
-    public void preBegin(boolean readOnly) throws Exception {
+    public void preBegin(boolean readOnly) {
         if (readOnly) return;
 
         if (readOnlyMode)
@@ -217,7 +217,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     public UuidDisplayName resolve(final String username) {
         return internalTransactionStrategy.execute(new TransactionCallback<UuidDisplayName>() {
             @Override
-            public UuidDisplayName doInTransaction() throws Exception {
+            public UuidDisplayName doInTransaction() {
                 Date expire = new Date(System.currentTimeMillis() - uuidCacheTimeout);
                 UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
                         .eq("name", username.toLowerCase())
@@ -239,7 +239,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
     }
 
     @Override
-    public Map<String, UuidDisplayName> resolve(Collection<String> usernames) throws Exception {
+    public Map<String, UuidDisplayName> resolve(Collection<String> usernames) {
         Map<String, UuidDisplayName> resolved = new LinkedHashMap<>();
         // Just resolve each name one at a time
         for (String username : usernames) {
@@ -259,7 +259,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
             public void run() {
                 internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
                     @Override
-                    public void doInTransactionWithoutResult() throws Exception {
+                    public void doInTransactionWithoutResult() {
                         // Does it already exist? (regardless of expiration)
                         UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
                                 .eq("name", username.toLowerCase())
@@ -290,7 +290,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
             public void run() {
                 internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
                     @Override
-                    public void doInTransactionWithoutResult() throws Exception {
+                    public void doInTransactionWithoutResult() {
                         // If it exists (regardless of expiration), just delete it
                         UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
                                 .eq("name", username.toLowerCase())
@@ -313,7 +313,7 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
             public void run() {
                 internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
                     @Override
-                    public void doInTransactionWithoutResult() throws Exception {
+                    public void doInTransactionWithoutResult() {
                         // This is a bad way to do it, but I'm not sure how
                         // an SQL delete would work in light of configurable
                         // table names.

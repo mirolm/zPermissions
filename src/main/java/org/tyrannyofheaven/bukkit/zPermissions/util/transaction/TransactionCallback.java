@@ -26,8 +26,7 @@ public interface TransactionCallback<T> {
      * Perform operations within a transaction.
      *
      * @return the result of the operation
-     * @throws Exception any thrown exception will result in a rollback
      */
-    T doInTransaction() throws Exception;
+    T doInTransaction();
 
 }

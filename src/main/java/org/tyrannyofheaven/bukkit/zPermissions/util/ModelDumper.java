@@ -55,7 +55,7 @@ public class ModelDumper {
         try (PrintWriter out = new PrintWriter(outFile)) {
             storageStrategy.getTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     // Header
                     out.println(String.format("# Dumped by %s %s on %s",
                             plugin.getDescription().getName(),

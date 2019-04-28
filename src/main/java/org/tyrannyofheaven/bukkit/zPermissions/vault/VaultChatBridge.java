@@ -236,7 +236,7 @@ public class VaultChatBridge extends ChatCompatibility {
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     if (value != null)
                         storageStrategy.getPermissionService().setMetadata(name, uuid, group, metadataName, value);
                     else

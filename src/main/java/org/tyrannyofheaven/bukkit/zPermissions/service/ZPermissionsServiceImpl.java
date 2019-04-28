@@ -190,7 +190,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
 
         getTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void doInTransactionWithoutResult() throws Exception {
+            public void doInTransactionWithoutResult() {
                 for (String group : Utils.toGroupNames(Utils.filterExpired(getPermissionService().getGroups(uuid)))) {
                     // Get ancestors
                     List<String> ancestors = getPermissionService().getAncestry(group);
@@ -231,7 +231,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
 
         return getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
             @Override
-            public Map<String, Boolean> doInTransaction() throws Exception {
+            public Map<String, Boolean> doInTransaction() {
                 return getResolver().resolveGroup(groupName.toLowerCase(), lworldName, regions);
             }
         }, true);
@@ -269,7 +269,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
 
         return getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
             @Override
-            public Map<String, Boolean> doInTransaction() throws Exception {
+            public Map<String, Boolean> doInTransaction() {
                 return getResolver().resolvePlayer(uuid, lworldName, regions).getPermissions();
             }
         }, true);
@@ -393,7 +393,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
         } else {
             value = getTransactionStrategy().execute(new TransactionCallback<Object>() {
                 @Override
-                public Object doInTransaction() throws Exception {
+                public Object doInTransaction() {
                     return getPermissionService().getMetadata(name, uuid, group, metadataName);
                 }
             }, true);

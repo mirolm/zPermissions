@@ -72,7 +72,7 @@ class TransactionRunnable implements Runnable, TransactionCallback<Object> {
     }
 
     @Override
-    public Object doInTransaction() throws Exception {
+    public Object doInTransaction() {
         for (Runnable runnable : getRunnables()) {
             runnable.run();
         }

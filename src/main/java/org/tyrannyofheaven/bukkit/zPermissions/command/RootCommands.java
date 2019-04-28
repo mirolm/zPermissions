@@ -174,7 +174,7 @@ public class RootCommands {
         // Do everything in one ginormous transaction.
         storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 Set<String> playerGroupNames = new HashSet<>(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
                 if (playerGroupNames.isEmpty())
                     playerGroupNames.add(resolver.getDefaultGroup());
@@ -322,7 +322,7 @@ public class RootCommands {
         // Do everything in one ginormous transaction.
         storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 Set<String> playerGroupNames = new HashSet<>(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
                 if (playerGroupNames.isEmpty())
                     playerGroupNames.add(resolver.getDefaultGroup());

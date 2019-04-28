@@ -159,7 +159,7 @@ public class PlayerCommands extends CommonCommands {
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     Date newExpiration = handleExtendExpiration(groupName, uuid, playerName, add, addNoReset, expiration);
 
                     storageStrategy.getPermissionService().setGroup(uuid, playerName, groupName, newExpiration);

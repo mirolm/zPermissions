@@ -122,7 +122,7 @@ public abstract class CommonCommands {
         // Read entry from PermissionService, if any
         Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return storageStrategy.getPermissionService().getPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission());
             }
         }, true);
@@ -155,7 +155,7 @@ public abstract class CommonCommands {
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     storageStrategy.getPermissionService().setPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission(), value == null ? Boolean.TRUE : value);
                 }
             });
@@ -191,7 +191,7 @@ public abstract class CommonCommands {
         // Delete permission entry.
         Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return storageStrategy.getPermissionService().unsetPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission());
             }
         });
@@ -236,7 +236,7 @@ public abstract class CommonCommands {
     private void _delete0(CommandSender sender, final String name, final UUID uuid) {
         boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return storageStrategy.getPermissionService().deleteEntity(name, uuid, group);
             }
         });
@@ -287,7 +287,7 @@ public abstract class CommonCommands {
             // Grab permissions from zPerms
             rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
-                public Map<String, Boolean> doInTransaction() throws Exception {
+                public Map<String, Boolean> doInTransaction() {
                     if (group) {
                         if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
                             throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
@@ -372,7 +372,7 @@ public abstract class CommonCommands {
         try {
             rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
-                public Map<String, Boolean> doInTransaction() throws Exception {
+                public Map<String, Boolean> doInTransaction() {
                     if (group) {
                         if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
                             throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
@@ -396,7 +396,7 @@ public abstract class CommonCommands {
         try {
             otherRootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
-                public Map<String, Boolean> doInTransaction() throws Exception {
+                public Map<String, Boolean> doInTransaction() {
                     if (group) {
                         if (storageStrategy.getPermissionService().getEntity(otherName, null, true) == null)
                             throw new MissingGroupException(otherName); // Don't really want to handle it in the transaction...
@@ -468,7 +468,7 @@ public abstract class CommonCommands {
     private void clone(final CommandSender sender, final String name, final UUID sourceUuid, final String destination, final UUID destinationUuid, final boolean rename) {
         storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void doInTransactionWithoutResult() throws Exception {
+            public void doInTransactionWithoutResult() {
                 PermissionEntity entity = storageStrategy.getPermissionService().getEntity(name, sourceUuid, group);
                 List<Membership> memberships = Collections.emptyList();
                 if (!group) {
@@ -615,7 +615,7 @@ public abstract class CommonCommands {
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     Date newExpiration = handleExtendExpiration(groupName, playerUuid, playerName, add, addNoReset, expiration);
 
                     storageStrategy.getPermissionService().addMember(groupName, playerUuid, playerName, newExpiration);
@@ -647,7 +647,7 @@ public abstract class CommonCommands {
         // Remove player from group
         Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return storageStrategy.getPermissionService().removeMember(groupName, playerUuid);
             }
         });

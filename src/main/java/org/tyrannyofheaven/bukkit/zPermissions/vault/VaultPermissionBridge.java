@@ -88,7 +88,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         try {
             getTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     getPermissionService().setPermission(group, null, true, null, permWorld, permission, true);
                 }
             });
@@ -129,7 +129,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         final String permWorld = world;
         boolean result = getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return getPermissionService().unsetPermission(group, null, true, null, permWorld, permission);
             }
         });
@@ -171,7 +171,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         final String permWorld = world;
         getTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void doInTransactionWithoutResult() throws Exception {
+            public void doInTransactionWithoutResult() {
                 getPermissionService().setPermission(playerName, uuid, false, null, permWorld, permission, true);
             }
         });
@@ -195,7 +195,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         try {
             getTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
-                public void doInTransactionWithoutResult() throws Exception {
+                public void doInTransactionWithoutResult() {
                     getPermissionService().addMember(group, uuid, playerName, null);
                 }
             });
@@ -260,7 +260,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         final String permWorld = world;
         boolean result = getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return getPermissionService().unsetPermission(playerName, uuid, false, null, permWorld, permission);
             }
         });
@@ -286,7 +286,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         try {
             getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
                 @Override
-                public Boolean doInTransaction() throws Exception {
+                public Boolean doInTransaction() {
                     return getPermissionService().removeMember(group, uuid);
                 }
             });

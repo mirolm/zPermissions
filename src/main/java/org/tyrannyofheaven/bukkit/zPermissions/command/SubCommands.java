@@ -351,7 +351,7 @@ public class SubCommands {
             // Ensure database is empty
             if (!storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
                 @Override
-                public Boolean doInTransaction() throws Exception {
+                public Boolean doInTransaction() {
                     // Check in a single transaction
                     List<PermissionEntity> players = storageStrategy.getPermissionService().getEntities(false);
                     List<PermissionEntity> groups = storageStrategy.getPermissionService().getEntities(true);
@@ -444,7 +444,7 @@ public class SubCommands {
     private void showPlayerMetadataString(final Player sender, final String metadataName) {
         Object result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Object>() {
             @Override
-            public Object doInTransaction() throws Exception {
+            public Object doInTransaction() {
                 return storageStrategy.getPermissionService().getMetadata(sender.getName(), sender.getUniqueId(), false, metadataName);
             }
         }, true);
@@ -467,7 +467,7 @@ public class SubCommands {
         }
         storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void doInTransactionWithoutResult() throws Exception {
+            public void doInTransactionWithoutResult() {
                 storageStrategy.getPermissionService().setMetadata(player.getName(), player.getUniqueId(), false, metadataName, stringValue.toString());
             }
         });
@@ -480,7 +480,7 @@ public class SubCommands {
     private void unsetPlayerMetadataString(final Player player, final String metadataName) {
         Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
             @Override
-            public Boolean doInTransaction() throws Exception {
+            public Boolean doInTransaction() {
                 return storageStrategy.getPermissionService().unsetMetadata(player.getName(), player.getUniqueId(), false, metadataName);
             }
         });
@@ -558,7 +558,7 @@ public class SubCommands {
             // Diff one against the other
             Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
-                public Map<String, Boolean> doInTransaction() throws Exception {
+                public Map<String, Boolean> doInTransaction() {
                     return resolver.resolvePlayer(uuid, worldName, regionNames).getPermissions();
                 }
             }, true);
@@ -567,7 +567,7 @@ public class SubCommands {
 
             Map<String, Boolean> otherRootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
-                public Map<String, Boolean> doInTransaction() throws Exception {
+                public Map<String, Boolean> doInTransaction() {
                     return resolver.resolvePlayer(otherUuid, otherWorldName, otherRegionNames).getPermissions();
                 }
             }, true);
@@ -587,7 +587,7 @@ public class SubCommands {
             // Diff Bukkit effective permissions against zPerms effective permissions
             Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
-                public Map<String, Boolean> doInTransaction() throws Exception {
+                public Map<String, Boolean> doInTransaction() {
                     return resolver.resolvePlayer(uuid, worldName, regionNames).getPermissions();
                 }
             }, true);
@@ -657,7 +657,7 @@ public class SubCommands {
             } else {
                 storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                     @Override
-                    public void doInTransactionWithoutResult() throws Exception {
+                    public void doInTransactionWithoutResult() {
                         // Purge players
                         for (PermissionEntity player : storageStrategy.getPermissionService().getEntities(false)) {
                             storageStrategy.getPermissionService().deleteEntity(player.getDisplayName(), player.getUuid(), false);
@@ -692,7 +692,7 @@ public class SubCommands {
     public void cleanup(CommandSender sender) {
         storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void doInTransactionWithoutResult() throws Exception {
+            public void doInTransactionWithoutResult() {
                 List<Membership> toDelete = new ArrayList<>();
                 Date now = new Date();
                 // For each group...

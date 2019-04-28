@@ -107,7 +107,7 @@ public class MetadataManager {
                         // Not in cache, look it up
                         MetadataResult metadataResult = getTransactionStrategy().execute(new TransactionCallback<MetadataResult>() {
                             @Override
-                            public MetadataResult doInTransaction() throws Exception {
+                            public MetadataResult doInTransaction() {
                                 if (group)
                                     return getResolver().resolveGroupMetadata(lname);
                                 else

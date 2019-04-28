@@ -838,7 +838,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         final String world = location.getWorld().getName().toLowerCase();
         ResolverResult resolverResult = getRetryingTransactionStrategy().execute(new TransactionCallback<ResolverResult>() {
             @Override
-            public ResolverResult doInTransaction() throws Exception {
+            public ResolverResult doInTransaction() {
 //                fakeFailureChance();
                 return getResolver().resolvePlayer(player.getUniqueId(), world, regions);
             }
@@ -1437,7 +1437,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             public void run() {
                 getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                     @Override
-                    public void doInTransactionWithoutResult() throws Exception {
+                    public void doInTransactionWithoutResult() {
                         getPermissionService().updateDisplayName(uuid, displayName);
                     }
                 });
@@ -1459,7 +1459,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         final Plugin realThis = this;
         getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void doInTransactionWithoutResult() throws Exception {
+            public void doInTransactionWithoutResult() {
                 // Check if they are in any groups
                 List<Membership> memberships = getPermissionService().getGroups(uuid);
                 if (memberships.isEmpty()) {
