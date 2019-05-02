@@ -65,7 +65,7 @@ public class Entry {
     }
 
     @JoinColumn(name = "region_id")
-    @ManyToOne(optional = true)
+    @ManyToOne
     public PermissionRegion getRegion() {
         return region;
     }
@@ -75,7 +75,7 @@ public class Entry {
     }
 
     @JoinColumn(name = "world_id")
-    @ManyToOne(optional = true)
+    @ManyToOne
     public PermissionWorld getWorld() {
         return world;
     }

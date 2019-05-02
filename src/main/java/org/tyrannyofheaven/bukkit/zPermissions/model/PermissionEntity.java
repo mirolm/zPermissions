@@ -113,7 +113,7 @@ public class PermissionEntity {
         this.displayName = displayName;
     }
 
-    @ManyToOne(optional = true)
+    @ManyToOne
     public PermissionEntity getParent() {
         return parent;
     }
