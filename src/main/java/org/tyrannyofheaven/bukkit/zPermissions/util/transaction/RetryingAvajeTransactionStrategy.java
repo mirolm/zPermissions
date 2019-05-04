@@ -18,8 +18,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.transaction;
 import javax.persistence.PersistenceException;
 
 import com.avaje.ebean.EbeanServer;
-
-import java.util.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * TransactionStrategy that executes the action inside an Avaje Ebean
@@ -126,7 +125,7 @@ public class RetryingAvajeTransactionStrategy implements TransactionStrategy {
         }
 
         // At this point, we've run out of attempts
-        throw Objects.requireNonNull(savedPE);
+        throw Preconditions.checkNotNull(savedPE);
     }
 
 }

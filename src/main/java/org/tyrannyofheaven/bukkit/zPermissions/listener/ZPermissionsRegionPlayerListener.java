@@ -47,11 +47,13 @@ public class ZPermissionsRegionPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         // Only bother if player actually moved to a new block
-        if (event.getFrom().getBlockX() != event.getTo().getBlockX() ||
-                event.getFrom().getBlockY() != event.getTo().getBlockY() ||
-                event.getFrom().getBlockZ() != event.getTo().getBlockZ()) {
-            // Conditionally update if containing regions changed
-            core.setBukkitPermissions(event.getPlayer(), event.getTo(), false, RefreshCause.MOVEMENT);
+        if (event.getTo() != null) {
+            if (event.getFrom().getBlockX() != event.getTo().getBlockX() ||
+                    event.getFrom().getBlockY() != event.getTo().getBlockY() ||
+                    event.getFrom().getBlockZ() != event.getTo().getBlockZ()) {
+                // Conditionally update if containing regions changed
+                core.setBukkitPermissions(event.getPlayer(), event.getTo(), false, RefreshCause.MOVEMENT);
+            }
         }
     }
 
