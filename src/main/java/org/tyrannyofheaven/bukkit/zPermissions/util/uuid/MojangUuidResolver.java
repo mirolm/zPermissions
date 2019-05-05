@@ -38,10 +38,6 @@ import com.google.common.collect.Lists;
 
 public class MojangUuidResolver implements UuidResolver {
 
-    private static final String AGENT = "minecraft";
-
-    private static final UuidDisplayName NULL_UDN = new UuidDisplayName(UUID.randomUUID(), "NOT FOUND");
-
     private final LoadingCache<String, UuidDisplayName> cache;
 
     public MojangUuidResolver(int cacheMaxSize, long cacheTtl, TimeUnit cacheTtlUnits) {
@@ -51,8 +47,7 @@ public class MojangUuidResolver implements UuidResolver {
                 .build(new CacheLoader<String, UuidDisplayName>() {
                     @Override
                     public UuidDisplayName load(String key) throws Exception {
-                        UuidDisplayName udn = _resolve(key);
-                        return udn != null ? udn : NULL_UDN; // Doesn't like nulls, so we use a marker object instead
+                        return _resolve(key);
                     }
                 });
     }
@@ -63,10 +58,8 @@ public class MojangUuidResolver implements UuidResolver {
             throw new IllegalArgumentException("username must have a value");
 
         try {
-            UuidDisplayName udn = cache.get(username.toLowerCase());
-            return udn != NULL_UDN ? udn : null;
+            return cache.get(username.toLowerCase());
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -77,10 +70,10 @@ public class MojangUuidResolver implements UuidResolver {
             throw new IllegalArgumentException("username must have a value");
 
         if (cacheOnly) {
-            UuidDisplayName udn = cache.asMap().get(username.toLowerCase());
-            if (udn == null) return null;
-            return udn != NULL_UDN ? udn : null; // NB Can't tell between "not cached" and "maps to null"
-        } else return resolve(username); // Same as normal version
+            return cache.asMap().get(username.toLowerCase());
+        } else {
+            return resolve(username); // Same as normal version
+        }
     }
 
     @Override
@@ -93,12 +86,7 @@ public class MojangUuidResolver implements UuidResolver {
         final int BATCH_SIZE = 97; // Should be <= Mojang's AccountsClient's PROFILES_PER_REQUEST (100)
 
         for (List<String> sublist : Lists.partition(new ArrayList<>(usernames), BATCH_SIZE)) {
-            List<Profile> searchResult = searchProfiles(sublist);
-            for (Profile profile : searchResult) {
-                String username = profile.getName();
-                UUID uuid = uncanonicalizeUuid(profile.getId());
-                result.put(username.toLowerCase(), new UuidDisplayName(uuid, username));
-            }
+            result.putAll(searchProfiles(sublist));
         }
 
         return result;
@@ -131,30 +119,15 @@ public class MojangUuidResolver implements UuidResolver {
         if (!hasText(username))
             throw new IllegalArgumentException("username must have a value");
 
-        List<Profile> result = searchProfiles(Collections.singletonList(username));
+        Map<String, UuidDisplayName> result = new LinkedHashMap<>(searchProfiles(Collections.singletonList(username)));
 
-        if (result.size() < 1) return null;
-
-        // TODO what to do if there are >1?
-        Profile p = result.get(0);
-
-        String uuidString = p.getId();
-        UUID uuid;
-        try {
-            uuid = uncanonicalizeUuid(uuidString);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-
-        String displayName = hasText(p.getName()) ? p.getName() : username;
-
-        return new UuidDisplayName(uuid, displayName);
+        return result.get(username.toLowerCase());
     }
 
-    private List<Profile> searchProfiles(List<String> usernames) throws IOException, JsonIOException, JsonSyntaxException {
+    private Map<String, UuidDisplayName> searchProfiles(List<String> usernames) throws IOException, JsonIOException, JsonSyntaxException {
         Gson gson = new Gson();
 
-        URL url = new URL("https://api.mojang.com/profiles/" + AGENT);
+        URL url = new URL("https://api.mojang.com/profiles/minecraft");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -175,39 +148,15 @@ public class MojangUuidResolver implements UuidResolver {
             profiles = gson.fromJson(reader, JsonArray.class);
         }
 
-        return convertResponse(profiles);
-    }
-
-    private List<Profile> convertResponse(JsonArray profiles) {
-        List<Profile> result = new ArrayList<>();
+        Map<String, UuidDisplayName> searchResult = new LinkedHashMap<>();
         for (JsonElement element : profiles) {
             JsonObject profile = element.getAsJsonObject();
-            String id = profile.get("id").getAsString();
-            String name = profile.get("name").getAsString();
-            result.add(new Profile(id, name));
-        }
-        return result;
-    }
-
-    private static class Profile {
-
-        private final String id;
-
-        private final String name;
-
-        private Profile(String id, String name) {
-            this.id = id;
-            this.name = name;
+            UUID uuid = uncanonicalizeUuid(profile.get("id").getAsString());
+            String username = profile.get("name").getAsString();
+            searchResult.put(username.toLowerCase(), new UuidDisplayName(uuid, username));
         }
 
-        public String getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
+        return searchResult;
     }
 
 }
