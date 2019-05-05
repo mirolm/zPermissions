@@ -7,10 +7,11 @@ package org.tyrannyofheaven.bukkit.zPermissions.util.uuid;
 import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
 import static org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils.uncanonicalizeUuid;
 
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,11 +23,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 import com.google.common.base.Charsets;
 import com.google.common.cache.CacheBuilder;
@@ -125,7 +127,7 @@ public class MojangUuidResolver implements UuidResolver {
         cache.invalidateAll();
     }
 
-    private UuidDisplayName _resolve(String username) throws IOException, ParseException {
+    private UuidDisplayName _resolve(String username) throws Exception {
         if (!hasText(username))
             throw new IllegalArgumentException("username must have a value");
 
@@ -149,8 +151,8 @@ public class MojangUuidResolver implements UuidResolver {
         return new UuidDisplayName(uuid, displayName);
     }
 
-    private List<Profile> searchProfiles(List<String> usernames) throws IOException, ParseException {
-        String body = JSONValue.toJSONString(usernames);
+    private List<Profile> searchProfiles(List<String> usernames) throws IOException, JsonIOException, JsonSyntaxException {
+        Gson gson = new Gson();
 
         URL url = new URL("https://api.mojang.com/profiles/" + AGENT);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -162,26 +164,26 @@ public class MojangUuidResolver implements UuidResolver {
         connection.setConnectTimeout(15000);
         connection.setReadTimeout(15000);
 
-        try (DataOutputStream writer = new DataOutputStream(connection.getOutputStream())) {
-            writer.write(body.getBytes(Charsets.UTF_8));
-            writer.flush();
+        try (BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(connection.getOutputStream(), Charsets.UTF_8))) {
+            gson.toJson(usernames, writer);
         }
 
-        JSONArray profiles;
-        try (Reader reader = new InputStreamReader(connection.getInputStream())) {
-            JSONParser parser = new JSONParser(); // NB Not thread safe
-            profiles = (JSONArray) parser.parse(reader);
+        JsonArray profiles;
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
+            profiles = gson.fromJson(reader, JsonArray.class);
         }
 
         return convertResponse(profiles);
     }
 
-    private List<Profile> convertResponse(JSONArray profiles) {
+    private List<Profile> convertResponse(JsonArray profiles) {
         List<Profile> result = new ArrayList<>();
-        for (Object obj : profiles) {
-            JSONObject jsonProfile = (JSONObject) obj;
-            String id = (String) jsonProfile.get("id");
-            String name = (String) jsonProfile.get("name");
+        for (JsonElement element : profiles) {
+            JsonObject profile = element.getAsJsonObject();
+            String id = profile.get("id").getAsString();
+            String name = profile.get("name").getAsString();
             result.add(new Profile(id, name));
         }
         return result;
