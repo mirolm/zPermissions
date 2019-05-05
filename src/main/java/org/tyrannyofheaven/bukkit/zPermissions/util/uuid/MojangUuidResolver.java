@@ -40,6 +40,8 @@ public class MojangUuidResolver implements UuidResolver {
 
     private final LoadingCache<String, UuidDisplayName> cache;
 
+    private static Gson gson = new Gson();
+
     public MojangUuidResolver(int cacheMaxSize, long cacheTtl, TimeUnit cacheTtlUnits) {
         cache = CacheBuilder.newBuilder()
                 .maximumSize(cacheMaxSize)
@@ -99,7 +101,7 @@ public class MojangUuidResolver implements UuidResolver {
         if (uuid == null)
             throw new IllegalArgumentException("uuid cannot be null");
 
-        cache.asMap().put(username.toLowerCase(), new UuidDisplayName(uuid, username));
+        cache.asMap().putIfAbsent(username.toLowerCase(), new UuidDisplayName(uuid, username));
     }
 
     @Override
@@ -125,8 +127,6 @@ public class MojangUuidResolver implements UuidResolver {
     }
 
     private Map<String, UuidDisplayName> searchProfiles(List<String> usernames) throws IOException, JsonIOException, JsonSyntaxException {
-        Gson gson = new Gson();
-
         URL url = new URL("https://api.mojang.com/profiles/minecraft");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -148,15 +148,15 @@ public class MojangUuidResolver implements UuidResolver {
             profiles = gson.fromJson(reader, JsonArray.class);
         }
 
-        Map<String, UuidDisplayName> searchResult = new LinkedHashMap<>();
+        Map<String, UuidDisplayName> result = new LinkedHashMap<>();
         for (JsonElement element : profiles) {
             JsonObject profile = element.getAsJsonObject();
             UUID uuid = uncanonicalizeUuid(profile.get("id").getAsString());
-            String username = profile.get("name").getAsString();
-            searchResult.put(username.toLowerCase(), new UuidDisplayName(uuid, username));
+            String name = profile.get("name").getAsString();
+            result.putIfAbsent(name.toLowerCase(), new UuidDisplayName(uuid, name));
         }
 
-        return searchResult;
+        return result;
     }
 
 }
