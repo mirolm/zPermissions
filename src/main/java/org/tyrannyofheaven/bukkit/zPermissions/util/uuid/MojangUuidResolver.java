@@ -38,9 +38,9 @@ import com.google.common.collect.Lists;
 
 public class MojangUuidResolver implements UuidResolver {
 
-    private final LoadingCache<String, UuidDisplayName> cache;
+    private final Gson gson = new Gson();
 
-    private static Gson gson = new Gson();
+    private final LoadingCache<String, UuidDisplayName> cache;
 
     public MojangUuidResolver(int cacheMaxSize, long cacheTtl, TimeUnit cacheTtlUnits) {
         cache = CacheBuilder.newBuilder()
