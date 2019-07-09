@@ -554,17 +554,17 @@ public class SubCommands {
             otherRegionNames = Collections.emptySet();
         }
 
+        Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
+            @Override
+            public Map<String, Boolean> doInTransaction() {
+                return resolver.resolvePlayer(uuid, worldName, regionNames).getPermissions();
+            }
+        }, true);
+        Map<String, Boolean> permissions = new HashMap<>();
+        Utils.calculateChildPermissions(permissions, rootPermissions, false);
+
         if (otherPlayer != null) {
             // Diff one against the other
-            Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-                @Override
-                public Map<String, Boolean> doInTransaction() {
-                    return resolver.resolvePlayer(uuid, worldName, regionNames).getPermissions();
-                }
-            }, true);
-            Map<String, Boolean> permissions = new HashMap<>();
-            Utils.calculateChildPermissions(permissions, rootPermissions, false);
-
             Map<String, Boolean> otherRootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
                 @Override
                 public Map<String, Boolean> doInTransaction() {
@@ -585,16 +585,6 @@ public class SubCommands {
                             (otherRegionNames.isEmpty() ? "" : "[" + ToHStringUtils.delimitedString(",", otherRegionNames) + "]")), filter);
         } else {
             // Diff Bukkit effective permissions against zPerms effective permissions
-            Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-                @Override
-                public Map<String, Boolean> doInTransaction() {
-                    return resolver.resolvePlayer(uuid, worldName, regionNames).getPermissions();
-                }
-            }, true);
-            Map<String, Boolean> permissions = new HashMap<>();
-            Utils.calculateChildPermissions(permissions, rootPermissions, false);
-
-            // Get Bukkit effective permissions
             Map<String, Boolean> otherPermissions = new HashMap<>();
             for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
                 otherPermissions.put(pai.getPermission().toLowerCase(), pai.getValue());
