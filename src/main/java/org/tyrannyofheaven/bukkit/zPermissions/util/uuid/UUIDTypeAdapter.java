@@ -15,33 +15,23 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util.uuid;
 
+import static org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils.canonicalizeUuid;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils.uncanonicalizeUuid;
+
+import com.google.gson.TypeAdapter;
+import com.google.gson.internal.bind.TypeAdapters;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
 import java.util.UUID;
 
-public class UuidDisplayName {
-
-    private final UUID id;
-
-    private final String name;
-
-    public UuidDisplayName(UUID uuid, String displayName) {
-        if (uuid == null)
-            throw new IllegalArgumentException("uuid cannot be null");
-
-        this.id = uuid;
-        this.name = displayName;
+public class UUIDTypeAdapter extends TypeAdapter<UUID> {
+    public void write(JsonWriter out, UUID value) throws IOException {
+        TypeAdapters.STRING.write(out, canonicalizeUuid(value));
     }
 
-    public UuidDisplayName(UuidDisplayName source) {
-        this.id = source.id;
-        this.name = source.name;
+    public UUID read(JsonReader in) throws IOException {
+        return uncanonicalizeUuid(TypeAdapters.STRING.read(in));
     }
-
-    public UUID getUuid() {
-        return id;
-    }
-
-    public String getDisplayName() {
-        return name;
-    }
-
 }

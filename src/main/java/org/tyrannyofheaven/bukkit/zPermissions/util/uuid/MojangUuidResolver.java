@@ -5,7 +5,6 @@
 package org.tyrannyofheaven.bukkit.zPermissions.util.uuid;
 
 import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
-import static org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils.uncanonicalizeUuid;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,11 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.GsonBuilder;
 
 import com.google.common.base.Charsets;
 import com.google.common.cache.CacheBuilder;
@@ -38,7 +33,7 @@ import com.google.common.collect.Lists;
 
 public class MojangUuidResolver implements UuidResolver {
 
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
 
     private final LoadingCache<String, UuidDisplayName> cache;
 
@@ -126,7 +121,7 @@ public class MojangUuidResolver implements UuidResolver {
         return result.get(username.toLowerCase());
     }
 
-    private Map<String, UuidDisplayName> searchProfiles(List<String> usernames) throws IOException, JsonIOException, JsonSyntaxException {
+    private Map<String, UuidDisplayName> searchProfiles(List<String> usernames) throws IOException {
         URL url = new URL("https://api.mojang.com/profiles/minecraft");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -142,18 +137,15 @@ public class MojangUuidResolver implements UuidResolver {
             gson.toJson(usernames, writer);
         }
 
-        JsonArray profiles;
+        UuidDisplayName[] profiles;
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
-            profiles = gson.fromJson(reader, JsonArray.class);
+            profiles = gson.fromJson(reader, UuidDisplayName[].class);
         }
 
         Map<String, UuidDisplayName> result = new LinkedHashMap<>();
-        for (JsonElement element : profiles) {
-            JsonObject profile = element.getAsJsonObject();
-            UUID uuid = uncanonicalizeUuid(profile.get("id").getAsString());
-            String name = profile.get("name").getAsString();
-            result.putIfAbsent(name.toLowerCase(), new UuidDisplayName(uuid, name));
+        for (UuidDisplayName profile : profiles) {
+            result.putIfAbsent(profile.getDisplayName().toLowerCase(), new UuidDisplayName(profile));
         }
 
         return result;
