@@ -15,33 +15,40 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util.uuid;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.UUID;
 
 public class UuidDisplayName {
 
-    private final UUID id;
+    @SerializedName("id")
+    private final UUID uuid;
 
-    private final String name;
+    @SerializedName("name")
+    private final String displayName;
 
     public UuidDisplayName(UUID uuid, String displayName) {
         if (uuid == null)
             throw new IllegalArgumentException("uuid cannot be null");
 
-        this.id = uuid;
-        this.name = displayName;
+        this.uuid = uuid;
+        this.displayName = displayName;
     }
 
     public UuidDisplayName(UuidDisplayName source) {
-        this.id = source.id;
-        this.name = source.name;
+        if (source == null)
+            throw new IllegalArgumentException("source cannot be null");
+
+        this.uuid = source.uuid;
+        this.displayName = source.displayName;
     }
 
     public UUID getUuid() {
-        return id;
+        return uuid;
     }
 
     public String getDisplayName() {
-        return name;
+        return displayName;
     }
 
 }

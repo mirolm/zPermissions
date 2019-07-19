@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import com.google.common.base.Charsets;
 import com.google.common.cache.CacheBuilder;
@@ -75,12 +77,12 @@ public class MojangUuidResolver implements UuidResolver {
 
     @Override
     public Map<String, UuidDisplayName> resolve(Collection<String> usernames) throws Exception {
-        if (usernames == null)
-            throw new IllegalArgumentException("usernames cannot be null");
+        if (usernames == null || usernames.isEmpty())
+            throw new IllegalArgumentException("usernames cannot be empty");
 
         Map<String, UuidDisplayName> result = new LinkedHashMap<>();
 
-        final int BATCH_SIZE = 97; // Should be <= Mojang's AccountsClient's PROFILES_PER_REQUEST (100)
+        final int BATCH_SIZE = 95; // Should be less than Mojang's PROFILES_PER_REQUEST (100)
 
         for (List<String> sublist : Lists.partition(new ArrayList<>(usernames), BATCH_SIZE)) {
             result.putAll(searchProfiles(sublist));
@@ -132,20 +134,18 @@ public class MojangUuidResolver implements UuidResolver {
         connection.setConnectTimeout(15000);
         connection.setReadTimeout(15000);
 
-        try (BufferedWriter writer = new BufferedWriter(
-                new OutputStreamWriter(connection.getOutputStream(), Charsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), Charsets.UTF_8))) {
             gson.toJson(usernames, writer);
         }
 
-        UuidDisplayName[] profiles;
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
-            profiles = gson.fromJson(reader, UuidDisplayName[].class);
-        }
-
         Map<String, UuidDisplayName> result = new LinkedHashMap<>();
-        for (UuidDisplayName profile : profiles) {
-            result.putIfAbsent(profile.getDisplayName().toLowerCase(), new UuidDisplayName(profile));
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
+            Type listProfilesType = TypeToken.getParameterized(List.class, UuidDisplayName.class).getType();
+            List<UuidDisplayName> profiles = gson.fromJson(reader, listProfilesType);
+            for (UuidDisplayName profile : profiles) {
+                result.putIfAbsent(profile.getDisplayName().toLowerCase(), new UuidDisplayName(profile));
+            }
         }
 
         return result;
