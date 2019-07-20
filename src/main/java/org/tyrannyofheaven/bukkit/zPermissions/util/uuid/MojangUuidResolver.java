@@ -141,8 +141,8 @@ public class MojangUuidResolver implements UuidResolver {
         Map<String, UuidDisplayName> result = new LinkedHashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
-            Type listProfilesType = TypeToken.getParameterized(List.class, UuidDisplayName.class).getType();
-            List<UuidDisplayName> profiles = gson.fromJson(reader, listProfilesType);
+            Type listProfileType = TypeToken.getParameterized(List.class, UuidDisplayName.class).getType();
+            List<UuidDisplayName> profiles = gson.fromJson(reader, listProfileType);
             for (UuidDisplayName profile : profiles) {
                 result.putIfAbsent(profile.getDisplayName().toLowerCase(), new UuidDisplayName(profile));
             }
