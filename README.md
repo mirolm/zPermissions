@@ -95,8 +95,13 @@ Sources may be found on GitHub:
 Development builds of this project can be acquired at the provided continuous integration server. 
 These builds have not been approved by the BukkitDev staff. Use them at your own risk.
 
-*   [zPermissions](http://ci.tyrannyofheaven.org/job/zPermissions/) (Requires ToHPluginUtils.jar)
-*   [zPermissions-standlone](http://ci.tyrannyofheaven.org/job/zPermissions-standalone/) (includes ToHPluginUtils, like the version distributed on dev.bukkit.org)
+*   [zPermissions @ ci.codemc.org](https://ci.codemc.org/job/mirolm/job/zPermissions/) (Jenkins job building this project)
+*   [zPermissions](https://ci.codemc.org/job/mirolm/job/zPermissions/lastSuccessfulBuild/artifact/target/zPermissions.jar) (All-in-one ready to go zPermissions.jar)
+*   [original-zPermissions (zPermissionsNoAvaje)](https://ci.codemc.org/job/mirolm/job/zPermissions/lastSuccessfulBuild/artifact/target/original-zPermissions.jar) (Use this if you have Avaje already shaded in other plugins)
+
+If you want to use zPermissions API add the below Maven repository.
+
+*   [repo.codemc.org](https://repo.codemc.org/repository/maven-public/) 
 
 ## To Do ##
 

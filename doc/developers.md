@@ -8,9 +8,10 @@ The API methods are exposed via the [ZPermissionsService](https://github.com/Zer
 
 First, you will need to add zPermissions-X.Y.Z.jar to your build path somehow. If your project uses Maven, add the following repository to your POM:
 
+    <!-- CodeMC Repo (Contains many required libraries) -->
     <repository>
-      <id>tyrannyofheaven.org</id>
-      <url>http://maven.tyrannyofheaven.org/</url>
+      <id>codemc-repo</id>
+      <url>https://repo.codemc.org/repository/maven-public/</url>
     </repository>
 
 Then add the following dependency:
@@ -18,11 +19,11 @@ Then add the following dependency:
     <dependency>
       <groupId>org.tyrannyofheaven.bukkit</groupId>
       <artifactId>zPermissions</artifactId>
-      <version>[0.9.8,)</version>
+      <version>[1.4.1,)</version>
       <scope>provided</scope>
     </dependency>
 
-If you don't use Maven (and why not?), you can visit my [Maven repository](http://maven.tyrannyofheaven.org/org/tyrannyofheaven/bukkit/zPermissions/) directly and download any version > 0.9.8.
+If you don't use Maven (and why not?), you can visit [CodeMC repository](https://repo.codemc.org/) directly and download any version >= 1.4.1.
 
 Next, to get an actual implementation of this interface, your plugin should do something like the following:
 
