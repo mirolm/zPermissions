@@ -26,7 +26,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.util.UUID;
 
-public class UUIDTypeAdapter extends TypeAdapter<UUID> {
+public class UuidTypeAdapter extends TypeAdapter<UUID> {
     public void write(JsonWriter out, UUID value) throws IOException {
         TypeAdapters.STRING.write(out, canonicalizeUuid(value));
     }

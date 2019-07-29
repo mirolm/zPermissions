@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
 
 public class MojangUuidResolver implements UuidResolver {
 
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UuidTypeAdapter()).create();
 
     private final LoadingCache<String, UuidDisplayName> cache;
 
