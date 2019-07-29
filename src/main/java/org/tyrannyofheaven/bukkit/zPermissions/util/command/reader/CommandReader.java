@@ -151,7 +151,7 @@ public class CommandReader {
                                 (sender instanceof Player ? "/" : ""),
                                 call.getAlias(),
                                 (call.getArgs().length > 0 ? " " : ""),
-                                delimitedString(" ", call.getArgs()));
+                                delimitedString(" ", (Object[]) call.getArgs()));
                     }
                     if (!call.getCommand().execute(sender, call.getAlias(), call.getArgs()))
                         return false;

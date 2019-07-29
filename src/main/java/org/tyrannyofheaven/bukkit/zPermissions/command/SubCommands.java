@@ -463,7 +463,7 @@ public class SubCommands {
         final StringBuilder stringValue = new StringBuilder(value);
         if (rest.length > 0) {
             stringValue.append(' ')
-                    .append(ToHStringUtils.delimitedString(" ", rest));
+                    .append(ToHStringUtils.delimitedString(" ", (Object[]) rest));
         }
         storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
             @Override
