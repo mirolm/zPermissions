@@ -83,7 +83,7 @@ public class RefreshTask implements Runnable {
     }
 
     private void scheduleTask() {
-        if ((taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this, (long) delay)) < 0) {
+        if ((taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this, delay)) < 0) {
             error(plugin, "Failed to schedule RefreshTask! Remaining players: %s", delimitedString(", ", playersToRefresh));
         }
     }
