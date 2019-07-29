@@ -309,7 +309,7 @@ public class Utils {
         if (match.matches()) {
             int unitsInt = Calendar.DAY_OF_MONTH;
 
-            int durationInt = Integer.valueOf(match.group(1));
+            int durationInt = Integer.parseInt(match.group(1));
             if (durationInt < 1)
                 throw new ParseException("Invalid value: duration/timestamp"); // NB Should match option name
 
