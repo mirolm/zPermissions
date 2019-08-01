@@ -91,7 +91,7 @@ public class MetadataCommands {
         final StringBuilder stringValue = new StringBuilder(value);
         if (rest.length > 0) {
             stringValue.append(' ')
-                    .append(ToHStringUtils.delimitedString(" ", (Object[]) rest));
+                    .append(ToHStringUtils.delimitedString(" ", rest));
         }
         set0(sender, name, metadataName, stringValue.toString());
     }

@@ -65,10 +65,10 @@ public class ToHStringUtils {
      * by the given delimiter. Similar to "string join" in other languages.
      *
      * @param delimiter the string delimiter
-     * @param objs      an array of objects
+     * @param objs      an array of strings
      * @return the delimited string
      */
-    public static String delimitedString(String delimiter, Object... objs) {
+    public static String delimitedString(String delimiter, String... objs) {
         return delimitedString(delimiter, Arrays.asList(objs));
     }
 

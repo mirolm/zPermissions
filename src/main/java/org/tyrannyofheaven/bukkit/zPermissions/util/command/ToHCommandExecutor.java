@@ -127,7 +127,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
 
         try {
             if (quoteAware)
-                args = split(ToHStringUtils.delimitedString(" ", (Object[]) args), true);
+                args = split(ToHStringUtils.delimitedString(" ", args), true);
 
             // NB: We use command.getName() rather than label. This allows the
             // user to freely add aliases by editing plugin.yml. However,
@@ -176,7 +176,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
                 argsNoQuery = args;
             }
 
-            args = split(ToHStringUtils.delimitedString(" ", (Object[]) argsNoQuery), false);
+            args = split(ToHStringUtils.delimitedString(" ", argsNoQuery), false);
             // Extend and add query
             args = Arrays.copyOfRange(args, 0, args.length + 1);
             args[args.length - 1] = query;

@@ -301,7 +301,7 @@ public class Utils {
 
         // Append args, if present
         if (args.length > 0)
-            duration = duration + " " + ToHStringUtils.delimitedString(" ", (Object[]) args);
+            duration = duration + " " + ToHStringUtils.delimitedString(" ", args);
 
         duration = duration.trim();
 
