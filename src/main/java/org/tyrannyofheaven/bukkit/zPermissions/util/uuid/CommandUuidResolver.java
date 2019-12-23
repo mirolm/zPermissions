@@ -73,7 +73,6 @@ public class CommandUuidResolver {
                 handler.process(sender, displayName, udn.getUuid(), skip);
             } else {
                 // Is the named player online?
-                @SuppressWarnings("deprecation")
                 Player player = Bukkit.getPlayerExact(name);
                 if (player != null) {
                     // Simply run inline, no explicit lookup necessary
