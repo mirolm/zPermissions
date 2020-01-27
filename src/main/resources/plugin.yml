@@ -6,6 +6,7 @@ author: ZerothAngel
 database: false
 load: STARTUP
 api-version: ${bukkitplugin.api}
+softdepend: [Vault, WorldGuard]
 
 commands:
   permissions:
