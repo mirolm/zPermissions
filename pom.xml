@@ -55,7 +55,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -101,7 +101,7 @@
             <plugin>
                 <groupId>net.md-5</groupId>
                 <artifactId>scriptus</artifactId>
-                <version>0.3.1</version>
+                <version>0.3.2</version>
                 <configuration>
                     <format>%s</format>
                     <scmDirectory>zPermissions/</scmDirectory>
