@@ -407,13 +407,8 @@ public class Utils {
         Set<String> changed = new HashSet<>(permissions.keySet());
         changed.retainAll(otherPermissions.keySet());
         // Now we know what's common, actually determine what's different
-        for (Iterator<String> i = changed.iterator(); i.hasNext(); ) {
-            String key = i.next();
-            if (permissions.get(key).equals(otherPermissions.get(key))) {
-                // Same thing, so remove from set
-                i.remove();
-            }
-        }
+        // Same thing, so remove from set
+        changed.removeIf(key -> permissions.get(key).equals(otherPermissions.get(key)));
 
         List<String> lines = new ArrayList<>();
 
