@@ -170,11 +170,7 @@ public class PermissionsResolver {
 
     public void addWorldAlias(String world, String target) {
         target = target.toLowerCase();
-        List<Pattern> patterns = worldAliases.get(target);
-        if (patterns == null) {
-            patterns = new ArrayList<>();
-            worldAliases.put(target, patterns);
-        }
+        List<Pattern> patterns = worldAliases.computeIfAbsent(target, k -> new ArrayList<>());
         patterns.add(GlobPattern.compile(world.toLowerCase()));
     }
 
@@ -402,11 +398,7 @@ public class PermissionsResolver {
 
     private void addRegionPermission(Map<String, Map<String, Boolean>> regionPermissions, Entry e) {
         String region = e.getRegion().getName();
-        Map<String, Boolean> regionPerms = regionPermissions.get(region);
-        if (regionPerms == null) {
-            regionPerms = new LinkedHashMap<>();
-            regionPermissions.put(region, regionPerms);
-        }
+        Map<String, Boolean> regionPerms = regionPermissions.computeIfAbsent(region, k -> new LinkedHashMap<>());
         regionPerms.put(e.getPermission(), e.isValue());
     }
 

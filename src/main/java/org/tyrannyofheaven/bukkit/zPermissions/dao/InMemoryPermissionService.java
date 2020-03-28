@@ -785,11 +785,7 @@ public class InMemoryPermissionService implements PermissionService {
     }
 
     private void rememberMembership(Membership membership) {
-        Set<Membership> memberships = getReverseMembershipMap().get(membership.getMember());
-        if (memberships == null) {
-            memberships = new HashSet<>();
-            getReverseMembershipMap().put(membership.getMember(), memberships);
-        }
+        Set<Membership> memberships = getReverseMembershipMap().computeIfAbsent(membership.getMember(), k -> new HashSet<>());
         memberships.add(membership);
     }
 
@@ -885,11 +881,7 @@ public class InMemoryPermissionService implements PermissionService {
     }
 
     public static void rememberMembership(MemoryState memoryState, Membership membership) {
-        Set<Membership> memberships = memoryState.getReverseMembershipMap().get(membership.getMember());
-        if (memberships == null) {
-            memberships = new HashSet<>();
-            memoryState.getReverseMembershipMap().put(membership.getMember(), memberships);
-        }
+        Set<Membership> memberships = memoryState.getReverseMembershipMap().computeIfAbsent(membership.getMember(), k -> new HashSet<>());
         memberships.add(membership);
     }
 
