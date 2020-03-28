@@ -88,12 +88,7 @@ public class FileStorageStrategy implements StorageStrategy, TransactionStrategy
 
         debug(plugin, "Saving permissions database one last time...");
         // Queue up a final save task
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                save();
-            }
-        });
+        executorService.execute(this::save);
         // Start shutting down
         executorService.shutdown();
         // And wait

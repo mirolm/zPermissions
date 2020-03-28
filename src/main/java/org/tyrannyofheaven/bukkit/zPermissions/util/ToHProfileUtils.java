@@ -90,12 +90,7 @@ public class ToHProfileUtils {
     }
 
     public static void schedulePeriodicReport(Plugin plugin, long interval) {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
-            @Override
-            public void run() {
-                profileReport();
-            }
-        }, interval, interval);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, ToHProfileUtils::profileReport, interval, interval);
     }
 
     private static class ProfileData {

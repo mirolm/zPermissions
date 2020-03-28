@@ -84,12 +84,7 @@ public class ZPermissionsPlayerListener implements Listener {
         // (ignore the fact that it actually changed on login for now)
         core.setBukkitPermissions(event.getPlayer(), event.getPlayer().getLocation(), true, null); // Does this need to be forced again?
         // Wait for next tick...
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                core.refreshExpirations();
-            }
-        });
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, core::refreshExpirations);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -103,12 +98,7 @@ public class ZPermissionsPlayerListener implements Listener {
         debug(plugin, "%s quitting", event.getPlayer().getName());
         core.removeBukkitPermissions(event.getPlayer(), false); // They're leaving, no need to recalc
         // Wait for next tick...
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                core.refreshExpirations();
-            }
-        });
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, core::refreshExpirations);
         // Pre-load cache of UuidResolver
         uuidResolver.preload(event.getPlayer().getName(), event.getPlayer().getUniqueId());
     }

@@ -60,12 +60,7 @@ public class AvajePermissionDao implements PermissionDao {
     public AvajePermissionDao(InMemoryPermissionService permissionService, EbeanServer ebeanServer, Executor executor) {
         this.permissionService = permissionService;
         this.ebeanServer = ebeanServer;
-        this.executor = executor != null ? executor : new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        };
+        this.executor = executor != null ? executor : Runnable::run;
     }
 
     EbeanServer getEbeanServer() {
