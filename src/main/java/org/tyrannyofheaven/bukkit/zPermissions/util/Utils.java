@@ -57,59 +57,38 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
  */
 public class Utils {
 
-    private final static Comparator<PermissionEntity> PERMISSION_ENTITY_ALPHA_COMPARATOR = new Comparator<PermissionEntity>() {
-        @Override
-        public int compare(PermissionEntity a, PermissionEntity b) {
-            return a.getName().compareTo(b.getName()); // In the case of players, sort by UUID
-        }
-    };
+    private final static Comparator<PermissionEntity> PERMISSION_ENTITY_ALPHA_COMPARATOR = Comparator.comparing(PermissionEntity::getName);
 
     private final static Pattern DURATION_PATTERN = Pattern.compile("^(\\d+)\\s*(min(?:ute)?s?|h(?:ours?)?|d(?:ays?)?|m(?:onths?)?|y(?:ears?)?)?$", Pattern.CASE_INSENSITIVE);
 
-    public final static Comparator<Entry> ENTRY_COMPARATOR = new Comparator<Entry>() {
-        @Override
-        public int compare(Entry a, Entry b) {
-            if (a.getRegion() != null && b.getRegion() == null)
-                return 1;
-            else if (a.getRegion() == null && b.getRegion() != null)
-                return -1;
-            else if (a.getRegion() != null && b.getRegion() != null) {
-                int regions = a.getRegion().getName().compareTo(b.getRegion().getName());
-                if (regions != 0) return regions;
-            }
-
-            if (a.getWorld() != null && b.getWorld() == null)
-                return 1;
-            else if (a.getWorld() == null && b.getWorld() != null)
-                return -1;
-            else if (a.getWorld() != null && b.getWorld() != null) {
-                int worlds = a.getWorld().getName().compareTo(b.getWorld().getName());
-                if (worlds != 0) return worlds;
-            }
-
-            return a.getPermission().compareTo(b.getPermission());
+    public final static Comparator<Entry> ENTRY_COMPARATOR = (a, b) -> {
+        if (a.getRegion() != null && b.getRegion() == null)
+            return 1;
+        else if (a.getRegion() == null && b.getRegion() != null)
+            return -1;
+        else if (a.getRegion() != null && b.getRegion() != null) {
+            int regions = a.getRegion().getName().compareTo(b.getRegion().getName());
+            if (regions != 0) return regions;
         }
+
+        if (a.getWorld() != null && b.getWorld() == null)
+            return 1;
+        else if (a.getWorld() == null && b.getWorld() != null)
+            return -1;
+        else if (a.getWorld() != null && b.getWorld() != null) {
+            int worlds = a.getWorld().getName().compareTo(b.getWorld().getName());
+            if (worlds != 0) return worlds;
+        }
+
+        return a.getPermission().compareTo(b.getPermission());
     };
 
-    private final static Comparator<PermissionInfo> PERMISSION_INFO_COMPARATOR = new Comparator<PermissionInfo>() {
-        @Override
-        public int compare(PermissionInfo a, PermissionInfo b) {
-            return a.getPermission().compareTo(b.getPermission());
-        }
-    };
+    private final static Comparator<PermissionInfo> PERMISSION_INFO_COMPARATOR = Comparator.comparing(PermissionInfo::getPermission);
 
-    private static final Comparator<EntityMetadata> METADATA_COMPARATOR = new Comparator<EntityMetadata>() {
-        @Override
-        public int compare(EntityMetadata a, EntityMetadata b) {
-            return a.getName().compareToIgnoreCase(b.getName());
-        }
-    };
+    private static final Comparator<EntityMetadata> METADATA_COMPARATOR = (a, b) -> a.getName().compareToIgnoreCase(b.getName());
 
-    private static final Comparator<Membership> MEMBERSHIP_COMPARATOR = new Comparator<Membership>() {
-        @Override
-        public int compare(Membership a, Membership b) {
-            return a.getMember().compareToIgnoreCase(b.getMember()); // NB By UUID
-        }
+    private static final Comparator<Membership> MEMBERSHIP_COMPARATOR = (a, b) -> {
+        return a.getMember().compareToIgnoreCase(b.getMember()); // NB By UUID
     };
 
     public static List<PermissionEntity> sortPlayers(Collection<PermissionEntity> players) {

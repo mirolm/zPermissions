@@ -48,22 +48,9 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
  */
 public class InMemoryPermissionService implements PermissionService {
 
-    private static final Comparator<Membership> MEMBERSHIP_GROUP_PRIORITY_COMPARATOR = new Comparator<Membership>() {
-        @Override
-        public int compare(Membership a, Membership b) {
-            int pri = a.getGroup().getPriority() - b.getGroup().getPriority();
-            if (pri != 0)
-                return pri;
-            return a.getGroup().getName().compareTo(b.getGroup().getName());
-        }
-    };
+    private static final Comparator<Membership> MEMBERSHIP_GROUP_PRIORITY_COMPARATOR = Comparator.comparingInt((Membership a) -> a.getGroup().getPriority()).thenComparing(a -> a.getGroup().getName());
 
-    private static final Comparator<Membership> MEMBERSHIP_MEMBER_COMPARATOR = new Comparator<Membership>() {
-        @Override
-        public int compare(Membership a, Membership b) {
-            return a.getDisplayName().toLowerCase().compareTo(b.getDisplayName().toLowerCase());
-        }
-    };
+    private static final Comparator<Membership> MEMBERSHIP_MEMBER_COMPARATOR = Comparator.comparing(a -> a.getDisplayName().toLowerCase());
 
     private PermissionDao permissionDao;
 

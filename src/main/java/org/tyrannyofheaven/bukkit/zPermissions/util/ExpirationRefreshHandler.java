@@ -41,12 +41,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.storage.StorageStrategy;
 
 public class ExpirationRefreshHandler implements Runnable {
 
-    private static final Comparator<Membership> MEMBERSHIP_EXPIRATION_COMPARATOR = new Comparator<Membership>() {
-        @Override
-        public int compare(Membership a, Membership b) {
-            return a.getExpiration().compareTo(b.getExpiration());
-        }
-    };
+    private static final Comparator<Membership> MEMBERSHIP_EXPIRATION_COMPARATOR = Comparator.comparing(Membership::getExpiration);
 
     private static final long FUDGE = 1000L;
 

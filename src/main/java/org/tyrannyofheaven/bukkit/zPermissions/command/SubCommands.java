@@ -201,12 +201,7 @@ public class SubCommands {
         }
 
         List<PermissionEntity> entities = storageStrategy.getPermissionService().getEntities(group);
-        entities.sort(new Comparator<PermissionEntity>() {
-            @Override
-            public int compare(PermissionEntity a, PermissionEntity b) {
-                return a.getDisplayName().toLowerCase().compareTo(b.getDisplayName().toLowerCase());
-            }
-        });
+        entities.sort(Comparator.comparing(a -> a.getDisplayName().toLowerCase()));
         List<String> entityNames = new ArrayList<>(entities.size());
         for (PermissionEntity entity : entities) {
             entityNames.add(group ? entity.getDisplayName() : formatPlayerName(entity, showUuid));
