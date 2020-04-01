@@ -31,7 +31,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.MetadataManager;
@@ -229,12 +228,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             regions.add(regionName.toLowerCase());
         }
 
-        return getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-            @Override
-            public Map<String, Boolean> doInTransaction() {
-                return getResolver().resolveGroup(groupName.toLowerCase(), lworldName, regions);
-            }
-        }, true);
+        return getTransactionStrategy().execute(() -> getResolver().resolveGroup(groupName.toLowerCase(), lworldName, regions), true);
     }
 
     /* (non-Javadoc)
@@ -267,12 +261,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             regions.add(regionName.toLowerCase());
         }
 
-        return getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-            @Override
-            public Map<String, Boolean> doInTransaction() {
-                return getResolver().resolvePlayer(uuid, lworldName, regions).getPermissions();
-            }
-        }, true);
+        return getTransactionStrategy().execute(() -> getResolver().resolvePlayer(uuid, lworldName, regions).getPermissions(), true);
     }
 
     /* (non-Javadoc)
@@ -391,12 +380,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
             // Use metadata manager to resolve metadata
             value = getMetadataManager().getMetadata(name, uuid, group, metadataName);
         } else {
-            value = getTransactionStrategy().execute(new TransactionCallback<Object>() {
-                @Override
-                public Object doInTransaction() {
-                    return getPermissionService().getMetadata(name, uuid, group, metadataName);
-                }
-            }, true);
+            value = getTransactionStrategy().execute(() -> getPermissionService().getMetadata(name, uuid, group, metadataName), true);
         }
 
         if (value == null)

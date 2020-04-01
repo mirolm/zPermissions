@@ -65,7 +65,6 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.ToHUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.util.VersionInfo;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.CommandExceptionHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.ToHCommandExecutor;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CascadingUuidResolver;
@@ -747,13 +746,10 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             if (kickOnError && (kickOpsOnError || !player.isOp())) {
                 // Probably safer to do this synchronously
                 final UUID playerUuid = player.getUniqueId();
-                getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-                    @Override
-                    public void run() {
-                        Player player = getServer().getPlayer(playerUuid);
-                        if (player != null)
-                            player.kickPlayer("Error determining your permissions");
-                    }
+                getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+                    Player player1 = getServer().getPlayer(playerUuid);
+                    if (player1 != null)
+                        player1.kickPlayer("Error determining your permissions");
                 });
             } else {
                 // Ensure player has no permissions
@@ -782,14 +778,11 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                     throw new AssertionError("Unhandled RefreshCause: " + eventCause);
             }
             // Fire it off on the following tick
-            Bukkit.getScheduler().runTask(this, new Runnable() {
-                @Override
-                public void run() {
-                    Player player = Bukkit.getPlayer(playerUuid);
-                    if (player != null) {
-                        ZPermissionsPlayerUpdateEvent event = new ZPermissionsPlayerUpdateEvent(player, cause);
-                        Bukkit.getPluginManager().callEvent(event);
-                    }
+            Bukkit.getScheduler().runTask(this, () -> {
+                Player player12 = Bukkit.getPlayer(playerUuid);
+                if (player12 != null) {
+                    ZPermissionsPlayerUpdateEvent event = new ZPermissionsPlayerUpdateEvent(player12, cause);
+                    Bukkit.getPluginManager().callEvent(event);
                 }
             });
 
@@ -836,12 +829,9 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
         // Resolve effective permissions
         final String world = location.getWorld().getName().toLowerCase();
-        ResolverResult resolverResult = getRetryingTransactionStrategy().execute(new TransactionCallback<ResolverResult>() {
-            @Override
-            public ResolverResult doInTransaction() {
-//                fakeFailureChance();
-                return getResolver().resolvePlayer(player.getUniqueId(), world, regions);
-            }
+        ResolverResult resolverResult = getRetryingTransactionStrategy().execute(() -> {
+//            fakeFailureChance();
+            return getResolver().resolvePlayer(player.getUniqueId(), world, regions);
         }, true);
 
         debug(this, "(Existing Permission: %s, PlayerState: %s, PermissionAttachment: %s)", perm != null, playerState != null, hasPermissionAttachment);
@@ -1274,13 +1264,10 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         config = ToHFileUtils.getConfig(this);
         readConfig();
         startAutoRefreshTask();
-        refresh(true, new Runnable() {
-            @Override
-            public void run() {
-                invalidateMetadataCache();
-                refreshPlayers();
-                refreshExpirations();
-            }
+        refresh(true, () -> {
+            invalidateMetadataCache();
+            refreshPlayers();
+            refreshExpirations();
         });
     }
 
@@ -1302,21 +1289,15 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         // Start up new task at new interval
         if (databaseSupport && autoRefreshInterval > 0) {
             final Plugin plugin = this;
-            autoRefreshTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-                @Override
-                public void run() {
-                    log(plugin, "Refreshing from database...");
-                    refresh(autoRefreshForce, new Runnable() {
-                        @Override
-                        public void run() {
-                            // This is executed after the storage refresh is done.
-                            log(plugin, "Refresh done.");
-                            invalidateMetadataCache();
-                            refreshPlayers();
-                            refreshExpirations();
-                        }
-                    });
-                }
+            autoRefreshTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+                log(plugin, "Refreshing from database...");
+                refresh(autoRefreshForce, () -> {
+                    // This is executed after the storage refresh is done.
+                    log(plugin, "Refresh done.");
+                    invalidateMetadataCache();
+                    refreshPlayers();
+                    refreshExpirations();
+                });
             }, autoRefreshInterval * 20 * 60, autoRefreshInterval * 20 * 60); // FIXME magic numbers
         }
     }
@@ -1432,18 +1413,15 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
         // Run synchronous since I'm not so sure about thread safety of AvajeStorageStrategy's
         // pre-commit hook...
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-            @Override
-            public void run() {
-                getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
-                    @Override
-                    public void doInTransactionWithoutResult() {
-                        getPermissionService().updateDisplayName(uuid, displayName);
-                    }
-                });
-                // Also preload name -> UUID mapping into UuidResolver cache(s)
-                uuidResolver.preload(displayName, uuid);
-            }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
+                @Override
+                public void doInTransactionWithoutResult() {
+                    getPermissionService().updateDisplayName(uuid, displayName);
+                }
+            });
+            // Also preload name -> UUID mapping into UuidResolver cache(s)
+            uuidResolver.preload(displayName, uuid);
         });
     }
 

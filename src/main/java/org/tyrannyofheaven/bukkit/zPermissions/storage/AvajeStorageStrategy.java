@@ -36,7 +36,6 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.AsyncTransaction
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.PreBeginHook;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.PreCommitHook;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.RetryingAvajeTransactionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidDisplayName;
@@ -124,29 +123,23 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
 
     @Override
     public void refresh(final boolean force, final Runnable finishTask) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (refreshInternal(force) && finishTask != null)
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, finishTask);
-            }
+        executorService.execute(() -> {
+            if (refreshInternal(force) && finishTask != null)
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, finishTask);
         });
     }
 
     private boolean refreshInternal(final boolean force) {
-        return internalTransactionStrategy.execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                DataVersion currentVersion = getCurrentDataVersion();
+        return internalTransactionStrategy.execute(() -> {
+            DataVersion currentVersion = getCurrentDataVersion();
 
-                if (force || lastLoadedVersion.get() != currentVersion.getVersion()) {
-                    permissionDao.load();
-                    lastLoadedVersion.set(currentVersion.getVersion());
-                    return true;
-                }
-
-                return false;
+            if (force || lastLoadedVersion.get() != currentVersion.getVersion()) {
+                permissionDao.load();
+                lastLoadedVersion.set(currentVersion.getVersion());
+                return true;
             }
+
+            return false;
         }, true);
     }
 
@@ -215,20 +208,17 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
 
     @Override
     public UuidDisplayName resolve(final String username) {
-        return internalTransactionStrategy.execute(new TransactionCallback<UuidDisplayName>() {
-            @Override
-            public UuidDisplayName doInTransaction() {
-                Date expire = new Date(System.currentTimeMillis() - uuidCacheTimeout);
-                UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
-                        .eq("name", username.toLowerCase())
-                        .ge("timestamp", expire)
-                        .findUnique();
-                if (udnc != null) {
-                    UUID uuid = udnc.getUuid();
-                    return new UuidDisplayName(uuid, udnc.getDisplayName());
-                }
-                return null;
+        return internalTransactionStrategy.execute(() -> {
+            Date expire = new Date(System.currentTimeMillis() - uuidCacheTimeout);
+            UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
+                    .eq("name", username.toLowerCase())
+                    .ge("timestamp", expire)
+                    .findUnique();
+            if (udnc != null) {
+                UUID uuid = udnc.getUuid();
+                return new UuidDisplayName(uuid, udnc.getDisplayName());
             }
+            return null;
         }, true /* always read-only */);
     }
 
@@ -254,30 +244,25 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
         if (readOnlyMode) return; // Do nothing if read-only
 
         // Must never block, so utilize our Executor
-        executorService.execute(new Runnable() {
+        executorService.execute(() -> internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void run() {
-                internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
-                    @Override
-                    public void doInTransactionWithoutResult() {
-                        // Does it already exist? (regardless of expiration)
-                        UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
-                                .eq("name", username.toLowerCase())
-                                .findUnique();
-                        if (udnc == null) {
-                            // If not, create it
-                            udnc = new UuidDisplayNameCache();
-                            udnc.setName(username.toLowerCase());
-                        }
-                        // Update values
-                        udnc.setDisplayName(username);
-                        udnc.setUuid(uuid);
-                        udnc.setTimestamp(new Date());
-                        getEbeanServer().save(udnc);
-                    }
-                });
+            public void doInTransactionWithoutResult() {
+                // Does it already exist? (regardless of expiration)
+                UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
+                        .eq("name", username.toLowerCase())
+                        .findUnique();
+                if (udnc == null) {
+                    // If not, create it
+                    udnc = new UuidDisplayNameCache();
+                    udnc.setName(username.toLowerCase());
+                }
+                // Update values
+                udnc.setDisplayName(username);
+                udnc.setUuid(uuid);
+                udnc.setTimestamp(new Date());
+                getEbeanServer().save(udnc);
             }
-        });
+        }));
     }
 
     @Override
@@ -285,22 +270,17 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
         if (readOnlyMode)
             throw new ReadOnlyException();
 
-        executorService.execute(new Runnable() {
+        executorService.execute(() -> internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void run() {
-                internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
-                    @Override
-                    public void doInTransactionWithoutResult() {
-                        // If it exists (regardless of expiration), just delete it
-                        UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
-                                .eq("name", username.toLowerCase())
-                                .findUnique();
-                        if (udnc != null)
-                            getEbeanServer().delete(udnc);
-                    }
-                });
+            public void doInTransactionWithoutResult() {
+                // If it exists (regardless of expiration), just delete it
+                UuidDisplayNameCache udnc = getEbeanServer().find(UuidDisplayNameCache.class).where()
+                        .eq("name", username.toLowerCase())
+                        .findUnique();
+                if (udnc != null)
+                    getEbeanServer().delete(udnc);
             }
-        });
+        }));
     }
 
     @Override
@@ -308,22 +288,17 @@ public class AvajeStorageStrategy implements StorageStrategy, PreBeginHook, PreC
         if (readOnlyMode)
             throw new ReadOnlyException();
 
-        executorService.execute(new Runnable() {
+        executorService.execute(() -> internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void run() {
-                internalTransactionStrategy.execute(new TransactionCallbackWithoutResult() {
-                    @Override
-                    public void doInTransactionWithoutResult() {
-                        // This is a bad way to do it, but I'm not sure how
-                        // an SQL delete would work in light of configurable
-                        // table names.
-                        List<UuidDisplayNameCache> udncs = getEbeanServer().find(UuidDisplayNameCache.class)
-                                .findList();
-                        getEbeanServer().delete(udncs);
-                    }
-                });
+            public void doInTransactionWithoutResult() {
+                // This is a bad way to do it, but I'm not sure how
+                // an SQL delete would work in light of configurable
+                // table names.
+                List<UuidDisplayNameCache> udncs = getEbeanServer().find(UuidDisplayNameCache.class)
+                        .findList();
+                getEbeanServer().delete(udncs);
             }
-        });
+        }));
     }
 
 }

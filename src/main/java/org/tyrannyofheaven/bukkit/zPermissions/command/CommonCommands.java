@@ -37,10 +37,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.HelpBuilder;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
-import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolverHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.QualifiedPermission;
 import org.tyrannyofheaven.bukkit.zPermissions.RefreshCause;
@@ -104,12 +102,7 @@ public abstract class CommonCommands {
     }
 
     protected final void _get(CommandSender sender, final String name, final String permission) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                _get0(sender, name, uuid, permission);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> _get0(sender1, name1, uuid, permission));
     }
 
     private void _get0(CommandSender sender, final String name, final UUID uuid, String permission) {
@@ -120,12 +113,7 @@ public abstract class CommonCommands {
         if (checkDynamicPermission(sender, wp.getPermission())) return;
 
         // Read entry from PermissionService, if any
-        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return storageStrategy.getPermissionService().getPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission());
-            }
-        }, true);
+        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().getPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission()), true);
 
         if (result == null) {
             sendMessage(sender, colorize("%s%s{YELLOW} does not set {GOLD}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, permission);
@@ -136,12 +124,7 @@ public abstract class CommonCommands {
     }
 
     protected final void _set(CommandSender sender, final String name, final String permission, final Boolean value) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                _set0(sender, name, uuid, permission, value);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> _set0(sender1, name1, uuid, permission, value));
     }
 
     private void _set0(CommandSender sender, final String name, final UUID uuid, String permission, final Boolean value) {
@@ -173,12 +156,7 @@ public abstract class CommonCommands {
     }
 
     protected final void _unset(CommandSender sender, final String name, final String permission) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                _unset0(sender, name, uuid, permission);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> _unset0(sender1, name1, uuid, permission));
     }
 
     private void _unset0(CommandSender sender, final String name, final UUID uuid, String permission) {
@@ -189,12 +167,7 @@ public abstract class CommonCommands {
         if (checkDynamicPermission(sender, wp.getPermission())) return;
 
         // Delete permission entry.
-        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return storageStrategy.getPermissionService().unsetPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission());
-            }
-        });
+        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().unsetPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission()));
 
         if (result) {
             sendMessage(sender, colorize("{GOLD}%s{YELLOW} unset for %s%s"), permission, group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name);
@@ -225,21 +198,11 @@ public abstract class CommonCommands {
     }
 
     protected final void _delete(CommandSender sender, final String name) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                _delete0(sender, name, uuid);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> _delete0(sender1, name1, uuid));
     }
 
     private void _delete0(CommandSender sender, final String name, final UUID uuid) {
-        boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return storageStrategy.getPermissionService().deleteEntity(name, uuid, group);
-            }
-        });
+        boolean result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().deleteEntity(name, uuid, group));
 
         if (result) {
             sendMessage(sender, colorize("{YELLOW}%s %s%s{YELLOW} deleted"),
@@ -259,12 +222,7 @@ public abstract class CommonCommands {
     }
 
     protected final void _dump(CommandSender sender, final String name, final String worldName, final String filter, final String[] regionNames) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                _dump0(sender, name, uuid, worldName, filter, regionNames);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> _dump0(sender1, name1, uuid, worldName, filter, regionNames));
     }
 
     private void _dump0(CommandSender sender, final String name, final UUID uuid, String worldName, String filter, String[] regionNames) {
@@ -285,16 +243,13 @@ public abstract class CommonCommands {
         Map<String, Boolean> rootPermissions;
         try {
             // Grab permissions from zPerms
-            rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-                @Override
-                public Map<String, Boolean> doInTransaction() {
-                    if (group) {
-                        if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
-                            throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
-                        return resolver.resolveGroup(name.toLowerCase(), lworldName, regions);
-                    } else {
-                        return resolver.resolvePlayer(uuid, lworldName, regions).getPermissions();
-                    }
+            rootPermissions = storageStrategy.getTransactionStrategy().execute(() -> {
+                if (group) {
+                    if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
+                        throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
+                    return resolver.resolveGroup(name.toLowerCase(), lworldName, regions);
+                } else {
+                    return resolver.resolvePlayer(uuid, lworldName, regions).getPermissions();
                 }
             }, true);
         } catch (MissingGroupException e) {
@@ -336,17 +291,9 @@ public abstract class CommonCommands {
 
     protected final void _diff(CommandSender sender, final String name, final String worldName, final String filter, final String otherName, final String[] regionNames) {
         final CommonCommands realThis = this;
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, final String name, final UUID uuid, boolean group) {
-                // Resolve both names...
-                uuidResolver.resolveUsername(sender, otherName, group, new CommandUuidResolverHandler() {
-                    @Override
-                    public void process(CommandSender sender, String otherName, UUID otherUuid, boolean group) {
-                        realThis._diff(sender, name, uuid, worldName, filter, otherName, otherUuid, regionNames);
-                    }
-                });
-            }
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> {
+            // Resolve both names...
+            uuidResolver.resolveUsername(sender1, otherName, group, (sender11, otherName1, otherUuid, group1) -> realThis._diff(sender11, name1, uuid, worldName, filter, otherName1, otherUuid, regionNames));
         });
     }
 
@@ -370,16 +317,13 @@ public abstract class CommonCommands {
         final String lworldName = worldName.toLowerCase();
         Map<String, Boolean> rootPermissions;
         try {
-            rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-                @Override
-                public Map<String, Boolean> doInTransaction() {
-                    if (group) {
-                        if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
-                            throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
-                        return resolver.resolveGroup(name.toLowerCase(), lworldName, regions);
-                    } else {
-                        return resolver.resolvePlayer(uuid, lworldName, regions).getPermissions();
-                    }
+            rootPermissions = storageStrategy.getTransactionStrategy().execute(() -> {
+                if (group) {
+                    if (storageStrategy.getPermissionService().getEntity(name, null, true) == null)
+                        throw new MissingGroupException(name); // Don't really want to handle it in the transaction...
+                    return resolver.resolveGroup(name.toLowerCase(), lworldName, regions);
+                } else {
+                    return resolver.resolvePlayer(uuid, lworldName, regions).getPermissions();
                 }
             }, true);
         } catch (MissingGroupException e) {
@@ -394,16 +338,13 @@ public abstract class CommonCommands {
         // Grab permissions of other entity
         Map<String, Boolean> otherRootPermissions;
         try {
-            otherRootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-                @Override
-                public Map<String, Boolean> doInTransaction() {
-                    if (group) {
-                        if (storageStrategy.getPermissionService().getEntity(otherName, null, true) == null)
-                            throw new MissingGroupException(otherName); // Don't really want to handle it in the transaction...
-                        return resolver.resolveGroup(otherName.toLowerCase(), lworldName, regions);
-                    } else {
-                        return resolver.resolvePlayer(otherUuid, lworldName, regions).getPermissions();
-                    }
+            otherRootPermissions = storageStrategy.getTransactionStrategy().execute(() -> {
+                if (group) {
+                    if (storageStrategy.getPermissionService().getEntity(otherName, null, true) == null)
+                        throw new MissingGroupException(otherName); // Don't really want to handle it in the transaction...
+                    return resolver.resolveGroup(otherName.toLowerCase(), lworldName, regions);
+                } else {
+                    return resolver.resolvePlayer(otherUuid, lworldName, regions).getPermissions();
                 }
             }, true);
         } catch (MissingGroupException e) {
@@ -451,17 +392,9 @@ public abstract class CommonCommands {
             throw new IllegalArgumentException();
 
         final CommonCommands realThis = this;
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, final String sourceName, final UUID sourceUuid, boolean group) {
-                // Resolve twice (yeah, pretty insane...)
-                uuidResolver.resolveUsername(sender, destination, group, new CommandUuidResolverHandler() {
-                    @Override
-                    public void process(CommandSender sender, String destination, UUID destinationUuid, boolean group) {
-                        realThis.clone(sender, sourceName, sourceUuid, destination, destinationUuid, rename);
-                    }
-                });
-            }
+        uuidResolver.resolveUsername(sender, name, group, (sender1, sourceName, sourceUuid, group) -> {
+            // Resolve twice (yeah, pretty insane...)
+            uuidResolver.resolveUsername(sender1, destination, group, (sender11, destination1, destinationUuid, group1) -> realThis.clone(sender11, sourceName, sourceUuid, destination1, destinationUuid, rename));
         });
     }
 
@@ -600,12 +533,7 @@ public abstract class CommonCommands {
     }
 
     protected final void addGroupMember(CommandSender sender, final String groupName, final String playerName, final String duration, final String[] args, final boolean add, final boolean addNoReset) {
-        uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                addGroupMember(sender, groupName, uuid, name, duration, args, add, addNoReset);
-            }
-        });
+        uuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> addGroupMember(sender1, groupName, uuid, name, duration, args, add, addNoReset));
     }
 
     private void addGroupMember(CommandSender sender, final String groupName, final UUID playerUuid, final String playerName, String duration, String[] args, final boolean add, final boolean addNoReset) {
@@ -635,22 +563,12 @@ public abstract class CommonCommands {
     }
 
     protected final void removeGroupMember(CommandSender sender, final String groupName, final String playerName) {
-        uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                removeGroupMember(sender, groupName, uuid, name);
-            }
-        });
+        uuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> removeGroupMember(sender1, groupName, uuid, name));
     }
 
     private void removeGroupMember(CommandSender sender, final String groupName, final UUID playerUuid, final String playerName) {
         // Remove player from group
-        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return storageStrategy.getPermissionService().removeMember(groupName, playerUuid);
-            }
-        });
+        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().removeMember(groupName, playerUuid));
 
         if (result) {
             sendMessage(sender, colorize("{AQUA}%s{YELLOW} removed from {DARK_GREEN}%s"), playerName, groupName);

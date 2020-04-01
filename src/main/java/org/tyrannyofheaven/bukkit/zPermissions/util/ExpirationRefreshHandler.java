@@ -113,18 +113,15 @@ public class ExpirationRefreshHandler implements Runnable {
 
         // Send notifications
         if (!expired.isEmpty()) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    for (Membership membership : expired) {
-                        Player player = Bukkit.getPlayer(membership.getUuid());
-                        if (player != null && player.hasPermission("zpermissions.notify.self.expiration")) {
-                            sendMessage(player, colorize("{YELLOW}Your membership to {DARK_GREEN}%s{YELLOW} has expired."), membership.getGroup().getDisplayName());
-                        }
-                        broadcast(plugin, "zpermissions.notify.expiration",
-                                "Player %s is no longer a member of %s",
-                                membership.getDisplayName(), membership.getGroup().getDisplayName());
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                for (Membership membership : expired) {
+                    Player player = Bukkit.getPlayer(membership.getUuid());
+                    if (player != null && player.hasPermission("zpermissions.notify.self.expiration")) {
+                        sendMessage(player, colorize("{YELLOW}Your membership to {DARK_GREEN}%s{YELLOW} has expired."), membership.getGroup().getDisplayName());
                     }
+                    broadcast(plugin, "zpermissions.notify.expiration",
+                            "Player %s is no longer a member of %s",
+                            membership.getDisplayName(), membership.getGroup().getDisplayName());
                 }
             });
         }
@@ -146,12 +143,9 @@ public class ExpirationRefreshHandler implements Runnable {
             debug(plugin, "Next expiration is %dms away", delay);
 
             final Runnable realThis = this;
-            scheduledFuture = executorService.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    debug(plugin, "Expiring...");
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, realThis);
-                }
+            scheduledFuture = executorService.schedule(() -> {
+                debug(plugin, "Expiring...");
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, realThis);
             }, delay + FUDGE, TimeUnit.MILLISECONDS);
         } else
             debug(plugin, "No future expirations");

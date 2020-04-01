@@ -39,9 +39,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.command.Command;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.HelpBuilder;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Option;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Require;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
-import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolverHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.RefreshCause;
@@ -155,12 +153,7 @@ public class RootCommands {
     }
 
     private void rankChange(final CommandSender sender, final String playerName, final String trackName, final boolean rankUp, final BroadcastScope scope, final boolean verbose) {
-        commandUuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                rankChange(sender, uuid, name, trackName, rankUp, scope, verbose);
-            }
-        });
+        commandUuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> rankChange(sender1, uuid, name, trackName, rankUp, scope, verbose));
     }
 
     // Perform the actual promotion/demotion
@@ -172,90 +165,87 @@ public class RootCommands {
         final List<String> track = trackMetaData.getTrack();
 
         // Do everything in one ginormous transaction.
-        storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                Set<String> playerGroupNames = new HashSet<>(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
-                if (playerGroupNames.isEmpty())
-                    playerGroupNames.add(resolver.getDefaultGroup());
+        storageStrategy.getTransactionStrategy().execute(() -> {
+            Set<String> playerGroupNames = new HashSet<>(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
+            if (playerGroupNames.isEmpty())
+                playerGroupNames.add(resolver.getDefaultGroup());
 
-                // Determine what groups the player and the track have in common
-                playerGroupNames = getCommonGroups(playerGroupNames, track);
+            // Determine what groups the player and the track have in common
+            playerGroupNames = getCommonGroups(playerGroupNames, track);
 
-                if (playerGroupNames.size() > 1) {
-                    // Hmm, player is member of 2 or more groups in track. Don't know
-                    // what to do, so abort.
-                    sendMessage(sender, colorize("{RED}Player is in more than one group in that track: {DARK_GREEN}%s"), delimitedString(", ", playerGroupNames));
-                    abortBatchProcessing();
-                    return false;
-                } else if (playerGroupNames.isEmpty()) {
-                    // Player not in any group. Only valid for rankUp
-                    if (rankUp) {
-                        String group = track.get(0);
-                        try {
-                            storageStrategy.getPermissionService().addMember(group, uuid, playerName, null);
-                        } catch (MissingGroupException e) {
-                            sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
-                            abortBatchProcessing();
-                            return false;
-                        }
-                        announce("promote", scope, "%s added %s to %s", sender.getName(), playerName, group);
-                        if (scope.isShouldEcho() || verbose)
-                            sendMessage(sender, colorize("{YELLOW}Adding {AQUA}%s{YELLOW} to {DARK_GREEN}%s"), playerName, group);
-                        fireRankEvent(playerName, trackMetaData.getTrackName(), null, group);
-                    } else {
-                        sendMessage(sender, colorize("{RED}Player is not in any groups in that track."));
+            if (playerGroupNames.size() > 1) {
+                // Hmm, player is member of 2 or more groups in track. Don't know
+                // what to do, so abort.
+                sendMessage(sender, colorize("{RED}Player is in more than one group in that track: {DARK_GREEN}%s"), delimitedString(", ", playerGroupNames));
+                abortBatchProcessing();
+                return false;
+            } else if (playerGroupNames.isEmpty()) {
+                // Player not in any group. Only valid for rankUp
+                if (rankUp) {
+                    String group = track.get(0);
+                    try {
+                        storageStrategy.getPermissionService().addMember(group, uuid, playerName, null);
+                    } catch (MissingGroupException e) {
+                        sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
                         abortBatchProcessing();
+                        return false;
                     }
-                    return true;
+                    announce("promote", scope, "%s added %s to %s", sender.getName(), playerName, group);
+                    if (scope.isShouldEcho() || verbose)
+                        sendMessage(sender, colorize("{YELLOW}Adding {AQUA}%s{YELLOW} to {DARK_GREEN}%s"), playerName, group);
+                    fireRankEvent(playerName, trackMetaData.getTrackName(), null, group);
                 } else {
-                    String oldGroup = playerGroupNames.iterator().next();
-                    int rankIndex = track.indexOf(oldGroup);
-                    assertFalse(rankIndex < 0); // should never happen...
+                    sendMessage(sender, colorize("{RED}Player is not in any groups in that track."));
+                    abortBatchProcessing();
+                }
+                return true;
+            } else {
+                String oldGroup = playerGroupNames.iterator().next();
+                int rankIndex = track.indexOf(oldGroup);
+                assertFalse(rankIndex < 0); // should never happen...
 
-                    // Rank up or down
-                    rankIndex += rankUp ? 1 : -1;
+                // Rank up or down
+                rankIndex += rankUp ? 1 : -1;
 
-                    // If now ranked below first rank, remove altogether
-                    if (rankIndex < 0) {
+                // If now ranked below first rank, remove altogether
+                if (rankIndex < 0) {
+                    storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
+                    announce(rankUp ? "promote" : "demote", scope, "%s removed %s from %s", sender.getName(), playerName, oldGroup);
+                    if (scope.isShouldEcho() || verbose)
+                        sendMessage(sender, colorize("{YELLOW}Removing {AQUA}%s{YELLOW} from {DARK_GREEN}%s"), playerName, oldGroup);
+                    fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, null);
+                } else {
+                    // Constrain rank to [1..track.size() - 1]
+                    if (rankIndex >= track.size()) rankIndex = track.size() - 1;
+
+                    String newGroup = track.get(rankIndex);
+
+                    // Change groups
+                    try {
+                        storageStrategy.getPermissionService().addMember(newGroup, uuid, playerName, null);
+                    } catch (MissingGroupException e) {
+                        sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
+                        abortBatchProcessing();
+                        return false;
+                    }
+                    if (!oldGroup.equalsIgnoreCase(newGroup))
                         storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
-                        announce(rankUp ? "promote" : "demote", scope, "%s removed %s from %s", sender.getName(), playerName, oldGroup);
-                        if (scope.isShouldEcho() || verbose)
-                            sendMessage(sender, colorize("{YELLOW}Removing {AQUA}%s{YELLOW} from {DARK_GREEN}%s"), playerName, oldGroup);
-                        fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, null);
-                    } else {
-                        // Constrain rank to [1..track.size() - 1]
-                        if (rankIndex >= track.size()) rankIndex = track.size() - 1;
 
-                        String newGroup = track.get(rankIndex);
-
-                        // Change groups
-                        try {
-                            storageStrategy.getPermissionService().addMember(newGroup, uuid, playerName, null);
-                        } catch (MissingGroupException e) {
-                            sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
-                            abortBatchProcessing();
-                            return false;
-                        }
-                        if (!oldGroup.equalsIgnoreCase(newGroup))
-                            storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
-
-                        announce(rankUp ? "promote" : "demote", scope, "%s %s %s from %s to %s", sender.getName(),
-                                (rankUp ? "promoted" : "demoted"),
+                    announce(rankUp ? "promote" : "demote", scope, "%s %s %s from %s to %s", sender.getName(),
+                            (rankUp ? "promoted" : "demoted"),
+                            playerName,
+                            oldGroup,
+                            newGroup);
+                    if (scope.isShouldEcho() || verbose)
+                        sendMessage(sender, colorize("{YELLOW}%s {AQUA}%s{YELLOW} from {DARK_GREEN}%s{YELLOW} to {DARK_GREEN}%s"),
+                                (rankUp ? "Promoting" : "Demoting"),
                                 playerName,
                                 oldGroup,
                                 newGroup);
-                        if (scope.isShouldEcho() || verbose)
-                            sendMessage(sender, colorize("{YELLOW}%s {AQUA}%s{YELLOW} from {DARK_GREEN}%s{YELLOW} to {DARK_GREEN}%s"),
-                                    (rankUp ? "Promoting" : "Demoting"),
-                                    playerName,
-                                    oldGroup,
-                                    newGroup);
-                        fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, newGroup);
-                    }
-
-                    return false;
+                    fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, newGroup);
                 }
+
+                return false;
             }
         });
 
@@ -288,12 +278,7 @@ public class RootCommands {
     }
 
     private void rankSet(final CommandSender sender, final String playerName, final String trackName, final String rankName, final BroadcastScope scope, final boolean verbose) {
-        commandUuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                rankSet(sender, uuid, name, trackName, rankName, scope, verbose);
-            }
-        });
+        commandUuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> rankSet(sender1, uuid, name, trackName, rankName, scope, verbose));
     }
 
     // Set rank to a specified rank on a track
@@ -320,80 +305,77 @@ public class RootCommands {
         }
 
         // Do everything in one ginormous transaction.
-        storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                Set<String> playerGroupNames = new HashSet<>(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
-                if (playerGroupNames.isEmpty())
-                    playerGroupNames.add(resolver.getDefaultGroup());
+        storageStrategy.getTransactionStrategy().execute(() -> {
+            Set<String> playerGroupNames = new HashSet<>(Utils.toGroupNames(Utils.filterExpired(storageStrategy.getPermissionService().getGroups(uuid))));
+            if (playerGroupNames.isEmpty())
+                playerGroupNames.add(resolver.getDefaultGroup());
 
-                // Determine what groups the player and the track have in common
-                playerGroupNames = getCommonGroups(playerGroupNames, track);
+            // Determine what groups the player and the track have in common
+            playerGroupNames = getCommonGroups(playerGroupNames, track);
 
-                if (playerGroupNames.size() > 1) {
-                    // Hmm, player is member of 2 or more groups in track. Don't know
-                    // what to do, so abort.
-                    sendMessage(sender, colorize("{RED}Player is in more than one group in that track: {DARK_GREEN}%s"), delimitedString(", ", playerGroupNames));
-                    abortBatchProcessing();
-                    return false;
-                } else if (playerGroupNames.isEmpty()) {
-                    if (rankName != null) {
-                        // Not in any groups, just add to new group.
-                        try {
-                            storageStrategy.getPermissionService().addMember(rankName, uuid, playerName, null);
-                        } catch (MissingGroupException e) {
-                            sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
-                            abortBatchProcessing();
-                            return false;
-                        }
-                        announce("setrank", scope, "%s added %s to %s", sender.getName(), playerName, rankName);
-                        if (scope.isShouldEcho() || verbose)
-                            sendMessage(sender, colorize("{YELLOW}Adding {AQUA}%s{YELLOW} to {DARK_GREEN}%s"), playerName, rankName);
-                        fireRankEvent(playerName, trackMetaData.getTrackName(), null, rankName);
-                    } else {
-                        sendMessage(sender, colorize("{RED}Player is not in any groups in that track."));
+            if (playerGroupNames.size() > 1) {
+                // Hmm, player is member of 2 or more groups in track. Don't know
+                // what to do, so abort.
+                sendMessage(sender, colorize("{RED}Player is in more than one group in that track: {DARK_GREEN}%s"), delimitedString(", ", playerGroupNames));
+                abortBatchProcessing();
+                return false;
+            } else if (playerGroupNames.isEmpty()) {
+                if (rankName != null) {
+                    // Not in any groups, just add to new group.
+                    try {
+                        storageStrategy.getPermissionService().addMember(rankName, uuid, playerName, null);
+                    } catch (MissingGroupException e) {
+                        sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
                         abortBatchProcessing();
+                        return false;
                     }
-                    return true;
+                    announce("setrank", scope, "%s added %s to %s", sender.getName(), playerName, rankName);
+                    if (scope.isShouldEcho() || verbose)
+                        sendMessage(sender, colorize("{YELLOW}Adding {AQUA}%s{YELLOW} to {DARK_GREEN}%s"), playerName, rankName);
+                    fireRankEvent(playerName, trackMetaData.getTrackName(), null, rankName);
                 } else {
-                    // Name of current (old) group
-                    String oldGroup = playerGroupNames.iterator().next();
+                    sendMessage(sender, colorize("{RED}Player is not in any groups in that track."));
+                    abortBatchProcessing();
+                }
+                return true;
+            } else {
+                // Name of current (old) group
+                String oldGroup = playerGroupNames.iterator().next();
 
-                    if (rankName != null) {
-                        // Add to new group
-                        try {
-                            storageStrategy.getPermissionService().addMember(rankName, uuid, playerName, null);
-                        } catch (MissingGroupException e) {
-                            sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
-                            abortBatchProcessing();
-                            return false;
-                        }
+                if (rankName != null) {
+                    // Add to new group
+                    try {
+                        storageStrategy.getPermissionService().addMember(rankName, uuid, playerName, null);
+                    } catch (MissingGroupException e) {
+                        sendMessage(sender, colorize("{RED}Group {DARK_GREEN}%s{RED} does not exist."), e.getGroupName());
+                        abortBatchProcessing();
+                        return false;
+                    }
 
-                        // Remove from old group
-                        if (!oldGroup.equalsIgnoreCase(rankName))
-                            storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
+                    // Remove from old group
+                    if (!oldGroup.equalsIgnoreCase(rankName))
+                        storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
 
-                        announce("setrank", scope, "%s changed rank of %s from %s to %s", sender.getName(),
+                    announce("setrank", scope, "%s changed rank of %s from %s to %s", sender.getName(),
+                            playerName,
+                            oldGroup,
+                            rankName);
+                    if (scope.isShouldEcho() || verbose)
+                        sendMessage(sender, colorize("{YELLOW}Changing rank of {AQUA}%s{YELLOW} from {DARK_GREEN}%s{YELLOW} to {DARK_GREEN}%s"),
                                 playerName,
                                 oldGroup,
                                 rankName);
-                        if (scope.isShouldEcho() || verbose)
-                            sendMessage(sender, colorize("{YELLOW}Changing rank of {AQUA}%s{YELLOW} from {DARK_GREEN}%s{YELLOW} to {DARK_GREEN}%s"),
-                                    playerName,
-                                    oldGroup,
-                                    rankName);
-                        fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, rankName);
-                    } else {
-                        // Remove from old group
-                        storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
+                    fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, rankName);
+                } else {
+                    // Remove from old group
+                    storageStrategy.getPermissionService().removeMember(oldGroup, uuid);
 
-                        announce("unsetrank", scope, "%s removed %s from %s", sender.getName(), playerName, oldGroup);
-                        if (scope.isShouldEcho() || verbose)
-                            sendMessage(sender, colorize("{YELLOW}Removing {AQUA}%s{YELLOW} from {DARK_GREEN}%s"), playerName, oldGroup);
-                        fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, null);
-                    }
-                    return false;
+                    announce("unsetrank", scope, "%s removed %s from %s", sender.getName(), playerName, oldGroup);
+                    if (scope.isShouldEcho() || verbose)
+                        sendMessage(sender, colorize("{YELLOW}Removing {AQUA}%s{YELLOW} from {DARK_GREEN}%s"), playerName, oldGroup);
+                    fireRankEvent(playerName, trackMetaData.getTrackName(), oldGroup, null);
                 }
+                return false;
             }
         });
 

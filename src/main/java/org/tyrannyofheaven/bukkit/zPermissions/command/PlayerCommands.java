@@ -39,7 +39,6 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.command.Require;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Session;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
-import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolverHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.RefreshCause;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;
@@ -125,12 +124,7 @@ public class PlayerCommands extends CommonCommands {
     @Command(value = "groups", description = "List groups this player is a member of")
     @Require("zpermissions.player.view")
     public void getGroups(CommandSender sender, @Session("entityName") String name) {
-        uuidResolver.resolveUsername(sender, name, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                getGroups(sender, uuid, name);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, false, (sender1, name1, uuid, group) -> getGroups(sender1, uuid, name1));
     }
 
     private void getGroups(CommandSender sender, UUID uuid, String name) {
@@ -145,12 +139,7 @@ public class PlayerCommands extends CommonCommands {
     @Command(value = {"setgroup", "group"}, description = "Set this player's singular group")
     @Require("zpermissions.player.manage")
     public void setGroup(CommandSender sender, final @Session("entityName") String playerName, final @Option({"-a", "--add"}) boolean add, final @Option({"-A", "--add-no-reset"}) boolean addNoReset, final @Option(value = "group", completer = "group") String groupName, final @Option(value = "duration/timestamp", optional = true) String duration, final String[] args) {
-        uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                setGroup(sender, uuid, name, add, addNoReset, groupName, duration, args);
-            }
-        });
+        uuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> setGroup(sender1, uuid, name, add, addNoReset, groupName, duration, args));
     }
 
     private void setGroup(CommandSender sender, final UUID uuid, final String playerName, final boolean add, final boolean addNoReset, final String groupName, String duration, String[] args) {
@@ -193,12 +182,7 @@ public class PlayerCommands extends CommonCommands {
     @Command(value = {"show", "sh"}, description = "Show information about a player")
     @Require("zpermissions.player.view")
     public void show(CommandSender sender, @Session("entityName") String playerName, final @Option(value = {"-f", "--filter"}, valueName = "filter") String filter) {
-        uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                show(sender, uuid, name, filter);
-            }
-        });
+        uuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> show(sender1, uuid, name, filter));
     }
 
     private void show(CommandSender sender, UUID uuid, String playerName, String filter) {
@@ -230,12 +214,7 @@ public class PlayerCommands extends CommonCommands {
     @Command(value = {"settemp", "temp", "tmp"}, description = "Set a temporary permission")
     @Require("zpermissions.player.manage")
     public void settemp(CommandSender sender, @Session("entityName") String playerName, final @Option("permission") String permission, final @Option(value = "value", optional = true) Boolean value, final @Option(value = {"-t", "--timeout"}, valueName = "timeout") Integer timeout) {
-        uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                settemp(sender, uuid, permission, value, timeout);
-            }
-        });
+        uuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> settemp(sender1, uuid, permission, value, timeout));
     }
 
     private void settemp(CommandSender sender, UUID uuid, String permission, Boolean value, Integer timeout) {
@@ -264,12 +243,7 @@ public class PlayerCommands extends CommonCommands {
     @Command(value = "has", description = "Bukkit hasPermission() check")
     @Require("zpermissions.player.view")
     public void has(CommandSender sender, @Session("entityName") String playerName, final @Option("permission") String permission) {
-        uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                has(sender, uuid, permission);
-            }
-        });
+        uuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> has(sender1, uuid, permission));
     }
 
     private void has(CommandSender sender, UUID uuid, String permission) {
@@ -302,12 +276,7 @@ public class PlayerCommands extends CommonCommands {
     @Command(value = "refresh", description = "Re-read permissions for player")
     @Require("zpermissions.player.refresh")
     public void refresh(CommandSender sender, @Session("entityName") String playerName) {
-        uuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                refresh(sender, uuid);
-            }
-        });
+        uuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> refresh(sender1, uuid));
     }
 
     private void refresh(CommandSender sender, UUID uuid) {

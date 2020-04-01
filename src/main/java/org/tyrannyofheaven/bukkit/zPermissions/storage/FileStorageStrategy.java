@@ -107,20 +107,17 @@ public class FileStorageStrategy implements StorageStrategy, TransactionStrategy
 
     @Override
     public void refresh(boolean force, final Runnable finishTask) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                cancelSaveTask();
+        executorService.execute(() -> {
+            cancelSaveTask();
 
-                try {
-                    permissionDao.load(saveFile);
-                } catch (IOException e) {
-                    log(plugin, Level.SEVERE, "Error loading permissions database:", e);
-                }
-
-                if (finishTask != null)
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, finishTask);
+            try {
+                permissionDao.load(saveFile);
+            } catch (IOException e) {
+                log(plugin, Level.SEVERE, "Error loading permissions database:", e);
             }
+
+            if (finishTask != null)
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, finishTask);
         });
     }
 

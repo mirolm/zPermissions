@@ -38,7 +38,6 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.command.HelpBuilder;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Option;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Require;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Session;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
@@ -92,17 +91,14 @@ public class GroupCommands extends CommonCommands {
         } else {
             boolean result;
             try {
-                result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-                    @Override
-                    public Boolean doInTransaction() {
-                        List<Membership> memberships = storageStrategy.getPermissionService().getMembers(name);
+                result = storageStrategy.getRetryingTransactionStrategy().execute(() -> {
+                    List<Membership> memberships = storageStrategy.getPermissionService().getMembers(name);
 
-                        for (Membership membership : memberships) {
-                            storageStrategy.getPermissionService().removeMember(name, membership.getUuid());
-                        }
-
-                        return !memberships.isEmpty();
+                    for (Membership membership : memberships) {
+                        storageStrategy.getPermissionService().removeMember(name, membership.getUuid());
                     }
+
+                    return !memberships.isEmpty();
                 });
             } catch (MissingGroupException e) {
                 handleMissingGroup(sender, e);
@@ -156,12 +152,7 @@ public class GroupCommands extends CommonCommands {
     @Command(value = "create", description = "Create a group")
     @Require("zpermissions.group.manage")
     public void create(CommandSender sender, final @Session("entityName") String groupName) {
-        boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return storageStrategy.getPermissionService().createGroup(groupName);
-            }
-        });
+        boolean result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().createGroup(groupName));
 
         if (result) {
             broadcastAdmin(plugin, "%s created group %s", sender.getName(), groupName);

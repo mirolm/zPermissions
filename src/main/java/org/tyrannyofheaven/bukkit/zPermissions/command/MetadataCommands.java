@@ -28,10 +28,8 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.command.Command;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Option;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Require;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Session;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
-import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolverHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsCore;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.MissingGroupException;
 import org.tyrannyofheaven.bukkit.zPermissions.model.EntityMetadata;
@@ -61,21 +59,11 @@ public class MetadataCommands {
     @Require({"zpermissions.player.view", "zpermissions.player.manage", "zpermissions.player.chat",
             "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat"})
     public void get(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                get(sender, name, uuid, metadataName);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> get(sender1, name1, uuid, metadataName));
     }
 
     private void get(CommandSender sender, final String name, final UUID uuid, final String metadataName) {
-        Object result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction() {
-                return storageStrategy.getPermissionService().getMetadata(name, uuid, group, metadataName);
-            }
-        }, true);
+        Object result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().getMetadata(name, uuid, group, metadataName), true);
 
         if (result == null) {
             sendMessage(sender, colorize("%s%s{YELLOW} does not set {GOLD}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, metadataName);
@@ -97,12 +85,7 @@ public class MetadataCommands {
     }
 
     private void set0(CommandSender sender, final String name, final String metadataName, final Object value) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                set0(sender, name, uuid, metadataName, value);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> set0(sender1, name1, uuid, metadataName, value));
     }
 
     private void set0(CommandSender sender, final String name, final UUID uuid, final String metadataName, final Object value) {
@@ -143,21 +126,11 @@ public class MetadataCommands {
     @Command(value = "unset", description = "Remove metadata value")
     @Require({"zpermissions.player.manage", "zpermissions.group.manage"})
     public void unset(CommandSender sender, final @Session("entityName") String name, final @Option("name") String metadataName) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                unset(sender, name, uuid, metadataName);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> unset(sender1, name1, uuid, metadataName));
     }
 
     private void unset(CommandSender sender, final String name, final UUID uuid, final String metadataName) {
-        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return storageStrategy.getPermissionService().unsetMetadata(name, uuid, group, metadataName);
-            }
-        });
+        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().unsetMetadata(name, uuid, group, metadataName));
 
         if (result) {
             sendMessage(sender, colorize("{GOLD}%s{YELLOW} unset for %s%s"), metadataName, group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name);
@@ -172,12 +145,7 @@ public class MetadataCommands {
     @Require({"zpermissions.player.view", "zpermissions.player.manage", "zpermissions.player.chat",
             "zpermissions.group.view", "zpermissions.group.manage", "zpermissions.group.chat"})
     public void list(CommandSender sender, final @Session("entityName") String name) {
-        uuidResolver.resolveUsername(sender, name, group, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                list(sender, name, uuid);
-            }
-        });
+        uuidResolver.resolveUsername(sender, name, group, (sender1, name1, uuid, group) -> list(sender1, name1, uuid));
     }
 
     private void list(CommandSender sender, final String name, final UUID uuid) {

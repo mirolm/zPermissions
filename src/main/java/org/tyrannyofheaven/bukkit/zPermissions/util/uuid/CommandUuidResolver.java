@@ -143,19 +143,16 @@ public class CommandUuidResolver {
             final UuidDisplayName udn = uuidResolver.resolve(name);
 
             // Run the rest in the main thread
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    // Re-lookup sender
-                    CommandSender sender = getSender() != null ? getSender() : Bukkit.getPlayer(senderUuid);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                // Re-lookup sender
+                CommandSender sender = getSender() != null ? getSender() : Bukkit.getPlayer(senderUuid);
 
-                    // Only execute if sender is still around
-                    if (sender != null) {
-                        if (udn == null) {
-                            commandUuidResolver.fail(sender, name);
-                        } else {
-                            handler.process(sender, udn.getDisplayName(), udn.getUuid(), skip);
-                        }
+                // Only execute if sender is still around
+                if (sender != null) {
+                    if (udn == null) {
+                        commandUuidResolver.fail(sender, name);
+                    } else {
+                        handler.process(sender, udn.getDisplayName(), udn.getUuid(), skip);
                     }
                 }
             });

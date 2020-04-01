@@ -52,10 +52,8 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.command.Option;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.ParseException;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.Require;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.reader.CommandReader;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolver;
-import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.CommandUuidResolverHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;
@@ -226,12 +224,7 @@ public class SubCommands {
     @Command(value = "check", description = "Check against effective permissions")
     @Require("zpermissions.check")
     public void check(CommandSender sender, final @Option("permission") String permission, @Option(value = "player", optional = true, completer = "player") String playerName) {
-        commandUuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                check(sender, permission, uuid, name);
-            }
-        });
+        commandUuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> check(sender1, permission, uuid, name));
     }
 
     private void check(CommandSender sender, String permission, UUID uuid, String playerName) {
@@ -270,12 +263,7 @@ public class SubCommands {
     @Command(value = "inspect", description = "Inspect effective permissions")
     @Require("zpermissions.inspect")
     public void inspect(CommandSender sender, final @Option(value = {"-f", "--filter"}, valueName = "filter") String filter, final @Option({"-v", "--verbose"}) boolean verbose, @Option(value = "player", optional = true, completer = "player") String playerName) {
-        commandUuidResolver.resolveUsername(sender, playerName, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, String name, UUID uuid, boolean group) {
-                inspect(sender, filter, verbose, uuid, name);
-            }
-        });
+        commandUuidResolver.resolveUsername(sender, playerName, false, (sender1, name, uuid, group) -> inspect(sender1, filter, verbose, uuid, name));
     }
 
     private void inspect(CommandSender sender, String filter, boolean verbose, UUID uuid, String playerName) {
@@ -322,13 +310,10 @@ public class SubCommands {
     public void refresh(CommandSender sender, @Option(value = {"-c", "--conditional"}, optional = true) Boolean conditional) {
         if (conditional == null)
             conditional = Boolean.FALSE; // backwards compatibility
-        core.refresh(!conditional, new Runnable() {
-            @Override
-            public void run() {
-                core.invalidateMetadataCache();
-                core.refreshPlayers();
-                core.refreshExpirations();
-            }
+        core.refresh(!conditional, () -> {
+            core.invalidateMetadataCache();
+            core.refreshPlayers();
+            core.refreshExpirations();
         });
         sendMessage(sender, colorize("{YELLOW}Refresh queued."));
     }
@@ -349,18 +334,15 @@ public class SubCommands {
         File inFile = sanitizeFilename(config.getDumpDirectory(), filename);
         try {
             // Ensure database is empty
-            if (!storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-                @Override
-                public Boolean doInTransaction() {
-                    // Check in a single transaction
-                    List<PermissionEntity> players = storageStrategy.getPermissionService().getEntities(false);
-                    List<PermissionEntity> groups = storageStrategy.getPermissionService().getEntities(true);
-                    if (!players.isEmpty() || !groups.isEmpty()) {
-                        sendMessage(sender, colorize("{RED}Database is not empty!"));
-                        return false;
-                    }
-                    return true;
+            if (!storageStrategy.getTransactionStrategy().execute(() -> {
+                // Check in a single transaction
+                List<PermissionEntity> players = storageStrategy.getPermissionService().getEntities(false);
+                List<PermissionEntity> groups = storageStrategy.getPermissionService().getEntities(true);
+                if (!players.isEmpty() || !groups.isEmpty()) {
+                    sendMessage(sender, colorize("{RED}Database is not empty!"));
+                    return false;
                 }
+                return true;
             }, true)) {
                 return;
             }
@@ -442,12 +424,7 @@ public class SubCommands {
 
     // Possible dupe with stuff in MetadataCommands. Refactor someday?
     private void showPlayerMetadataString(final Player sender, final String metadataName) {
-        Object result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction() {
-                return storageStrategy.getPermissionService().getMetadata(sender.getName(), sender.getUniqueId(), false, metadataName);
-            }
-        }, true);
+        Object result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().getMetadata(sender.getName(), sender.getUniqueId(), false, metadataName), true);
 
         if (result == null) {
             sendMessage(sender, colorize("{YELLOW}You do not have a {GOLD}%s"), metadataName);
@@ -478,12 +455,7 @@ public class SubCommands {
 
     // Possible dupe with stuff in MetadataCommands. Refactor someday?
     private void unsetPlayerMetadataString(final Player player, final String metadataName) {
-        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return storageStrategy.getPermissionService().unsetMetadata(player.getName(), player.getUniqueId(), false, metadataName);
-            }
-        });
+        Boolean result = storageStrategy.getRetryingTransactionStrategy().execute(() -> storageStrategy.getPermissionService().unsetMetadata(player.getName(), player.getUniqueId(), false, metadataName));
 
         if (result) {
             sendMessage(player, colorize("{YELLOW}Your {GOLD}%s{YELLOW} has been unset"), metadataName);
@@ -499,17 +471,9 @@ public class SubCommands {
                      final @Option(value = {"-w", "--world"}, valueName = "world") String world, final @Option(value = {"-W", "--other-world"}, valueName = "other-world") String otherWorld,
                      final @Option(value = {"-f", "--filter"}, valueName = "filter") String filter, final @Option(value = "player", completer = "player") String player, final @Option(value = "other-player", completer = "player", optional = true) String otherPlayer) {
         final SubCommands realThis = this;
-        commandUuidResolver.resolveUsername(sender, player, false, new CommandUuidResolverHandler() {
-            @Override
-            public void process(CommandSender sender, final String name, final UUID uuid, boolean group) {
-                // Resolve other name (if present)
-                commandUuidResolver.resolveUsername(sender, otherPlayer, false, new CommandUuidResolverHandler() {
-                    @Override
-                    public void process(CommandSender sender, String otherPlayer, UUID otherUuid, boolean group) {
-                        realThis.diff(sender, regions, otherRegions, world, otherWorld, filter, name, uuid, otherPlayer, otherUuid);
-                    }
-                });
-            }
+        commandUuidResolver.resolveUsername(sender, player, false, (sender1, name, uuid, group) -> {
+            // Resolve other name (if present)
+            commandUuidResolver.resolveUsername(sender1, otherPlayer, false, (sender11, otherPlayer1, otherUuid, group1) -> realThis.diff(sender11, regions, otherRegions, world, otherWorld, filter, name, uuid, otherPlayer1, otherUuid));
         });
     }
 
@@ -554,23 +518,13 @@ public class SubCommands {
             otherRegionNames = Collections.emptySet();
         }
 
-        Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-            @Override
-            public Map<String, Boolean> doInTransaction() {
-                return resolver.resolvePlayer(uuid, worldName, regionNames).getPermissions();
-            }
-        }, true);
+        Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(() -> resolver.resolvePlayer(uuid, worldName, regionNames).getPermissions(), true);
         Map<String, Boolean> permissions = new HashMap<>();
         Utils.calculateChildPermissions(permissions, rootPermissions, false);
 
         if (otherPlayer != null) {
             // Diff one against the other
-            Map<String, Boolean> otherRootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-                @Override
-                public Map<String, Boolean> doInTransaction() {
-                    return resolver.resolvePlayer(otherUuid, otherWorldName, otherRegionNames).getPermissions();
-                }
-            }, true);
+            Map<String, Boolean> otherRootPermissions = storageStrategy.getTransactionStrategy().execute(() -> resolver.resolvePlayer(otherUuid, otherWorldName, otherRegionNames).getPermissions(), true);
             Map<String, Boolean> otherPermissions = new HashMap<>();
             Utils.calculateChildPermissions(otherPermissions, otherRootPermissions, false);
 

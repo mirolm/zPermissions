@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.QualifiedPermission;
@@ -127,12 +126,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         }
 
         final String permWorld = world;
-        boolean result = getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return getPermissionService().unsetPermission(group, null, true, null, permWorld, permission);
-            }
-        });
+        boolean result = getTransactionStrategy().execute(() -> getPermissionService().unsetPermission(group, null, true, null, permWorld, permission));
         if (result) {
             core.refreshAffectedPlayers(group);
             core.logExternalChange("Removed permission '%s' from group %s via Vault",
@@ -258,12 +252,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
         final String playerName = player.getName();
 
         final String permWorld = world;
-        boolean result = getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-            @Override
-            public Boolean doInTransaction() {
-                return getPermissionService().unsetPermission(playerName, uuid, false, null, permWorld, permission);
-            }
-        });
+        boolean result = getTransactionStrategy().execute(() -> getPermissionService().unsetPermission(playerName, uuid, false, null, permWorld, permission));
         if (result) {
             core.refreshPlayer(uuid, RefreshCause.COMMAND);
             core.logExternalChange("Removed permission '%s' from player %s via Vault",
@@ -284,12 +273,7 @@ public class VaultPermissionBridge extends PermissionCompatibility implements Li
 
         // NB world ignored
         try {
-            getTransactionStrategy().execute(new TransactionCallback<Boolean>() {
-                @Override
-                public Boolean doInTransaction() {
-                    return getPermissionService().removeMember(group, uuid);
-                }
-            });
+            getTransactionStrategy().execute(() -> getPermissionService().removeMember(group, uuid));
         } catch (MissingGroupException e) {
             return false;
         }

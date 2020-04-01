@@ -27,7 +27,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver;
 import org.tyrannyofheaven.bukkit.zPermissions.model.Entry;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
@@ -143,14 +142,11 @@ public class SearchTask implements Runnable {
     }
 
     private boolean checkEffectivePermissions(final PermissionEntity entity) {
-        Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(new TransactionCallback<Map<String, Boolean>>() {
-            @Override
-            public Map<String, Boolean> doInTransaction() {
-                if (entity.isGroup()) {
-                    return resolver.resolveGroup(entity.getDisplayName(), world, regions);
-                } else {
-                    return resolver.resolvePlayer(entity.getUuid(), world, regions).getPermissions();
-                }
+        Map<String, Boolean> rootPermissions = storageStrategy.getTransactionStrategy().execute(() -> {
+            if (entity.isGroup()) {
+                return resolver.resolveGroup(entity.getDisplayName(), world, regions);
+            } else {
+                return resolver.resolvePlayer(entity.getUuid(), world, regions).getPermissions();
             }
         }, true);
         Map<String, Boolean> permissions = new HashMap<>();

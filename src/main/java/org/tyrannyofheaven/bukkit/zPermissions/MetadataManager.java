@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallback;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.PermissionsResolver.MetadataResult;
 
@@ -105,14 +104,11 @@ public class MetadataManager {
 
                     if (metadata == null) {
                         // Not in cache, look it up
-                        MetadataResult metadataResult = getTransactionStrategy().execute(new TransactionCallback<MetadataResult>() {
-                            @Override
-                            public MetadataResult doInTransaction() {
-                                if (group)
-                                    return getResolver().resolveGroupMetadata(lname);
-                                else
-                                    return getResolver().resolvePlayerMetadata(uuid);
-                            }
+                        MetadataResult metadataResult = getTransactionStrategy().execute(() -> {
+                            if (group)
+                                return getResolver().resolveGroupMetadata(lname);
+                            else
+                                return getResolver().resolvePlayerMetadata(uuid);
                         });
                         CacheEntry pe = new CacheEntry(metadataResult.getMetadata(), metadataResult.getGroups());
 

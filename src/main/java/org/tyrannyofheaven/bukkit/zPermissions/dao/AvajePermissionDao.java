@@ -75,17 +75,14 @@ public class AvajePermissionDao implements PermissionDao {
     public void createRegion(PermissionRegion region) {
         final String name = region.getName().toLowerCase();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                PermissionRegion dbRegion = getEbeanServer().find(PermissionRegion.class).where()
-                        .eq("name", name)
-                        .findUnique();
-                if (dbRegion == null) {
-                    dbRegion = new PermissionRegion();
-                    dbRegion.setName(name);
-                    getEbeanServer().save(dbRegion);
-                }
+        getExecutor().execute(() -> {
+            PermissionRegion dbRegion = getEbeanServer().find(PermissionRegion.class).where()
+                    .eq("name", name)
+                    .findUnique();
+            if (dbRegion == null) {
+                dbRegion = new PermissionRegion();
+                dbRegion.setName(name);
+                getEbeanServer().save(dbRegion);
             }
         });
     }
@@ -94,17 +91,14 @@ public class AvajePermissionDao implements PermissionDao {
     public void createWorld(PermissionWorld world) {
         final String name = world.getName().toLowerCase();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                PermissionWorld dbWorld = getEbeanServer().find(PermissionWorld.class).where()
-                        .eq("name", name)
-                        .findUnique();
-                if (dbWorld == null) {
-                    dbWorld = new PermissionWorld();
-                    dbWorld.setName(name);
-                    getEbeanServer().save(dbWorld);
-                }
+        getExecutor().execute(() -> {
+            PermissionWorld dbWorld = getEbeanServer().find(PermissionWorld.class).where()
+                    .eq("name", name)
+                    .findUnique();
+            if (dbWorld == null) {
+                dbWorld = new PermissionWorld();
+                dbWorld.setName(name);
+                getEbeanServer().save(dbWorld);
             }
         });
     }
@@ -115,22 +109,19 @@ public class AvajePermissionDao implements PermissionDao {
         final String displayName = entity.getDisplayName();
         final boolean group = entity.isGroup();
 
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                final String lname = name.toLowerCase();
-                PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", lname)
-                        .eq("group", group)
-                        .findUnique();
-                if (dbEntity == null) {
-                    dbEntity = new PermissionEntity();
-                    dbEntity.setName(lname);
-                    dbEntity.setGroup(group);
-                    dbEntity.setDisplayName(displayName);
-                    // NB assumes name/group/displayName are only attributes that need saving
-                    getEbeanServer().save(dbEntity);
-                }
+        executor.execute(() -> {
+            final String lname = name.toLowerCase();
+            PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", lname)
+                    .eq("group", group)
+                    .findUnique();
+            if (dbEntity == null) {
+                dbEntity = new PermissionEntity();
+                dbEntity.setName(lname);
+                dbEntity.setGroup(group);
+                dbEntity.setDisplayName(displayName);
+                // NB assumes name/group/displayName are only attributes that need saving
+                getEbeanServer().save(dbEntity);
             }
         });
     }
@@ -144,55 +135,52 @@ public class AvajePermissionDao implements PermissionDao {
         final String permission = entry.getPermission().toLowerCase();
         final boolean value = entry.isValue();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent objects
-                PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", group)
-                        .findUnique();
-                if (entity == null) {
-                    entity = inconsistentEntity(name, group);
-                }
-
-                PermissionRegion region = null;
-                if (regionName != null) {
-                    region = getEbeanServer().find(PermissionRegion.class).where()
-                            .eq("name", regionName.toLowerCase())
-                            .findUnique();
-                    if (region == null) {
-                        region = inconsistentRegion(regionName);
-                    }
-                }
-
-                PermissionWorld world = null;
-                if (worldName != null) {
-                    world = getEbeanServer().find(PermissionWorld.class).where()
-                            .eq("name", worldName)
-                            .findUnique();
-                    if (world == null) {
-                        world = inconsistentWorld(worldName);
-                    }
-                }
-
-                Entry dbEntry = getEbeanServer().find(Entry.class).where()
-                        .eq("entity", entity)
-                        .eq("region", region)
-                        .eq("world", world)
-                        .eq("permission", permission)
-                        .findUnique();
-                if (dbEntry == null) {
-                    dbEntry = new Entry();
-                    dbEntry.setEntity(entity);
-                    dbEntry.setRegion(region);
-                    dbEntry.setWorld(world);
-                    dbEntry.setPermission(permission);
-                }
-
-                dbEntry.setValue(value);
-                getEbeanServer().save(dbEntry);
+        getExecutor().execute(() -> {
+            // Locate dependent objects
+            PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", group)
+                    .findUnique();
+            if (entity == null) {
+                entity = inconsistentEntity(name, group);
             }
+
+            PermissionRegion region = null;
+            if (regionName != null) {
+                region = getEbeanServer().find(PermissionRegion.class).where()
+                        .eq("name", regionName.toLowerCase())
+                        .findUnique();
+                if (region == null) {
+                    region = inconsistentRegion(regionName);
+                }
+            }
+
+            PermissionWorld world = null;
+            if (worldName != null) {
+                world = getEbeanServer().find(PermissionWorld.class).where()
+                        .eq("name", worldName)
+                        .findUnique();
+                if (world == null) {
+                    world = inconsistentWorld(worldName);
+                }
+            }
+
+            Entry dbEntry = getEbeanServer().find(Entry.class).where()
+                    .eq("entity", entity)
+                    .eq("region", region)
+                    .eq("world", world)
+                    .eq("permission", permission)
+                    .findUnique();
+            if (dbEntry == null) {
+                dbEntry = new Entry();
+                dbEntry.setEntity(entity);
+                dbEntry.setRegion(region);
+                dbEntry.setWorld(world);
+                dbEntry.setPermission(permission);
+            }
+
+            dbEntry.setValue(value);
+            getEbeanServer().save(dbEntry);
         });
     }
 
@@ -204,54 +192,51 @@ public class AvajePermissionDao implements PermissionDao {
         final String worldName = entry.getWorld() == null ? null : entry.getWorld().getName();
         final String permission = entry.getPermission();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent objects
-                PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", group)
-                        .findUnique();
-                if (entity == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                PermissionRegion region = null;
-                if (regionName != null) {
-                    region = getEbeanServer().find(PermissionRegion.class).where()
-                            .eq("name", regionName)
-                            .findUnique();
-                    if (region == null) {
-                        databaseInconsistency();
-                        return;
-                    }
-                }
-
-                PermissionWorld world = null;
-                if (worldName != null) {
-                    world = getEbeanServer().find(PermissionWorld.class).where()
-                            .eq("name", worldName)
-                            .findUnique();
-                    if (world == null) {
-                        databaseInconsistency();
-                        return;
-                    }
-                }
-
-                Entry dbEntry = getEbeanServer().find(Entry.class).where()
-                        .eq("entity", entity)
-                        .eq("region", region)
-                        .eq("world", world)
-                        .eq("permission", permission.toLowerCase())
-                        .findUnique();
-                if (dbEntry == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                getEbeanServer().delete(dbEntry);
+        getExecutor().execute(() -> {
+            // Locate dependent objects
+            PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", group)
+                    .findUnique();
+            if (entity == null) {
+                databaseInconsistency();
+                return;
             }
+
+            PermissionRegion region = null;
+            if (regionName != null) {
+                region = getEbeanServer().find(PermissionRegion.class).where()
+                        .eq("name", regionName)
+                        .findUnique();
+                if (region == null) {
+                    databaseInconsistency();
+                    return;
+                }
+            }
+
+            PermissionWorld world = null;
+            if (worldName != null) {
+                world = getEbeanServer().find(PermissionWorld.class).where()
+                        .eq("name", worldName)
+                        .findUnique();
+                if (world == null) {
+                    databaseInconsistency();
+                    return;
+                }
+            }
+
+            Entry dbEntry = getEbeanServer().find(Entry.class).where()
+                    .eq("entity", entity)
+                    .eq("region", region)
+                    .eq("world", world)
+                    .eq("permission", permission.toLowerCase())
+                    .findUnique();
+            if (dbEntry == null) {
+                databaseInconsistency();
+                return;
+            }
+
+            getEbeanServer().delete(dbEntry);
         });
     }
 
@@ -262,31 +247,28 @@ public class AvajePermissionDao implements PermissionDao {
         final String displayName = membership.getDisplayName();
         final Date expiration = membership.getExpiration();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent object
-                PermissionEntity group = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (group == null) {
-                    group = inconsistentEntity(name, true);
-                }
-
-                Membership dbMembership = getEbeanServer().find(Membership.class).where()
-                        .eq("group", group)
-                        .eq("member", member)
-                        .findUnique();
-                if (dbMembership == null) {
-                    dbMembership = new Membership();
-                    dbMembership.setGroup(group);
-                    dbMembership.setMember(member);
-                    dbMembership.setDisplayName(displayName);
-                }
-                dbMembership.setExpiration(expiration);
-                getEbeanServer().save(dbMembership);
+        getExecutor().execute(() -> {
+            // Locate dependent object
+            PermissionEntity group = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (group == null) {
+                group = inconsistentEntity(name, true);
             }
+
+            Membership dbMembership = getEbeanServer().find(Membership.class).where()
+                    .eq("group", group)
+                    .eq("member", member)
+                    .findUnique();
+            if (dbMembership == null) {
+                dbMembership = new Membership();
+                dbMembership.setGroup(group);
+                dbMembership.setMember(member);
+                dbMembership.setDisplayName(displayName);
+            }
+            dbMembership.setExpiration(expiration);
+            getEbeanServer().save(dbMembership);
         });
     }
 
@@ -295,37 +277,34 @@ public class AvajePermissionDao implements PermissionDao {
         final String name = entity.getName();
         final boolean group = entity.isGroup();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", group)
-                        .findUnique();
-                if (dbEntity == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                if (group) {
-                    getEbeanServer().delete(getEbeanServer().find(Inheritance.class).where()
-                            .eq("child", dbEntity)
-                            .findList());
-                    getEbeanServer().delete(getEbeanServer().find(Inheritance.class).where()
-                            .eq("parent", dbEntity)
-                            .findList());
-                    // backwards compat
-                    for (PermissionEntity child : getEbeanServer().find(PermissionEntity.class).where()
-                            .eq("parent", dbEntity)
-                            .eq("group", true)
-                            .findList()) {
-                        child.setParent(null);
-                        getEbeanServer().save(child);
-                    }
-                }
-
-                getEbeanServer().delete(dbEntity);
+        getExecutor().execute(() -> {
+            PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", group)
+                    .findUnique();
+            if (dbEntity == null) {
+                databaseInconsistency();
+                return;
             }
+
+            if (group) {
+                getEbeanServer().delete(getEbeanServer().find(Inheritance.class).where()
+                        .eq("child", dbEntity)
+                        .findList());
+                getEbeanServer().delete(getEbeanServer().find(Inheritance.class).where()
+                        .eq("parent", dbEntity)
+                        .findList());
+                // backwards compat
+                for (PermissionEntity child : getEbeanServer().find(PermissionEntity.class).where()
+                        .eq("parent", dbEntity)
+                        .eq("group", true)
+                        .findList()) {
+                    child.setParent(null);
+                    getEbeanServer().save(child);
+                }
+            }
+
+            getEbeanServer().delete(dbEntity);
         });
     }
 
@@ -334,30 +313,27 @@ public class AvajePermissionDao implements PermissionDao {
         final String name = membership.getGroup().getDisplayName();
         final String member = membership.getMember();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent object
-                PermissionEntity group = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (group == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                Membership dbMembership = getEbeanServer().find(Membership.class).where()
-                        .eq("group", group)
-                        .eq("member", member.toLowerCase())
-                        .findUnique();
-                if (dbMembership == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                getEbeanServer().delete(dbMembership);
+        getExecutor().execute(() -> {
+            // Locate dependent object
+            PermissionEntity group = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (group == null) {
+                databaseInconsistency();
+                return;
             }
+
+            Membership dbMembership = getEbeanServer().find(Membership.class).where()
+                    .eq("group", group)
+                    .eq("member", member.toLowerCase())
+                    .findUnique();
+            if (dbMembership == null) {
+                databaseInconsistency();
+                return;
+            }
+
+            getEbeanServer().delete(dbMembership);
         });
     }
 
@@ -366,31 +342,28 @@ public class AvajePermissionDao implements PermissionDao {
         final String name = entity.getDisplayName();
         final String parentName = parent == null ? null : parent.getDisplayName();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                PermissionEntity dbParent = null;
-                if (parentName != null) {
-                    dbParent = getEbeanServer().find(PermissionEntity.class).where()
-                            .eq("name", parentName.toLowerCase())
-                            .eq("group", true)
-                            .findUnique();
-                    if (dbParent == null) {
-                        dbParent = inconsistentEntity(parentName, true);
-                    }
-                }
-
-                PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
+        getExecutor().execute(() -> {
+            PermissionEntity dbParent = null;
+            if (parentName != null) {
+                dbParent = getEbeanServer().find(PermissionEntity.class).where()
+                        .eq("name", parentName.toLowerCase())
                         .eq("group", true)
                         .findUnique();
-                if (dbEntity == null) {
-                    dbEntity = inconsistentEntity(name, true);
+                if (dbParent == null) {
+                    dbParent = inconsistentEntity(parentName, true);
                 }
-
-                dbEntity.setParent(dbParent);
-                getEbeanServer().save(dbEntity);
             }
+
+            PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (dbEntity == null) {
+                dbEntity = inconsistentEntity(name, true);
+            }
+
+            dbEntity.setParent(dbParent);
+            getEbeanServer().save(dbEntity);
         });
     }
 
@@ -400,38 +373,35 @@ public class AvajePermissionDao implements PermissionDao {
         final String parentName = inheritance.getParent().getDisplayName();
         final int ordering = inheritance.getOrdering();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent objects
-                PermissionEntity child = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", childName.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (child == null) {
-                    child = inconsistentEntity(childName, true);
-                }
-
-                PermissionEntity parent = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", parentName.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (parent == null) {
-                    parent = inconsistentEntity(parentName, true);
-                }
-
-                Inheritance dbInheritance = getEbeanServer().find(Inheritance.class).where()
-                        .eq("child", child)
-                        .eq("parent", parent)
-                        .findUnique();
-                if (dbInheritance == null) {
-                    dbInheritance = new Inheritance();
-                    dbInheritance.setChild(child);
-                    dbInheritance.setParent(parent);
-                }
-                dbInheritance.setOrdering(ordering);
-                getEbeanServer().save(dbInheritance);
+        getExecutor().execute(() -> {
+            // Locate dependent objects
+            PermissionEntity child = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", childName.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (child == null) {
+                child = inconsistentEntity(childName, true);
             }
+
+            PermissionEntity parent = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", parentName.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (parent == null) {
+                parent = inconsistentEntity(parentName, true);
+            }
+
+            Inheritance dbInheritance = getEbeanServer().find(Inheritance.class).where()
+                    .eq("child", child)
+                    .eq("parent", parent)
+                    .findUnique();
+            if (dbInheritance == null) {
+                dbInheritance = new Inheritance();
+                dbInheritance.setChild(child);
+                dbInheritance.setParent(parent);
+            }
+            dbInheritance.setOrdering(ordering);
+            getEbeanServer().save(dbInheritance);
         });
     }
 
@@ -440,39 +410,36 @@ public class AvajePermissionDao implements PermissionDao {
         final String childName = inheritance.getChild().getDisplayName();
         final String parentName = inheritance.getParent().getDisplayName();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent objects
-                PermissionEntity child = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", childName.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (child == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                PermissionEntity parent = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", parentName.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (parent == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                Inheritance dbInheritance = getEbeanServer().find(Inheritance.class).where()
-                        .eq("child", child)
-                        .eq("parent", parent)
-                        .findUnique();
-                if (dbInheritance == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                getEbeanServer().delete(dbInheritance);
+        getExecutor().execute(() -> {
+            // Locate dependent objects
+            PermissionEntity child = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", childName.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (child == null) {
+                databaseInconsistency();
+                return;
             }
+
+            PermissionEntity parent = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", parentName.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (parent == null) {
+                databaseInconsistency();
+                return;
+            }
+
+            Inheritance dbInheritance = getEbeanServer().find(Inheritance.class).where()
+                    .eq("child", child)
+                    .eq("parent", parent)
+                    .findUnique();
+            if (dbInheritance == null) {
+                databaseInconsistency();
+                return;
+            }
+
+            getEbeanServer().delete(dbInheritance);
         });
     }
 
@@ -480,20 +447,17 @@ public class AvajePermissionDao implements PermissionDao {
     public void setEntityPriority(PermissionEntity entity, final int priority) {
         final String name = entity.getDisplayName();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (dbEntity == null) {
-                    dbEntity = inconsistentEntity(name, true);
-                }
-
-                dbEntity.setPriority(priority);
-                getEbeanServer().save(dbEntity);
+        getExecutor().execute(() -> {
+            PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (dbEntity == null) {
+                dbEntity = inconsistentEntity(name, true);
             }
+
+            dbEntity.setPriority(priority);
+            getEbeanServer().save(dbEntity);
         });
     }
 
@@ -504,28 +468,25 @@ public class AvajePermissionDao implements PermissionDao {
             regionNames.add(region.getName());
         }
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                boolean inconsistent = false;
+        getExecutor().execute(() -> {
+            boolean inconsistent = false;
 
-                List<PermissionRegion> dbRegions = new ArrayList<>(regionNames.size());
-                for (String regionName : regionNames) {
-                    PermissionRegion dbRegion = getEbeanServer().find(PermissionRegion.class).where()
-                            .eq("name", regionName.toLowerCase())
-                            .findUnique();
-                    if (dbRegion == null)
-                        inconsistent = true;
-                    else
-                        dbRegions.add(dbRegion);
-                }
-
-                if (inconsistent)
-                    databaseInconsistency();
-
-                if (!dbRegions.isEmpty())
-                    getEbeanServer().delete(dbRegions);
+            List<PermissionRegion> dbRegions = new ArrayList<>(regionNames.size());
+            for (String regionName : regionNames) {
+                PermissionRegion dbRegion = getEbeanServer().find(PermissionRegion.class).where()
+                        .eq("name", regionName.toLowerCase())
+                        .findUnique();
+                if (dbRegion == null)
+                    inconsistent = true;
+                else
+                    dbRegions.add(dbRegion);
             }
+
+            if (inconsistent)
+                databaseInconsistency();
+
+            if (!dbRegions.isEmpty())
+                getEbeanServer().delete(dbRegions);
         });
     }
 
@@ -536,28 +497,25 @@ public class AvajePermissionDao implements PermissionDao {
             worldNames.add(world.getName());
         }
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                boolean inconsistent = false;
+        getExecutor().execute(() -> {
+            boolean inconsistent = false;
 
-                List<PermissionWorld> dbWorlds = new ArrayList<>(worldNames.size());
-                for (String worldName : worldNames) {
-                    PermissionWorld dbWorld = getEbeanServer().find(PermissionWorld.class).where()
-                            .eq("name", worldName.toLowerCase())
-                            .findUnique();
-                    if (dbWorld == null)
-                        inconsistent = true;
-                    else
-                        dbWorlds.add(dbWorld);
-                }
-
-                if (inconsistent)
-                    databaseInconsistency();
-
-                if (!dbWorlds.isEmpty())
-                    getEbeanServer().delete(dbWorlds);
+            List<PermissionWorld> dbWorlds = new ArrayList<>(worldNames.size());
+            for (String worldName : worldNames) {
+                PermissionWorld dbWorld = getEbeanServer().find(PermissionWorld.class).where()
+                        .eq("name", worldName.toLowerCase())
+                        .findUnique();
+                if (dbWorld == null)
+                    inconsistent = true;
+                else
+                    dbWorlds.add(dbWorld);
             }
+
+            if (inconsistent)
+                databaseInconsistency();
+
+            if (!dbWorlds.isEmpty())
+                getEbeanServer().delete(dbWorlds);
         });
     }
 
@@ -568,31 +526,28 @@ public class AvajePermissionDao implements PermissionDao {
         final String metadataName = metadata.getName().toLowerCase();
         final Object value = metadata.getValue();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent objects
-                PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", group)
-                        .findUnique();
-                if (entity == null) {
-                    entity = inconsistentEntity(name, group);
-                }
-
-                EntityMetadata dbMetadata = getEbeanServer().find(EntityMetadata.class).where()
-                        .eq("entity", entity)
-                        .eq("name", metadataName)
-                        .findUnique();
-                if (dbMetadata == null) {
-                    dbMetadata = new EntityMetadata();
-                    dbMetadata.setEntity(entity);
-                    dbMetadata.setName(metadataName);
-                }
-
-                dbMetadata.setValue(value);
-                getEbeanServer().save(dbMetadata);
+        getExecutor().execute(() -> {
+            // Locate dependent objects
+            PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", group)
+                    .findUnique();
+            if (entity == null) {
+                entity = inconsistentEntity(name, group);
             }
+
+            EntityMetadata dbMetadata = getEbeanServer().find(EntityMetadata.class).where()
+                    .eq("entity", entity)
+                    .eq("name", metadataName)
+                    .findUnique();
+            if (dbMetadata == null) {
+                dbMetadata = new EntityMetadata();
+                dbMetadata.setEntity(entity);
+                dbMetadata.setName(metadataName);
+            }
+
+            dbMetadata.setValue(value);
+            getEbeanServer().save(dbMetadata);
         });
     }
 
@@ -602,30 +557,27 @@ public class AvajePermissionDao implements PermissionDao {
         final boolean group = metadata.getEntity().isGroup();
         final String metadataName = metadata.getName();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent objects
-                PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", group)
-                        .findUnique();
-                if (entity == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                EntityMetadata dbMetadata = getEbeanServer().find(EntityMetadata.class).where()
-                        .eq("entity", entity)
-                        .eq("name", metadataName.toLowerCase())
-                        .findUnique();
-                if (dbMetadata == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                getEbeanServer().delete(dbMetadata);
+        getExecutor().execute(() -> {
+            // Locate dependent objects
+            PermissionEntity entity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", group)
+                    .findUnique();
+            if (entity == null) {
+                databaseInconsistency();
+                return;
             }
+
+            EntityMetadata dbMetadata = getEbeanServer().find(EntityMetadata.class).where()
+                    .eq("entity", entity)
+                    .eq("name", metadataName.toLowerCase())
+                    .findUnique();
+            if (dbMetadata == null) {
+                databaseInconsistency();
+                return;
+            }
+
+            getEbeanServer().delete(dbMetadata);
         });
     }
 
@@ -634,20 +586,17 @@ public class AvajePermissionDao implements PermissionDao {
         final String name = entity.getName();
         final String displayName = entity.getDisplayName();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", false)
-                        .findUnique();
-                if (dbEntity == null) {
-                    dbEntity = inconsistentEntity(name, false);
-                }
-
-                dbEntity.setDisplayName(displayName);
-                getEbeanServer().save(dbEntity);
+        getExecutor().execute(() -> {
+            PermissionEntity dbEntity = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", false)
+                    .findUnique();
+            if (dbEntity == null) {
+                dbEntity = inconsistentEntity(name, false);
             }
+
+            dbEntity.setDisplayName(displayName);
+            getEbeanServer().save(dbEntity);
         });
     }
 
@@ -657,31 +606,28 @@ public class AvajePermissionDao implements PermissionDao {
         final String member = membership.getMember();
         final String displayName = membership.getDisplayName();
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                // Locate dependent object
-                PermissionEntity group = getEbeanServer().find(PermissionEntity.class).where()
-                        .eq("name", name.toLowerCase())
-                        .eq("group", true)
-                        .findUnique();
-                if (group == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                Membership dbMembership = getEbeanServer().find(Membership.class).where()
-                        .eq("group", group)
-                        .eq("member", member.toLowerCase())
-                        .findUnique();
-                if (dbMembership == null) {
-                    databaseInconsistency();
-                    return;
-                }
-
-                dbMembership.setDisplayName(displayName);
-                getEbeanServer().save(dbMembership);
+        getExecutor().execute(() -> {
+            // Locate dependent object
+            PermissionEntity group = getEbeanServer().find(PermissionEntity.class).where()
+                    .eq("name", name.toLowerCase())
+                    .eq("group", true)
+                    .findUnique();
+            if (group == null) {
+                databaseInconsistency();
+                return;
             }
+
+            Membership dbMembership = getEbeanServer().find(Membership.class).where()
+                    .eq("group", group)
+                    .eq("member", member.toLowerCase())
+                    .findUnique();
+            if (dbMembership == null) {
+                databaseInconsistency();
+                return;
+            }
+
+            dbMembership.setDisplayName(displayName);
+            getEbeanServer().save(dbMembership);
         });
     }
 
