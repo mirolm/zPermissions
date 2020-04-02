@@ -15,13 +15,14 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedList;
+import java.util.List;
 
 class PagerPrompt implements Prompt {
 
@@ -44,12 +45,12 @@ class PagerPrompt implements Prompt {
     private static final Prompt ABORTED_PROMPT = new MessagePrompt() {
 
         @Override
-        public String getPromptText(ConversationContext context) {
+        public String getPromptText(@NotNull ConversationContext context) {
             return ChatColor.YELLOW + "Stopping.";
         }
 
         @Override
-        protected Prompt getNextPrompt(ConversationContext context) {
+        protected Prompt getNextPrompt(@NotNull ConversationContext context) {
             return Prompt.END_OF_CONVERSATION;
         }
 
@@ -64,8 +65,9 @@ class PagerPrompt implements Prompt {
         totalPages = (this.lines.size() + this.linesPerPage - 1) / this.linesPerPage;
     }
 
+    @NotNull
     @Override
-    public String getPromptText(ConversationContext context) {
+    public String getPromptText(@NotNull ConversationContext context) {
         if (currentLine < linesPerPage) {
             // Next line
             String prompt = lines.remove(0);
@@ -82,12 +84,12 @@ class PagerPrompt implements Prompt {
     }
 
     @Override
-    public boolean blocksForInput(ConversationContext context) {
+    public boolean blocksForInput(@NotNull ConversationContext context) {
         return shouldBlock;
     }
 
     @Override
-    public Prompt acceptInput(ConversationContext context, String input) {
+    public Prompt acceptInput(@NotNull ConversationContext context, String input) {
         // Sanitize
         if (input != null) {
             input = input.toLowerCase().trim();

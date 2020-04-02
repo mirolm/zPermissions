@@ -15,11 +15,15 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util.command;
 
-import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.error;
-import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.warn;
-import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.sendMessage;
-import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
-import static org.tyrannyofheaven.bukkit.zPermissions.util.command.reader.CommandReader.abortBatchProcessing;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
+import org.tyrannyofheaven.bukkit.zPermissions.util.permissions.PermissionException;
+import org.tyrannyofheaven.bukkit.zPermissions.util.permissions.PermissionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,14 +32,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-import org.bukkit.plugin.Plugin;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
-import org.tyrannyofheaven.bukkit.zPermissions.util.permissions.PermissionException;
-import org.tyrannyofheaven.bukkit.zPermissions.util.permissions.PermissionUtils;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.error;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHLoggingUtils.warn;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.command.reader.CommandReader.abortBatchProcessing;
 
 /**
  * A Bukkit CommandExecutor implementation that ties everything together.
@@ -122,7 +123,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
      * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         InvocationChain invChain = new InvocationChain();
 
         try {
@@ -162,7 +163,7 @@ public class ToHCommandExecutor<T extends Plugin> implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (quoteAware) {
             // Isolate query argument (last argument)
             String query;

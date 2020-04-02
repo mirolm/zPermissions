@@ -15,6 +15,8 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util.transaction;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.Executor;
 
 /**
@@ -34,7 +36,7 @@ class TransactionExecutor implements Executor {
     }
 
     @Override
-    public void execute(Runnable command) {
+    public void execute(@NotNull Runnable command) {
         TransactionRunnable currentTransactionRunnable = currentTransactionRunnableHolder.get();
         if (currentTransactionRunnable == null)
             throw new IllegalStateException("No current TransactionRunnable");

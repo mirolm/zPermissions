@@ -1,18 +1,18 @@
 package org.tyrannyofheaven.bukkit.zPermissions.util.configuration;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
+import com.google.common.base.Joiner;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.configuration.file.YamlRepresenter;
+import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
 
-import com.google.common.base.Joiner;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Version of {@link YamlConfiguration} that supports comments with every root-level
@@ -31,6 +31,7 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
     // Map from property key to comment. Comment may have multiple lines that are newline-separated.
     private final Map<String, String> comments = new HashMap<>();
 
+    @NotNull
     @Override
     public String saveToString() {
         // Wish these were protected...

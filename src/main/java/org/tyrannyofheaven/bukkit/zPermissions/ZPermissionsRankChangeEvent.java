@@ -17,6 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Bukkit event fired off whenever a rank command successfully completes.
@@ -98,6 +99,7 @@ public class ZPermissionsRankChangeEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
+    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }

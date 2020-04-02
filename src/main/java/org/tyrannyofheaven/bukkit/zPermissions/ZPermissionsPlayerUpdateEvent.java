@@ -18,6 +18,7 @@ package org.tyrannyofheaven.bukkit.zPermissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Bukkit event fired off whenever zPermissions might potentially change an
@@ -62,6 +63,7 @@ public class ZPermissionsPlayerUpdateEvent extends PlayerEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
+    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }

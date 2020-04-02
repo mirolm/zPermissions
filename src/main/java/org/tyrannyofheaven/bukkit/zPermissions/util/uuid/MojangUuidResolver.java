@@ -4,7 +4,15 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util.uuid;
 
-import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
+import com.google.common.base.Charsets;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,15 +31,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import com.google.common.base.Charsets;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.Lists;
+import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
 
 public class MojangUuidResolver implements UuidResolver {
 
@@ -45,7 +45,7 @@ public class MojangUuidResolver implements UuidResolver {
                 .expireAfterWrite(cacheTtl, cacheTtlUnits)
                 .build(new CacheLoader<String, UuidDisplayName>() {
                     @Override
-                    public UuidDisplayName load(String key) throws Exception {
+                    public UuidDisplayName load(@NotNull String key) throws Exception {
                         return _resolve(key);
                     }
                 });
