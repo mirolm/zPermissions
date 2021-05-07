@@ -44,6 +44,7 @@ class PagerPrompt implements Prompt {
 
     private static final Prompt ABORTED_PROMPT = new MessagePrompt() {
 
+        @NotNull
         @Override
         public String getPromptText(@NotNull ConversationContext context) {
             return ChatColor.YELLOW + "Stopping.";
