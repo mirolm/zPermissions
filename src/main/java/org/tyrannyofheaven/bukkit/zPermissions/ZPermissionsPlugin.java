@@ -273,7 +273,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     private int txnMaxRetries;
 
     // Interval for auto-refresh
-    private int autoRefreshInterval;
+    private long autoRefreshInterval;
 
     // Whether or not auto-refreshes should be forced refreshes
     private boolean autoRefreshForce;
@@ -1183,7 +1183,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
         // FIXME currently hidden option
         refreshTask.setDelay(config.getInt("bulk-refresh-delay", DEFAULT_BULK_REFRESH_DELAY));
-        autoRefreshInterval = config.getInt("auto-refresh-interval", DEFAULT_AUTO_REFRESH_INTERVAL);
+        autoRefreshInterval = config.getLong("auto-refresh-interval", DEFAULT_AUTO_REFRESH_INTERVAL);
         autoRefreshForce = config.getBoolean("auto-refresh-force", DEFAULT_AUTO_REFRESH_FORCE);
         nativeVaultBridges = config.getBoolean("native-vault-bridges", DEFAULT_NATIVE_VAULT_BRIDGES);
         vaultPrefixIncludesGroup = config.getBoolean("vault-prefix-includes-group", DEFAULT_VAULT_PREFIX_INCLUDES_GROUP);
