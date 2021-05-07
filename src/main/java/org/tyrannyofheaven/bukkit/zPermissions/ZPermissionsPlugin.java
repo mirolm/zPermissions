@@ -720,7 +720,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         player.removeMetadata(PLAYER_METADATA_KEY, this);
 
         // Remove dynamic permission and recalculate, if wanted
-        final String permName = DYNAMIC_PERMISSION_PREFIX + player.getUniqueId().toString();
+        final String permName = DYNAMIC_PERMISSION_PREFIX + player.getUniqueId();
         Bukkit.getPluginManager().removePermission(permName);
         if (recalculate) {
             for (Permissible p : Bukkit.getPluginManager().getPermissionSubscriptions(permName)) {
@@ -804,7 +804,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         final Set<String> regions = getRegions(location, player);
 
         // Fetch existing state
-        final String permName = DYNAMIC_PERMISSION_PREFIX + player.getUniqueId().toString();
+        final String permName = DYNAMIC_PERMISSION_PREFIX + player.getUniqueId();
         Permission perm = Bukkit.getPluginManager().getPermission(permName);
 
         PlayerState playerState = getPlayerState(player);
