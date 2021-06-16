@@ -5,15 +5,8 @@ name: Java CI
 
 # Build on every push and pull request regardless of the branch
 # Wiki: https://help.github.com/en/actions/reference/events-that-trigger-workflows
-on:
-  push:
-    branches:
-      # Check only the main branch in order to ignore dependabot double action runs
-      - main
-  pull_request:
-    branches:
-      # If larger changes are integrated, then check all branches
-      - '**'
+on: [push, pull_request]
+
 jobs:
   # job id
   build_and_test:
