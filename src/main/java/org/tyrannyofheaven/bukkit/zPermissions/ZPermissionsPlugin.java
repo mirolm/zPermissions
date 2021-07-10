@@ -123,9 +123,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
     // Default value for assigned-groups-can-include-default
     private static final boolean DEFAULT_ASSIGNED_GROUPS_CAN_INCLUDE_DEFAULT = true;
 
-    // Default max attempts (after the first) to complete a transaction
-    private static final int DEFAULT_TXN_MAX_RETRIES = 1;
-
     // Default number of ticks to wait between permissions refreshes of all players
     private static final int DEFAULT_BULK_REFRESH_DELAY = 5;
 
