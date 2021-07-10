@@ -26,7 +26,7 @@ public class Inheritance implements Comparable<Inheritance> {
         this.child = child;
     }
 
-   public PermissionEntity getParent() {
+    public PermissionEntity getParent() {
         return parent;
     }
 
