@@ -8,11 +8,11 @@ I aim to keep zPermissions a simple, yet feature-rich, Superperms provider.
 
 Please post bugs and/or feature requests as [dev.bukkit.org tickets](http://dev.bukkit.org/projects/zpermissions/tickets/). **But before doing so, please check the [known issues](http://dev.bukkit.org/projects/zpermissions/pages/known-issues/) as well as the [FAQ](/doc/faq.md).**
 
-[ [Quick start documentation](/doc/quickstart.md) | [For Server Admins](/doc/admins.md) | [FAQ](/doc/faq.md) | More documentation below! ]
+[ [Quick start documentation](/doc/quickstart.md) | [FAQ](/doc/faq.md) | More documentation below! ]
 
 ## Features ##
 
-*   **A variety of storage options, from SQL to flat-file.** Uses Bukkit database to store permissions (i.e. settings in bukkit.yml). Should work with most databases supported by [Avaje Ebean](http://www.avaje.org) &mdash; I've specifically tested with PostgreSQL, MySQL, and H2. The default Bukkit database, SQLite, is **not** supported. zPermissions will automatically fall back to flat-file storage if it is used.
+*   **Lightweight flat-file storage.** zPermissions uses simple and lightweight flat-file storage.
 
 *   **Group inheritance.** Groups may inherit permissions from a multiple parent groups.
 
@@ -78,10 +78,8 @@ The rank commands are `/promote`, `/demote`, `/setrank`, and `/unsetrank` and wi
 *   [Permissions](/doc/permissions.md)
 *   [Detailed Command Usage](/doc/commands.md)
 *   [Temporary Permissions & Groups](/doc/temporary.md)
-*   [Customizing Table Names](/doc/tables.md)
 *   [Vault Support](/doc/vault.md)
 *   [For Plugin Developers](/doc/developers.md)
-*   [Schema Updates](/doc/schemaupdate.md)
 
 ## License & Source ##
 
@@ -96,8 +94,7 @@ Development builds of this project can be acquired at the provided continuous in
 These builds have not been approved by the BukkitDev staff. Use them at your own risk.
 
 *   [zPermissions @ ci.codemc.org](https://ci.codemc.org/job/mirolm/job/zPermissions/) (Jenkins job building this project)
-*   [zPermissions](https://ci.codemc.org/job/mirolm/job/zPermissions/lastSuccessfulBuild/artifact/target/zPermissions.jar) (All-in-one ready to go zPermissions.jar)
-*   [original-zPermissions (zPermissionsNoAvaje)](https://ci.codemc.org/job/mirolm/job/zPermissions/lastSuccessfulBuild/artifact/target/original-zPermissions.jar) (Use this if you have Avaje already shaded in other plugins)
+*   [zPermissions](https://ci.codemc.org/job/mirolm/job/zPermissions/lastSuccessfulBuild/artifact/target/zPermissions.jar) (zPermissions.jar)
 
 If you want to use zPermissions API add the below Maven repository.
 

@@ -18,16 +18,6 @@ package org.tyrannyofheaven.bukkit.zPermissions.model;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
 
 /**
@@ -35,9 +25,6 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
  *
  * @author zerothangel
  */
-@Entity
-@Table(name = "memberships")
-@UniqueConstraint(columnNames = {"member", "group_id"})
 public class Membership {
 
     private Long id;
@@ -50,7 +37,6 @@ public class Membership {
 
     private Date expiration;
 
-    @Id
     public Long getId() {
         return id;
     }
@@ -75,8 +61,6 @@ public class Membership {
         this.displayName = displayName;
     }
 
-    @Column(name = "group_id")
-    @ManyToOne(optional = false)
     public PermissionEntity getGroup() {
         return group;
     }
@@ -85,7 +69,6 @@ public class Membership {
         this.group = group;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
     public Date getExpiration() {
         return expiration;
     }
@@ -94,7 +77,6 @@ public class Membership {
         this.expiration = expiration;
     }
 
-    @Transient
     public UUID getUuid() {
         return UuidUtils.uncanonicalizeUuid(getMember());
     }

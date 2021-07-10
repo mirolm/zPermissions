@@ -1,17 +1,3 @@
-database-support: |
-  Enable database support. Disabling database support switches
-  zPermissions to its flat-file-based permissions store.
-
-database: |
-  Settings for database (if enabled). This used to be in bukkit.yml before
-  Minecraft 1.12.
-
-database-read-only: |
-  Set to true if this server should be in read-only mode. Only valid when
-  actually using a database. If set to read-only, the database account
-  for this server should also be granted read-only permissions on
-  zPermissions tables. (Not strictly required though.)
-
 group-permission: |
   Groups may have a group permission node automatically assigned to their
   members. This is the name of that permission node. It must be a string
@@ -79,23 +65,6 @@ region-support: |
   as WorldGuard or Residence. Setting this to false will save some processing
   if you use a region plugin but don't use region-based permissions. Has no
   effect if a region plugin is not present.
-
-auto-refresh-interval: |
-  Interval, in minutes, in which to automatically refresh permissions from
-  the database. Set to a non-positive number to disable. Has no effect on
-  the flat-file storage method. DO NOT SET IT TOO LOW. Otherwise you run
-  the risk of refreshes overlapping or permissions changes inexplicably
-  being "forgotten."
-  Unless you have an external process modifying zPermissions tables, you
-  should have no need to enable this feature! (And even then, its use is
-  questionable...)
-
-auto-refresh-force: |
-  By default, the refreshes set by auto-refresh-interval are conditional.
-  That is, the refreshes do not actually occur unless the data version
-  number (found in the table named DATA_VERSION by default) is different.
-  Set this to true if you wish to perform an unconditional refresh instead.
-  (Prior to 1.1, the refreshes were always unconditional.)
 
 opaque-inheritance: |
   Determines how inherited groups and assigned groups are resolved. When

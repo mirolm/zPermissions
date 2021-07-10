@@ -15,22 +15,11 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 /**
  * A permission entry.
  *
  * @author zerothangel
  */
-@Entity
-@Table(name = "entries")
-@UniqueConstraint(columnNames = {"entity_id", "region_id", "world_id", "permission"})
 public class Entry {
 
     private Long id;
@@ -45,7 +34,6 @@ public class Entry {
 
     private boolean value;
 
-    @Id
     public Long getId() {
         return id;
     }
@@ -54,8 +42,6 @@ public class Entry {
         this.id = id;
     }
 
-    @JoinColumn(name = "entity_id")
-    @ManyToOne(optional = false)
     public PermissionEntity getEntity() {
         return entity;
     }
@@ -64,8 +50,6 @@ public class Entry {
         this.entity = owner;
     }
 
-    @JoinColumn(name = "region_id")
-    @ManyToOne
     public PermissionRegion getRegion() {
         return region;
     }
@@ -74,8 +58,6 @@ public class Entry {
         this.region = region;
     }
 
-    @JoinColumn(name = "world_id")
-    @ManyToOne
     public PermissionWorld getWorld() {
         return world;
     }
@@ -84,7 +66,6 @@ public class Entry {
         this.world = world;
     }
 
-    @Column(nullable = false)
     public String getPermission() {
         return permission;
     }
@@ -93,7 +74,6 @@ public class Entry {
         this.permission = permission;
     }
 
-    @Column(nullable = false)
     public boolean isValue() {
         return value;
     }

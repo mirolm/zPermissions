@@ -17,18 +17,11 @@ package org.tyrannyofheaven.bukkit.zPermissions.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 /**
  * Entity class to keep track of the current <em>data</em> version.
  *
  * @author zerothangel
  */
-@Entity
 public class DataVersion {
 
     private String name;
@@ -37,7 +30,6 @@ public class DataVersion {
 
     private Date timestamp;
 
-    @Id
     public String getName() {
         return name;
     }
@@ -46,7 +38,6 @@ public class DataVersion {
         this.name = name;
     }
 
-    @Column(nullable = false)
     public long getVersion() {
         return version;
     }
@@ -55,8 +46,6 @@ public class DataVersion {
         this.version = version;
     }
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     public Date getTimestamp() {
         return timestamp;
     }

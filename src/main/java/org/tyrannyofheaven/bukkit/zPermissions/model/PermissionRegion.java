@@ -15,26 +15,17 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 /**
  * Represents a region that permission entries may be associated with.
  *
  * @author zerothangel
  */
-@Entity
-@Table(name = "regions")
-@UniqueConstraint(columnNames = "name")
 public class PermissionRegion {
 
     private Long id;
 
     private String name;
 
-    @Id
     public Long getId() {
         return id;
     }

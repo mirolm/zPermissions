@@ -1,5 +1,5 @@
 name: zPermissions
-version: ${project.version}
+version: ${project.version}-${bukkitplugin.desc}
 main: org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsPlugin
 description: ${project.description}
 author: ZerothAngel

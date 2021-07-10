@@ -25,16 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-
 import org.tyrannyofheaven.bukkit.zPermissions.util.ToHUtils;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
 
@@ -47,9 +37,6 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidUtils;
  *
  * @author zerothangel
  */
-@Entity
-@Table(name = "entities")
-@UniqueConstraint(columnNames = {"name", "is_group"})
 public class PermissionEntity {
 
     private Long id;
@@ -74,10 +61,8 @@ public class PermissionEntity {
 
     private Set<EntityMetadata> metadata = new HashSet<>();
 
-    @Transient
     private final Map<String, EntityMetadata> metadataMap = new HashMap<>();
 
-    @Id
     public Long getId() {
         return id;
     }
@@ -86,7 +71,6 @@ public class PermissionEntity {
         this.id = id;
     }
 
-    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -95,7 +79,6 @@ public class PermissionEntity {
         this.name = name;
     }
 
-    @Column(name = "is_group", nullable = false)
     public boolean isGroup() {
         return group;
     }
@@ -104,7 +87,6 @@ public class PermissionEntity {
         this.group = group;
     }
 
-    @Column(nullable = false)
     public String getDisplayName() {
         return displayName;
     }
@@ -113,7 +95,6 @@ public class PermissionEntity {
         this.displayName = displayName;
     }
 
-    @ManyToOne
     public PermissionEntity getParent() {
         return parent;
     }
@@ -122,7 +103,6 @@ public class PermissionEntity {
         this.parent = parent;
     }
 
-    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
     public Set<Entry> getPermissions() {
         return permissions;
     }
@@ -139,7 +119,6 @@ public class PermissionEntity {
         this.priority = priority;
     }
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     public Set<Membership> getMemberships() {
         return memberships;
     }
@@ -148,7 +127,6 @@ public class PermissionEntity {
         this.memberships = memberships;
     }
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     public Set<Inheritance> getInheritancesAsParent() {
         return inheritancesAsParent;
     }
@@ -157,7 +135,6 @@ public class PermissionEntity {
         this.inheritancesAsParent = inheritancesAsParent;
     }
 
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
     public Set<Inheritance> getInheritancesAsChild() {
         return inheritancesAsChild;
     }
@@ -166,7 +143,6 @@ public class PermissionEntity {
         this.inheritancesAsChild = inheritancesAsChild;
     }
 
-    @Transient
     public List<PermissionEntity> getParents() {
         List<Inheritance> inheritances = new ArrayList<>(getInheritancesAsChild());
         Collections.sort(inheritances);
@@ -176,7 +152,6 @@ public class PermissionEntity {
         return result;
     }
 
-    @Transient
     public Set<PermissionEntity> getChildrenNew() {
         Set<PermissionEntity> result = new LinkedHashSet<>(getInheritancesAsParent().size());
         for (Inheritance i : getInheritancesAsParent())
@@ -184,7 +159,6 @@ public class PermissionEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL)
     public Set<EntityMetadata> getMetadata() {
         return metadata;
     }
@@ -193,7 +167,6 @@ public class PermissionEntity {
         this.metadata = metadata;
     }
 
-    @Transient
     public Map<String, EntityMetadata> getMetadataMap() {
         return metadataMap;
     }
@@ -205,7 +178,6 @@ public class PermissionEntity {
         }
     }
 
-    @Transient
     public UUID getUuid() {
         ToHUtils.assertFalse(isGroup(), "Only valid for players");
         return UuidUtils.uncanonicalizeUuid(getName());

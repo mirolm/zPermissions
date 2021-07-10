@@ -1,16 +1,5 @@
 config-version: 19
 
-database-support: false
-
-database:
-  username: us3r
-  isolation: REPEATABLE_READ
-  driver: com.mysql.jdbc.Driver
-  password: passw0rd
-  url: jdbc:mysql://localhost:3306/database
-
-database-read-only: false
-
 region-support: true
 
 group-permission: 'group.%s'
@@ -40,10 +29,6 @@ default-primary-group-track: ''
 kick-on-error: true
 
 kick-ops-on-error: false
-
-auto-refresh-interval: -1
-
-auto-refresh-force: false
 
 opaque-inheritance: true
 

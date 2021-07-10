@@ -55,14 +55,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
-import org.tyrannyofheaven.bukkit.zPermissions.util.DBPlugin;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHDatabaseUtils;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.tyrannyofheaven.bukkit.zPermissions.util.ToHFileUtils;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHNamingConvention;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHSchemaVersion;
 import org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils;
-import org.tyrannyofheaven.bukkit.zPermissions.util.ToHUtils;
-import org.tyrannyofheaven.bukkit.zPermissions.util.VersionInfo;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.CommandExceptionHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.util.command.ToHCommandExecutor;
 import org.tyrannyofheaven.bukkit.zPermissions.util.transaction.TransactionCallbackWithoutResult;
@@ -81,40 +76,28 @@ import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
 import org.tyrannyofheaven.bukkit.zPermissions.listener.ZPermissionsFallbackListener;
 import org.tyrannyofheaven.bukkit.zPermissions.listener.ZPermissionsPlayerListener;
 import org.tyrannyofheaven.bukkit.zPermissions.listener.ZPermissionsRegionPlayerListener;
-import org.tyrannyofheaven.bukkit.zPermissions.model.DataVersion;
-import org.tyrannyofheaven.bukkit.zPermissions.model.EntityMetadata;
-import org.tyrannyofheaven.bukkit.zPermissions.model.Entry;
-import org.tyrannyofheaven.bukkit.zPermissions.model.Inheritance;
 import org.tyrannyofheaven.bukkit.zPermissions.model.Membership;
-import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
-import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionRegion;
-import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
-import org.tyrannyofheaven.bukkit.zPermissions.model.UuidDisplayNameCache;
 import org.tyrannyofheaven.bukkit.zPermissions.region.RegionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.region.WorldGuardRegionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.service.DefaultPlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.PlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.ZPermissionsServiceImpl;
-import org.tyrannyofheaven.bukkit.zPermissions.storage.AvajeStorageStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.storage.FileStorageStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.storage.StorageStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.util.ExpirationRefreshHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.util.ModelDumper;
 import org.tyrannyofheaven.bukkit.zPermissions.util.RefreshTask;
-import org.tyrannyofheaven.bukkit.zPermissions.uuid.AvajeBulkUuidConverter;
 import org.tyrannyofheaven.bukkit.zPermissions.uuid.YamlBulkUuidConverter;
 import org.tyrannyofheaven.bukkit.zPermissions.vault.VaultChatBridge;
 import org.tyrannyofheaven.bukkit.zPermissions.vault.VaultPermissionBridge;
 
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebeaninternal.api.SpiEbeanServer;
 
 /**
  * zPermissions main class.
  *
  * @author zerothangel
  */
-public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZPermissionsConfig, CommandExceptionHandler {
+public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, ZPermissionsConfig, CommandExceptionHandler {
 
     // Name of the default group, in absence of a config file
     private static final String DEFAULT_GROUP = "default";
@@ -143,9 +126,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     // Default max attempts (after the first) to complete a transaction
     private static final int DEFAULT_TXN_MAX_RETRIES = 1;
 
-    // Default database support
-    private static final boolean DEFAULT_DATABASE_SUPPORT = false;
-
     // Default number of ticks to wait between permissions refreshes of all players
     private static final int DEFAULT_BULK_REFRESH_DELAY = 5;
 
@@ -157,12 +137,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // Default rank broadcast to admins
     private static final boolean DEFAULT_RANK_ADMIN_BROADCAST = false;
-
-    // Default auto-refresh interval
-    private static final int DEFAULT_AUTO_REFRESH_INTERVAL = -1;
-
-    // Default auto-refresh forced refreshes
-    private static final boolean DEFAULT_AUTO_REFRESH_FORCE = false;
 
     // Default primary group track
     private static final String DEFAULT_PRIMARY_GROUP_TRACK = null;
@@ -190,9 +164,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // Name of metadata key for our PlayerState instances
     private static final String PLAYER_METADATA_KEY = "zPermissions.PlayerState";
-
-    // Default read-only flag
-    private static final boolean DEFAULT_DATABASE_READ_ONLY = false;
 
     // Default metadata inheritance
     private static final boolean DEFAULT_INHERITED_METADATA = false;
@@ -226,9 +197,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     // Whether default group membership should be made explicit
     private static final boolean DEFAULT_EXPLICIT_DEFAULT_GROUP_MEMBERSHIP = false;
-
-    // Version info (may include build number)
-    private VersionInfo versionInfo;
 
     // Permission resolver
     private final PermissionsResolver resolver = new PermissionsResolver(this);
@@ -266,21 +234,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     // Names of tracks (in original case)
     private final Set<String> trackNames = new LinkedHashSet<>();
 
-    // Whether or not to use the database (Avaje) storage strategy
-    private boolean databaseSupport;
-
-    // Maximum number of times to retry transactions (so total attempts is +1)
-    private int txnMaxRetries;
-
-    // Interval for auto-refresh
-    private long autoRefreshInterval;
-
-    // Whether or not auto-refreshes should be forced refreshes
-    private boolean autoRefreshForce;
-
-    // Task ID for auto-refresh task
-    private int autoRefreshTaskId = -1;
-
     // Default primary group track
     private String defaultPrimaryGroupTrack;
 
@@ -310,17 +263,8 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     // Whether to log Vault changes at INFO level
     private boolean logVaultChanges;
 
-    // Whether the database should be read-only
-    private boolean databaseReadOnly;
-
     // Strategy for permissions storage
     private StorageStrategy storageStrategy;
-
-    // Create our own instance rather than use Bukkit's
-    private EbeanServer ebeanServer;
-
-    // Custom NamingConvention for Avaje
-    private final ToHNamingConvention namingConvention = new ToHNamingConvention(this, "zperms_schema_version");
 
     // Backwards compatibility. Broadcast to admins if true, the custom permissions otherwise.
     private boolean rankAdminBroadcast = DEFAULT_RANK_ADMIN_BROADCAST;
@@ -411,11 +355,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         return this;
     }
 
-    @Override
-    public void onLoad() {
-        versionInfo = ToHUtils.getVersion(this);
-    }
-
     /* (non-Javadoc)
      * @see org.bukkit.plugin.Plugin#onDisable()
      */
@@ -458,7 +397,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             removeBukkitPermissions(player, true);
         }
 
-        log(this, "%s disabled.", versionInfo.getVersionString());
+        log(this, "%s disabled.", this.getDescription().getVersion());
     }
 
     /* (non-Javadoc)
@@ -467,7 +406,7 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     @Override
     public void onEnable() {
         try {
-            log(this, "%s starting...", versionInfo.getVersionString());
+            log(this, "%s starting...", this.getDescription().getVersion());
 
             // FIXME Defaults workaround, to be removed after 1.0
             boolean isUpgrade = new File(getDataFolder(), "config.yml").exists();
@@ -534,27 +473,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                 // Use a custom StorageStrategy implementation
                 log(this, "Using custom storage strategy: %s", storageStrategyClassName);
                 storageStrategy = (StorageStrategy) Class.forName(storageStrategyClassName).getDeclaredConstructor().newInstance();
-            } else if (databaseSupport) {
-                // Use the default Avaje-based StorageStrategy
-                ebeanServer = ToHDatabaseUtils.createEbeanServer(this, getClassLoader(), namingConvention, config);
-
-                SpiEbeanServer spiEbeanServer = (SpiEbeanServer) ebeanServer;
-                if (spiEbeanServer.getDatabasePlatform().getName().contains("sqlite")) {
-                    log(this, Level.WARNING, "This plugin is NOT compatible with SQLite.");
-                    log(this, Level.WARNING, "Edit config.yml to switch databases or disable database support.");
-                    log(this, Level.WARNING, "Falling back to file-based storage strategy.");
-                    // Do nothing else (storageStrategy still null)
-                } else {
-                    ToHDatabaseUtils.upgradeDatabase(this, namingConvention, getClassLoader(), "sql");
-
-                    if (uuidMigrate) {
-                        // Perform migration
-                        new AvajeBulkUuidConverter(this, uuidResolver).migrate();
-                    }
-
-                    log(this, "Using database storage strategy.");
-                    storageStrategy = new AvajeStorageStrategy(this, txnMaxRetries, databaseReadOnly);
-                }
             }
 
             // If still no storage strategy at this point, use flat-file one
@@ -641,13 +559,10 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                 refreshPlayer(player.getUniqueId(), RefreshCause.GROUP_CHANGE);
             }
 
-            // Start auto-refresh task, if one is configured
-            startAutoRefreshTask();
-
             // Initialize expiration handler
             refreshExpirations();
 
-            log(this, "%s enabled.", versionInfo.getVersionString());
+            log(this, "%s enabled.", this.getDescription().getVersion());
         } catch (Throwable t) {
             unrecoverableError("everything else", t);
             if (t instanceof Error)
@@ -684,30 +599,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
                 return;
             }
         }
-    }
-
-    @Override
-    public EbeanServer getDatabase() {
-        return ebeanServer;
-    }
-
-    /* (non-Javadoc)
-     * @see org.bukkit.plugin.java.JavaPlugin#getDatabaseClasses()
-     */
-    @Override
-    public List<Class<?>> getDatabaseClasses() {
-        List<Class<?>> result = new ArrayList<>();
-        result.add(ToHSchemaVersion.class);
-        result.add(PermissionEntity.class);
-        result.add(Inheritance.class);
-        result.add(PermissionRegion.class);
-        result.add(PermissionWorld.class);
-        result.add(Entry.class);
-        result.add(Membership.class);
-        result.add(EntityMetadata.class);
-        result.add(DataVersion.class);
-        result.add(UuidDisplayNameCache.class);
-        return result;
     }
 
     // Remove all state associated with a player
@@ -790,13 +681,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             player.updateCommands();
         }
     }
-
-    // Simulate failures probabilistically
-//    private final java.util.Random failureChance = new java.util.Random();
-//    private void fakeFailureChance() {
-//        if (failureChance.nextDouble() < 0.2)
-//            throw new RuntimeException("Oh noes! An error!");
-//    }
 
     // Update state about a player, resolving effective permissions and
     // creating/updating their attachment
@@ -1073,8 +957,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         getLogger().setLevel(config.getBoolean("debug", false) ? Level.CONFIG : null);
 
         // Barebones defaults
-        databaseSupport = config.getBoolean("database-support", DEFAULT_DATABASE_SUPPORT);
-        databaseReadOnly = config.getBoolean("database-read-only", DEFAULT_DATABASE_READ_ONLY);
         getResolver().setDefaultGroup(DEFAULT_GROUP);
         defaultTrack = DEFAULT_TRACK;
         dumpDirectory = new File(DEFAULT_DUMP_DIRECTORY);
@@ -1146,7 +1028,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
             defaultPrimaryGroupTrack = value;
 
         defaultTempPermissionTimeout = config.getInt("default-temp-permission-timeout", DEFAULT_TEMP_PERMISSION_TIMEOUT);
-        txnMaxRetries = config.getInt("txn-max-retries", DEFAULT_TXN_MAX_RETRIES); // FIXME hidden
         rankAdminBroadcast = config.getBoolean("rank-admin-broadcast", DEFAULT_RANK_ADMIN_BROADCAST);
 
         // Read tracks, if any
@@ -1183,8 +1064,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
         // FIXME currently hidden option
         refreshTask.setDelay(config.getInt("bulk-refresh-delay", DEFAULT_BULK_REFRESH_DELAY));
-        autoRefreshInterval = config.getLong("auto-refresh-interval", DEFAULT_AUTO_REFRESH_INTERVAL);
-        autoRefreshForce = config.getBoolean("auto-refresh-force", DEFAULT_AUTO_REFRESH_FORCE);
         nativeVaultBridges = config.getBoolean("native-vault-bridges", DEFAULT_NATIVE_VAULT_BRIDGES);
         vaultPrefixIncludesGroup = config.getBoolean("vault-prefix-includes-group", DEFAULT_VAULT_PREFIX_INCLUDES_GROUP);
         vaultMetadataIncludesGroup = config.getBoolean("vault-metadata-includes-group", DEFAULT_VAULT_METADATA_INCLUDES_GROUP);
@@ -1202,8 +1081,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
         uuidResolverCacheSize = config.getInt("uuid-cache-size", DEFAULT_UUID_CACHE_SIZE);
         uuidResolverCacheTtl = config.getLong("uuid-cache-ttl", DEFAULT_UUID_CACHE_TTL);
         uuidMigrate = config.getBoolean("uuid-migrate", DEFAULT_UUID_MIGRATE);
-
-        ToHDatabaseUtils.populateNamingConvention(config, namingConvention);
 
         // Region managers
         regionManagers = new ArrayList<>();
@@ -1263,7 +1140,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     public void reload() {
         config = ToHFileUtils.getConfig(this);
         readConfig();
-        startAutoRefreshTask();
         refresh(true, () -> {
             invalidateMetadataCache();
             refreshPlayers();
@@ -1277,29 +1153,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
     @Override
     public void refresh(boolean force, Runnable finishTask) {
         storageStrategy.refresh(force, finishTask);
-    }
-
-    // Cancel existing auto-refresh task and start a new one if autoRefreshInterval is valid
-    private void startAutoRefreshTask() {
-        // Cancel previous task, if any
-        if (autoRefreshTaskId > -1) {
-            Bukkit.getScheduler().cancelTask(autoRefreshTaskId);
-            autoRefreshTaskId = -1;
-        }
-        // Start up new task at new interval
-        if (databaseSupport && autoRefreshInterval > 0) {
-            final Plugin plugin = this;
-            autoRefreshTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-                log(plugin, "Refreshing from database...");
-                refresh(autoRefreshForce, () -> {
-                    // This is executed after the storage refresh is done.
-                    log(plugin, "Refresh done.");
-                    invalidateMetadataCache();
-                    refreshPlayers();
-                    refreshExpirations();
-                });
-            }, autoRefreshInterval * 20 * 60, autoRefreshInterval * 20 * 60); // FIXME magic numbers
-        }
     }
 
     // Retrieve associated PlayerState, if any
@@ -1409,7 +1262,6 @@ public class ZPermissionsPlugin extends DBPlugin implements ZPermissionsCore, ZP
 
     @Override
     public void updateDisplayName(final UUID uuid, final String displayName) {
-        if (databaseReadOnly) return; // Do nothing if in read-only mode
 
         // Run synchronous since I'm not so sure about thread safety of AvajeStorageStrategy's
         // pre-commit hook...

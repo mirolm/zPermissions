@@ -1,15 +1,5 @@
 package org.tyrannyofheaven.bukkit.zPermissions.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-@Entity
-@Table(name = "inheritances")
-@UniqueConstraint(columnNames = {"child_id", "parent_id"})
 public class Inheritance implements Comparable<Inheritance> {
 
     private Long id;
@@ -20,7 +10,6 @@ public class Inheritance implements Comparable<Inheritance> {
 
     private int ordering;
 
-    @Id
     public Long getId() {
         return id;
     }
@@ -29,8 +18,6 @@ public class Inheritance implements Comparable<Inheritance> {
         this.id = id;
     }
 
-    @Column(name = "child_id")
-    @ManyToOne(optional = false)
     public PermissionEntity getChild() {
         return child;
     }
@@ -39,9 +26,7 @@ public class Inheritance implements Comparable<Inheritance> {
         this.child = child;
     }
 
-    @Column(name = "parent_id")
-    @ManyToOne(optional = false)
-    public PermissionEntity getParent() {
+   public PermissionEntity getParent() {
         return parent;
     }
 
@@ -49,7 +34,6 @@ public class Inheritance implements Comparable<Inheritance> {
         this.parent = parent;
     }
 
-    @Column(nullable = false)
     public int getOrdering() {
         return ordering;
     }

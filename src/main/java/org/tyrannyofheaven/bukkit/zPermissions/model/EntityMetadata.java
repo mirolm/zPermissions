@@ -15,18 +15,6 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-
-@Entity
-@Table(name = "metadata")
-@UniqueConstraint(columnNames = {"entity_id", "name"})
 public class EntityMetadata {
 
     private Long id;
@@ -43,7 +31,6 @@ public class EntityMetadata {
 
     private Boolean booleanValue;
 
-    @Id
     public Long getId() {
         return id;
     }
@@ -52,8 +39,6 @@ public class EntityMetadata {
         this.id = id;
     }
 
-    @JoinColumn(name = "entity_id")
-    @ManyToOne(optional = false)
     public PermissionEntity getEntity() {
         return entity;
     }
@@ -62,7 +47,6 @@ public class EntityMetadata {
         this.entity = entity;
     }
 
-    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -103,7 +87,6 @@ public class EntityMetadata {
         this.booleanValue = booleanValue;
     }
 
-    @Transient
     public Object getValue() {
         if (getStringValue() != null)
             return getStringValue();

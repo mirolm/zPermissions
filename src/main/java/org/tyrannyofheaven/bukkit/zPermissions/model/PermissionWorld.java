@@ -15,26 +15,17 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 /**
  * Represents a world that permission entries may be associated with.
  *
  * @author zerothangel
  */
-@Entity
-@Table(name = "worlds")
-@UniqueConstraint(columnNames = "name")
 public class PermissionWorld {
 
     private Long id;
 
     private String name;
 
-    @Id
     public Long getId() {
         return id;
     }
