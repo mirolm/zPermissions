@@ -15,12 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsConfig;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
@@ -49,10 +44,7 @@ public class DefaultPlayerPrefixHandler implements PlayerPrefixHandler {
             prefix = getFormattedPrefixSuffix(service, uuid, config.getVaultPlayerPrefixFormat(), true);
         }
 
-        if (prefix == null)
-            return "";
-        else
-            return prefix;
+        return Objects.requireNonNullElse(prefix, "");
     }
 
     /* (non-Javadoc)
@@ -70,10 +62,7 @@ public class DefaultPlayerPrefixHandler implements PlayerPrefixHandler {
             suffix = getFormattedPrefixSuffix(service, uuid, config.getVaultPlayerSuffixFormat(), false);
         }
 
-        if (suffix == null)
-            return "";
-        else
-            return suffix;
+        return Objects.requireNonNullElse(suffix, "");
     }
 
     private String getFormattedPrefixSuffix(ZPermissionsService service, UUID uuid, String format, boolean isPrefix) {

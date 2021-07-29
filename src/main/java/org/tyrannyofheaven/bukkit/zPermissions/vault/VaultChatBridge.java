@@ -2,6 +2,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.vault;
 
 import static org.tyrannyofheaven.bukkit.zPermissions.util.ToHStringUtils.hasText;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -47,28 +48,19 @@ public class VaultChatBridge extends ChatCompatibility {
     @Override
     public boolean getGroupInfoBoolean(String world, String group, String node, boolean defaultValue) {
         Boolean result = service.getGroupMetadata(group, node, Boolean.class);
-        if (result == null)
-            return defaultValue;
-        else
-            return result;
+        return Objects.requireNonNullElse(result, defaultValue);
     }
 
     @Override
     public double getGroupInfoDouble(String world, String group, String node, double defaultValue) {
         Double result = service.getGroupMetadata(group, node, Double.class);
-        if (result == null)
-            return defaultValue;
-        else
-            return result;
+        return Objects.requireNonNullElse(result, defaultValue);
     }
 
     @Override
     public int getGroupInfoInteger(String world, String group, String node, int defaultValue) {
         Integer result = service.getGroupMetadata(group, node, Integer.class);
-        if (result == null)
-            return defaultValue;
-        else
-            return result;
+        return Objects.requireNonNullElse(result, defaultValue);
     }
 
     @Override
@@ -101,10 +93,7 @@ public class VaultChatBridge extends ChatCompatibility {
         if (result == null && config.isVaultMetadataIncludesGroup())
             result = service.getGroupMetadata(getPrimaryGroup(world, player), node, Boolean.class);
 
-        if (result == null)
-            return defaultValue;
-        else
-            return result;
+        return Objects.requireNonNullElse(result, defaultValue);
     }
 
     @Override
@@ -113,10 +102,7 @@ public class VaultChatBridge extends ChatCompatibility {
         if (result == null && config.isVaultMetadataIncludesGroup())
             result = service.getGroupMetadata(getPrimaryGroup(world, player), node, Double.class);
 
-        if (result == null)
-            return defaultValue;
-        else
-            return result;
+        return Objects.requireNonNullElse(result, defaultValue);
     }
 
     @Override
@@ -125,10 +111,7 @@ public class VaultChatBridge extends ChatCompatibility {
         if (result == null && config.isVaultMetadataIncludesGroup())
             result = service.getGroupMetadata(getPrimaryGroup(world, player), node, Integer.class);
 
-        if (result == null)
-            return defaultValue;
-        else
-            return result;
+        return Objects.requireNonNullElse(result, defaultValue);
     }
 
     @Override
