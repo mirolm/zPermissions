@@ -36,8 +36,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          # Use Java 11, because it's minimum required version
-          java-version: '11'
+          # Use Java 17, because it's lts release
+          java-version: '17'
 
       # Build and test (included in package)
       - name: Build with Maven and test
