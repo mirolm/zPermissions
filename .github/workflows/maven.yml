@@ -36,8 +36,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          # Use Java 17, because it's lts release
-          java-version: '17'
+          # Use Java 16, because it's latest available
+          java-version: '16'
 
       # Build and test (included in package)
       - name: Build with Maven and test
