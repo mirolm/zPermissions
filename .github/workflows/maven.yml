@@ -35,9 +35,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          # Use Java 16, because it's latest available
-          java-version: '16'
+          distribution: 'temurin'
+          # Use Java 17, because it's latest LTS
+          java-version: '17'
 
       # Build and test (included in package)
       - name: Build with Maven and test
