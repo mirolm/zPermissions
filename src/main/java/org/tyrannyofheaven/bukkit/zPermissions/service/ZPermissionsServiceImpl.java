@@ -69,15 +69,14 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
     private final ThreadLocal<Boolean> playerPrefixHandlerLoopAvoidance = new ThreadLocal<>();
 
     static {
-        Set<Class<?>> types = new HashSet<>();
-        types.add(Object.class);
-        types.add(String.class);
-        types.add(Integer.class);
-        types.add(Long.class);
-        types.add(Float.class);
-        types.add(Double.class);
-        types.add(Boolean.class);
-        validMetadataTypes = Collections.unmodifiableSet(types);
+        validMetadataTypes = Set.of(
+                Object.class,
+                String.class,
+                Integer.class,
+                Long.class,
+                Float.class,
+                Double.class,
+                Boolean.class);
     }
 
     public ZPermissionsServiceImpl(Plugin plugin, PermissionsResolver resolver, PermissionService permissionService, MetadataManager metadataManager, TransactionStrategy transactionStrategy, ZPermissionsConfig config, PlayerPrefixHandler playerPrefixHandler) {

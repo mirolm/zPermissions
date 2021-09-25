@@ -64,15 +64,14 @@ final class HandlerExecutor<T extends Plugin> {
 
     static {
         // Build map of primitives to primitive wrappers
-        Map<Class<?>, Class<?>> wrappers = new HashMap<>();
-        wrappers.put(Boolean.TYPE, Boolean.class);
-        wrappers.put(Byte.TYPE, Byte.class);
-        wrappers.put(Short.TYPE, Short.class);
-        wrappers.put(Integer.TYPE, Integer.class);
-        wrappers.put(Long.TYPE, Long.class);
-        wrappers.put(Float.TYPE, Float.class);
-        wrappers.put(Double.TYPE, Double.class);
-        primitiveWrappers = Collections.unmodifiableMap(wrappers);
+        primitiveWrappers = Map.of(
+                Boolean.TYPE, Boolean.class,
+                Byte.TYPE, Byte.class,
+                Short.TYPE, Short.class,
+                Integer.TYPE, Integer.class,
+                Long.TYPE, Long.class,
+                Float.TYPE, Float.class,
+                Double.TYPE, Double.class);
 
         // Build set of supported parameter types
         Set<Class<?>> types = new HashSet<>();

@@ -90,7 +90,7 @@ final class CommandMetaData {
         this.rest = rest;
         this.completer = completer;
 
-        this.parameters = Collections.unmodifiableList(new ArrayList<>(options));
+        this.parameters = List.copyOf(options);
 
         List<OptionMetaData> flagOptions = new ArrayList<>();
         List<OptionMetaData> positionalArguments = new ArrayList<>();

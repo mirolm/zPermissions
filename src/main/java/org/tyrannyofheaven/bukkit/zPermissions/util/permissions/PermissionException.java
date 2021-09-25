@@ -15,8 +15,6 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.util.permissions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,7 +51,7 @@ public class PermissionException extends RuntimeException {
      * @param permissions name of permissions
      */
     public PermissionException(boolean all, boolean checkNegations, String... permissions) {
-        this.permissions = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(permissions)));
+        this.permissions = List.of(permissions);
         this.all = all;
         this.checkNegations = checkNegations;
     }

@@ -1179,7 +1179,7 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
 
         public void setRegions(Set<String> regions) {
             // NB should already be lower-cased
-            this.regions = Collections.unmodifiableSet(new HashSet<>(regions));
+            this.regions = Set.copyOf(regions);
         }
 
         public Set<String> getRegions() {
