@@ -43,7 +43,7 @@ public class MojangUuidResolver implements UuidResolver {
         cache = CacheBuilder.newBuilder()
                 .maximumSize(cacheMaxSize)
                 .expireAfterWrite(cacheTtl, cacheTtlUnits)
-                .build(new CacheLoader<String, UuidDisplayName>() {
+                .build(new CacheLoader<>() {
                     @Override
                     public UuidDisplayName load(@NotNull String key) throws Exception {
                         return _resolve(key);

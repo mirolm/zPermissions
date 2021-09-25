@@ -46,7 +46,7 @@ public class MetadataManager {
 
     // Simple brain-dead caches instead of Guava Caches because manual management
     // in Guava <11 is hard without a CacheLoader.
-    private final Map<UUID, CacheEntry> playerCache = new LinkedHashMap<UUID, CacheEntry>() {
+    private final Map<UUID, CacheEntry> playerCache = new LinkedHashMap<>() {
         private static final long serialVersionUID = -3392138700819296598L;
 
         @Override
@@ -55,7 +55,7 @@ public class MetadataManager {
         }
     };
 
-    private final Map<String, CacheEntry> groupCache = new LinkedHashMap<String, CacheEntry>() {
+    private final Map<String, CacheEntry> groupCache = new LinkedHashMap<>() {
         private static final long serialVersionUID = 535803145911477635L;
 
         @Override
