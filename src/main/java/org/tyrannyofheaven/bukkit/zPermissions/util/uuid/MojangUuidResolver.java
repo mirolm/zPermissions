@@ -45,7 +45,7 @@ public class MojangUuidResolver implements UuidResolver {
                 .expireAfterWrite(cacheTtl, cacheTtlUnits)
                 .build(new CacheLoader<>() {
                     @Override
-                    public UuidDisplayName load(@NotNull String key) throws Exception {
+                    public @NotNull UuidDisplayName load(@NotNull String key) throws Exception {
                         return _resolve(key);
                     }
                 });
