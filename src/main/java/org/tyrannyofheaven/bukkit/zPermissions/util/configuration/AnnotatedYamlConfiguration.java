@@ -40,9 +40,6 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
         yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(buildHeader());
-        if (builder.length() > 0)
-            builder.append('\n'); // Newline after header, if present
 
         // Iterate over each root-level property and dump
         for (Iterator<Map.Entry<String, Object>> i = getValues(false).entrySet().iterator(); i.hasNext(); ) {
@@ -64,7 +61,7 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
 
         String dump = builder.toString();
 
-        if (dump.equals(BLANK_CONFIG)) {
+        if (dump.equals("{}\n")) {
             dump = "";
         }
 
@@ -80,7 +77,7 @@ public class AnnotatedYamlConfiguration extends YamlConfiguration {
     protected String buildComment(String comment) {
         StringBuilder builder = new StringBuilder();
         for (String line : comment.split("\r?\n")) {
-            builder.append(COMMENT_PREFIX);
+            builder.append("# ");
             builder.append(line);
             builder.append('\n');
         }
