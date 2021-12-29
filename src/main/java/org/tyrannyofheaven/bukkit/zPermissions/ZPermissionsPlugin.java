@@ -411,7 +411,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
 
             // Read config
             config = ToHFileUtils.getConfig(this);
-            config.options().header(null);
             // FIXME Defaults workaround, to be removed after 1.0
             if (!isUpgrade)
                 config.set("interleaved-player-permissions", false);
