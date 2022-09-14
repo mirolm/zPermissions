@@ -22,8 +22,8 @@
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
-            <id>essx-repo</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+            <id>jitpack-repo</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
     <dependencies>
@@ -34,15 +34,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>1.7.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
