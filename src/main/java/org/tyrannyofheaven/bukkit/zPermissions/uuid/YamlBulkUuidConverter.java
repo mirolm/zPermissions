@@ -34,13 +34,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.configuration.file.YamlConstructor;
+import org.bukkit.configuration.file.YamlRepresenter;
 import org.bukkit.plugin.Plugin;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidDisplayName;
 import org.tyrannyofheaven.bukkit.zPermissions.util.uuid.UuidResolver;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
-import org.yaml.snakeyaml.representer.Representer;
 
 public class YamlBulkUuidConverter implements BulkUuidConverter {
 
@@ -65,8 +66,25 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         // Does it exist?
         if (!dataFile.exists()) return;
 
+        YamlConstructor constructor = new YamlConstructor();
+
+        YamlRepresenter representer = new YamlRepresenter();
+        representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        LoaderOptions loader = new LoaderOptions();
+        loader.setMaxAliasesForCollections(Integer.MAX_VALUE);
+
+        try {
+            loader.setCodePointLimit(Integer.MAX_VALUE);
+        } catch (NoSuchMethodError ignored) {
+            // pre-1.32 snakeyaml
+        }
+
         // Read it in
-        Yaml yaml = new Yaml(new SafeConstructor());
+        Yaml yaml = new Yaml(constructor, representer, options, loader);
         Map<String, Object> data;
         try (Reader in = new FileReader(dataFile)) {
             data = yaml.load(in);
@@ -99,9 +117,7 @@ public class YamlBulkUuidConverter implements BulkUuidConverter {
         File newFile = new File(dataFile.getParentFile(), dataFile.getName() + ".new");
 
         // Write out file
-        DumperOptions options = new DumperOptions();
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        yaml = new Yaml(new SafeConstructor(), new Representer(), options);
+        yaml = new Yaml(constructor, representer, options, loader);
         try (Writer out = new FileWriter(newFile)) {
             out.write("# DO NOT EDIT -- file is written to periodically!\n");
             yaml.dump(data, out);

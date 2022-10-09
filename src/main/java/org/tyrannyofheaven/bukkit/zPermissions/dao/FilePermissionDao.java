@@ -38,6 +38,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.configuration.file.YamlConstructor;
+import org.bukkit.configuration.file.YamlRepresenter;
 import org.tyrannyofheaven.bukkit.zPermissions.QualifiedPermission;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.InMemoryPermissionService.MemoryState;
 import org.tyrannyofheaven.bukkit.zPermissions.model.EntityMetadata;
@@ -49,9 +51,8 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionRegion;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
 import org.tyrannyofheaven.bukkit.zPermissions.util.Utils;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
-import org.yaml.snakeyaml.representer.Representer;
 
 /**
  * Flat-file based PermissionDao implementation.
@@ -177,7 +178,7 @@ public class FilePermissionDao implements PermissionDao {
     }
 
     /**
-     * Save state of entire system to filesyste.
+     * Save state of entire system to filesystem.
      *
      * @param file the file to save to
      * @throws IOException if something went wrong
@@ -192,10 +193,25 @@ public class FilePermissionDao implements PermissionDao {
 
         File newFile = new File(file.getParentFile(), file.getName() + ".new");
 
-        // Write out file
+        YamlConstructor constructor = new YamlConstructor();
+
+        YamlRepresenter representer = new YamlRepresenter();
+        representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        Yaml yaml = new Yaml(new SafeConstructor(), new Representer(), options);
+
+        LoaderOptions loader = new LoaderOptions();
+        loader.setMaxAliasesForCollections(Integer.MAX_VALUE);
+
+        try {
+            loader.setCodePointLimit(Integer.MAX_VALUE);
+        } catch (NoSuchMethodError ignored) {
+            // pre-1.32 snakeyaml
+        }
+
+        // Write out file
+        Yaml yaml = new Yaml(constructor, representer, options, loader);
         try (Writer out = new FileWriter(newFile)) {
             out.write("# DO NOT EDIT -- file is written to periodically!\n" +
                     "# Seriously, do not edit. Today it is YAML, tomorrow it may not be.\n" +
@@ -233,7 +249,24 @@ public class FilePermissionDao implements PermissionDao {
      * @throws IOException if something went wrong
      */
     public void load(File file) throws IOException {
-        Yaml yaml = new Yaml(new SafeConstructor());
+        YamlConstructor constructor = new YamlConstructor();
+
+        YamlRepresenter representer = new YamlRepresenter();
+        representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        LoaderOptions loader = new LoaderOptions();
+        loader.setMaxAliasesForCollections(Integer.MAX_VALUE);
+
+        try {
+            loader.setCodePointLimit(Integer.MAX_VALUE);
+        } catch (NoSuchMethodError ignored) {
+            // pre-1.32 snakeyaml
+        }
+
+        Yaml yaml = new Yaml(constructor, representer, options, loader);
         Map<String, Object> input;
         try (Reader in = new FileReader(file)) {
             input = yaml.load(in);
