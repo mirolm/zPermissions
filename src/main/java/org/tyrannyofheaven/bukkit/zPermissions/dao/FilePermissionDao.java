@@ -193,22 +193,17 @@ public class FilePermissionDao implements PermissionDao {
 
         File newFile = new File(file.getParentFile(), file.getName() + ".new");
 
-        YamlConstructor constructor = new YamlConstructor();
-
-        YamlRepresenter representer = new YamlRepresenter();
-        representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         LoaderOptions loader = new LoaderOptions();
         loader.setMaxAliasesForCollections(Integer.MAX_VALUE);
+        loader.setCodePointLimit(Integer.MAX_VALUE);
 
-        try {
-            loader.setCodePointLimit(Integer.MAX_VALUE);
-        } catch (NoSuchMethodError ignored) {
-            // pre-1.32 snakeyaml
-        }
+        YamlConstructor constructor = new YamlConstructor(loader);
+
+        YamlRepresenter representer = new YamlRepresenter(options);
+        representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         // Write out file
         Yaml yaml = new Yaml(constructor, representer, options, loader);
@@ -249,22 +244,18 @@ public class FilePermissionDao implements PermissionDao {
      * @throws IOException if something went wrong
      */
     public void load(File file) throws IOException {
-        YamlConstructor constructor = new YamlConstructor();
-
-        YamlRepresenter representer = new YamlRepresenter();
-        representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         LoaderOptions loader = new LoaderOptions();
         loader.setMaxAliasesForCollections(Integer.MAX_VALUE);
+        loader.setCodePointLimit(Integer.MAX_VALUE);
 
-        try {
-            loader.setCodePointLimit(Integer.MAX_VALUE);
-        } catch (NoSuchMethodError ignored) {
-            // pre-1.32 snakeyaml
-        }
+        YamlConstructor constructor = new YamlConstructor(loader);
+
+        YamlRepresenter representer = new YamlRepresenter(options);
+
+        representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         Yaml yaml = new Yaml(constructor, representer, options, loader);
         Map<String, Object> input;

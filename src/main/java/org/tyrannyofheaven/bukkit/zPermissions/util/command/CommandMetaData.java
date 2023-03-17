@@ -121,7 +121,7 @@ final class CommandMetaData {
     /**
      * Return metadata for any flags.
      *
-     * @return set of OptionMetaData for any associated flags
+     * @return list of OptionMetaData for any associated flags
      */
     public List<OptionMetaData> getFlagOptions() {
         return flagOptions;

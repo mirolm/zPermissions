@@ -6,8 +6,8 @@ import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.configuration.file.YamlRepresenter;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.representer.Representer;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,23 +22,30 @@ import java.util.Map;
  */
 public class AnnotatedYamlConfiguration extends YamlConfiguration {
 
-    private final DumperOptions yamlOptions = new DumperOptions();
-
-    private final Representer yamlRepresenter = new YamlRepresenter();
-
-    private final Yaml yaml = new Yaml(new YamlConstructor(), yamlRepresenter, yamlOptions);
+    private final Yaml yaml;
 
     // Map from property key to comment. Comment may have multiple lines that are newline-separated.
     private final Map<String, String> comments = new HashMap<>();
 
+    public AnnotatedYamlConfiguration() {
+        DumperOptions yamlOptions = new DumperOptions();
+        yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        LoaderOptions yamlLoader = new LoaderOptions();
+        yamlLoader.setMaxAliasesForCollections(Integer.MAX_VALUE);
+        yamlLoader.setCodePointLimit(Integer.MAX_VALUE);
+
+        YamlConstructor yamlConstructor = new YamlConstructor(yamlLoader);
+
+        YamlRepresenter yamlRepresenter = new YamlRepresenter(yamlOptions);
+        yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        yaml = new Yaml(yamlConstructor, yamlRepresenter, yamlOptions, yamlLoader);
+    }
+
     @NotNull
     @Override
     public String saveToString() {
-        // Wish these were protected...
-        yamlOptions.setIndent(options().indent());
-        yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-
         StringBuilder builder = new StringBuilder();
 
         // Iterate over each root-level property and dump
