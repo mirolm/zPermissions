@@ -254,7 +254,6 @@ public class FilePermissionDao implements PermissionDao {
         YamlConstructor constructor = new YamlConstructor(loader);
 
         YamlRepresenter representer = new YamlRepresenter(options);
-
         representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
         Yaml yaml = new Yaml(constructor, representer, options, loader);
