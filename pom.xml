@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <bukkitplugin.api>1.13</bukkitplugin.api>
+        <bukkitplugin.api>1.19</bukkitplugin.api>
     </properties>
     <repositories>
         <repository>
