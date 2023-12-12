@@ -344,7 +344,7 @@ public class ZPermissionsServiceImpl implements ZPermissionsService {
                         String value = isPrefix ? getPlayerPrefix(uuid) : getPlayerSuffix(uuid);
                         return type.cast(value);
                     } finally {
-                        playerPrefixHandlerLoopAvoidance.set(null);
+                        playerPrefixHandlerLoopAvoidance.remove();
                     }
                 }
                 // Otherwise just fall through (avoids infinite recursion since PlayerPrefixHandler may call us)
