@@ -17,14 +17,14 @@ jobs:
     # Run steps
     steps:
       # Pull changes
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Cache artifacts - however this has the downside that we don't get notified of
       # artifact resolution failures like invalid repository
       # Nevertheless the repositories should be more stable and it makes no sense to pull
       # a same version every time
       # A dry run would make more sense
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -33,11 +33,11 @@ jobs:
 
       # Setup Java
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          # Use Java 17, because it's latest LTS
-          java-version: '17'
+          # Use Java 21, because it's latest LTS
+          java-version: '21'
 
       # Build and test (included in package)
       - name: Build with Maven and test
@@ -48,7 +48,7 @@ jobs:
 
       # Build plugin and upload
       - name: Upload plugin file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: zPermissions
           path: target/zPermissions.jar
